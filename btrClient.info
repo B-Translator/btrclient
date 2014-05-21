@@ -1,0 +1,20 @@
+name = B-Translator Client
+description = B-Translator Client Module.
+package = B-Translator
+core = 7.x
+
+dependencies[] = entity
+dependencies[] = field_sql_storage
+dependencies[] = text
+dependencies[] = image
+;dependencies[] = list
+;dependencies[] = options
+;dependencies[] = number
+dependencies[] = wsclient
+dependencies[] = wsclient_rest
+dependencies[] = http_client
+dependencies[] = oauth2_client
+dependencies[] = oauth2_login
+
+files[] = btrClient.test
+configure = admin/config/bcl
