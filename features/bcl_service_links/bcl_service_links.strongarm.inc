@@ -21,7 +21,7 @@ function bcl_service_links_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'service_links_path_icons';
-  $strongarm->value = 'profiles/btr_client/modules/features/bcl_service_links/images';
+  $strongarm->value = drupal_get_path('module', 'btrClient') . '/features/bcl_service_links/images';
   $export['service_links_path_icons'] = $strongarm;
 
   $strongarm = new stdClass();
