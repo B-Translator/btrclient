@@ -13,6 +13,30 @@ include drupal_get_path('module', 'btrClient') . '/btrClient.projects.inc';
 function btrClient_install() {
   // create a new content type for projects
   btrClient_create_project_content_type();
+
+  // set some default values for the variables
+  variable_set('oauth2_server_url', '');
+
+  // Set some test/dummy values for oauth2 variables.
+  $server_url = 'https://dev.btranslator.org';
+  $client_id = 'client1';
+  $client_secret = '0123456789';
+  $skip_ssl = 1;
+
+  // Set the B-Translator API server
+  variable_set('btrClient_server', $server_url);
+
+  // Set configuration variables of oauth2_login.
+  variable_set('oauth2_login_oauth2_server', $server_url);
+  variable_set('oauth2_login_client_id', $client_id);
+  variable_set('oauth2_login_client_secret', $client_secret);
+  variable_set('oauth2_login_skipssl', $skip_ssl);
+
+  // Enable the oauth2 login link and set the settings to hybridauth.
+  variable_set('oauth2_login_enabled', TRUE);
+  module_load_include('inc', 'oauth2_login', 'oauth2_login.admin');
+  oauth2_login_update_login_link();
+  oauth2_login_admin_set_settings();
 }
 
 /**
