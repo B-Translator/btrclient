@@ -85,3 +85,12 @@ function btrClient_menu() {
 
   return $items;
 }
+
+/**
+ * Implements hook_menu_alter().
+ */
+function btrClient_menu_alter(&$items) {
+  // Move the configuration of oauth2_login to the section of B-Translator.
+  $items['admin/config/bcl/oauth2_login'] = $items['admin/config/people/oauth2_login'];
+  unset($items['admin/config/people/oauth2_login']);
+}
