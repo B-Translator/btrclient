@@ -3,6 +3,7 @@ description = B-Translator Client Module.
 package = B-Translator
 core = 7.x
 
+dependencies[] = libraries
 dependencies[] = entity
 dependencies[] = field_sql_storage
 dependencies[] = text
