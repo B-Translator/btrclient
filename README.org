@@ -1,0 +1,70 @@
+
+* B-Translator Client
+
+  This Drupal module implements a client based on the B-Translator
+  API. For more info about /B-Translator/ see:
+  http://info.btranslator.org For more details about /B-Translator API/
+  see: https://dev.l10n.org.al/api-docs/ and
+  https://dev.l10n.org.al/api-examples/js
+
+** Installation
+
+   1. Put these lines on the make file of your profile:
+      #+BEGIN_EXAMPLE
+      projects[btrClient][type] = "module"
+      projects[btrClient][subdir] = "custom"
+      projects[btrClient][download][type] = "git"
+      projects[btrClient][download][url] = "https://github.com/B-Translator/btrClient.git"
+      ;projects[btrClient][download][branch] = "7.x-1.x"
+      #+END_EXAMPLE
+
+      For example, if you have innstalled the *standard* Drupal
+      profile create the file ~standard.make~ with a content like
+      this:
+      #+BEGIN_EXAMPLE
+      api = 2
+      core = 7.x
+
+      defaults[projects][subdir] = "contrib"
+
+      projects[btrClient][type] = "module"
+      projects[btrClient][subdir] = "custom"
+      projects[btrClient][download][type] = "git"
+      projects[btrClient][download][url] = "https://github.com/B-Translator/btrClient.git"
+      ;projects[btrClient][download][branch] = "7.x-1.x"
+      #+END_EXAMPLE
+
+   2. Install *drush_remake*: =drush dl drush_remake=
+      #+BEGIN_EXAMPLE
+      drush dl drush_remake
+      #+END_EXAMPLE
+
+   3. Run the drush command *remake* to download all the required
+      components (modules, libraries, etc.):
+      #+BEGIN_EXAMPLE
+      drush remake <profile_name>
+      drush remake standard
+      #+END_EXAMPLE
+
+   4. Make sure that the module *libraries* is installed:
+      #+BEGIN_EXAMPLE
+      drush en libraries
+      #+END_EXAMPLE
+
+   5. Install the module *btrClient* (all its dependencies will be
+      installed as well):
+      #+BEGIN_EXAMPLE
+      drush en btrClient
+      #+END_EXAMPLE
+
+   6. Optionally, install also the feature *bcl_disqus* (to add
+      support for disqus comments) and one of the features
+      *bcl_service_links* or *bcl_sharethis* (for sharing to social
+      networks).
+
+** Configuration
+
+   Set the B-Translator *Server URL* on =admin/config/bcl/client=, and
+   set the OAuth2 Login parameters (*Client ID* and *Client Secret*)
+   on =admin/config/bcl/oauth2_login=. You have to register first an
+   oauth2 client on the B-Translator server.
