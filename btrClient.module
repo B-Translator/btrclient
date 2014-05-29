@@ -136,16 +136,6 @@ function btrClient_hybridauth_profile_alter($profile) {
   $_SESSION['btrClient']['btr_profile'] = $btr_profile;
 }
 
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function btrClient_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
-  // remove the field 'field_data_sequential' from the form
-  // it is for internal usage only
-  $form['field_data_sequential']['#access'] = FALSE;
-}
-
 /**
  * Implements hook_oauth2_login_enabled().
  */
