@@ -83,6 +83,15 @@ function btrClient_menu() {
     'weight'          => 5,
   );
 
+  // Return a RSS feed.
+  $items['translations/rss-feed'] = array(
+    'type'            => MENU_CALLBACK,
+    'title'           => 'Latest Translation Feedback',
+    'page callback'   => 'btrClient_rss_feed',
+    'file'            => 'translations/rss_feed.inc',
+    'access callback' => TRUE,
+  );
+
   return $items;
 }
 
