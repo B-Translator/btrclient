@@ -4,7 +4,7 @@
  * Menu callbacks.
  */
 
-function btrClient_rss_feed($lng =NULL, $origin =NULL, $project =NULL) {
+function btrClient_rss_feed($origin =NULL, $project =NULL) {
   // Get the translation language.
   $lng = variable_get('btrClient_translation_lng', 'fr');
 
