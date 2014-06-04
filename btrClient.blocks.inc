@@ -179,6 +179,7 @@ function _btrClient_block_topcontrib() {
     ),
   );
 
+  $btr_server = variable_get('btrClient_server');
   foreach ($topusers as $user) {
     $args = array(
       '!uid' => $user['uid'],
@@ -187,7 +188,7 @@ function _btrClient_block_topcontrib() {
       '!score' => $user['score'],
       '!nr_translations' => $user['translations'],
       '!nr_votes' => $user['votes'],
-      '@url_user' => url('user/' . $user['uid']),
+      '@url_user' => $btr_server . '/user/' . $user['uid'],
       '@url_translations' => url('translations/search', array(
                              'query' => array(
                                'lng' => $lng,

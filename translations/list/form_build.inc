@@ -373,19 +373,16 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
       '#suffix' => '</label>',
     );
     if ($translation['author'] != NULL) {
-      $title = btrClient_translate_byline($translation['author'], $translation['uid'], $translation['time']);
-
       $form['author'] = array(
-        '#markup' => $title,
-        //'#prefix' => '<div class="l10n-byline"><a href="' . url('translations/details/' . $translation['tguid']) . '" class="l10n-more-link" title="' . t('Show full details for the translation.') . '">',
-        //'#suffix' => '</a><div class="l10n-more-info"></div></div>',
+        '#markup' => _btrClient_translate_byline($translation['author'], $translation['uid'], $translation['time']),
       );
     }
     //TODO: Improve displaying of vote count and the voters.
     if ($translation['count'] != '0') {
+      $btr_server = variable_get('btrClient_server');
       $voters = array();
       foreach ($translation['votes'] as $name => $vote) {
-        $voters[] = theme('username', array('account' => (object) array('name' => $name, 'uid' => $vote['uid'])));
+        $voters[] = l($name, $btr_server . '/user/' . $vote['uid']);
       }
       $form['votes'] = array(
         '#type' => 'fieldset',
@@ -424,17 +421,12 @@ function _btrClient_translate_render_textarray($textarray, $empty = '') {
 /**
  * Generates the byline containing meta information about a string.
  */
-function btrClient_translate_byline($name, $uid, $time, $medium =-1, $type =-1, $link_user =TRUE) {
-  $account = (object) array('name' => $name, 'uid' => $uid);
-  $username = ($link_user ? theme('username', array('account' => $account)) : check_plain($name));
-  //dpm($username);  //debug
+function _btrClient_translate_byline($name, $uid, $time) {
+  $btr_server = variable_get('btrClient_server');
   $params = array(
-    '!author' => $uid ? $username : t('uknown user'),
-    // Also skip handling time if uid was not specified (for decline entries
-    // in the update, which have time for ordering reasons, but no uid).
-    '@date' => $time && $uid ? format_date(strtotime($time)) : t('unknown time'),
-    '@ago' => $time ? t('@time ago', array('@time' => format_interval(REQUEST_TIME - strtotime($time)))) : t('no time record available'),
+    '!author' => l($name, $btr_server . "/user/$uid"),
+    '@date' => format_date(strtotime($time)),
+    '@timeago' => format_interval(REQUEST_TIME - strtotime($time)),
   );
-
-  return t('by !author <span title="@ago">on @date</span>', $params);
+  return t('by !author <span title="on @date">@timeago ago</span>', $params);
 }
