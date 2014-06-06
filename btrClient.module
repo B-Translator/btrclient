@@ -78,8 +78,6 @@ function btrClient_flush_caches() {
 function btrClient_init() {
   if (arg(0) == 'translations') {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient.css');
-    // For the translation overview pages. This is used to present admin page like panels.
-    drupal_add_css(drupal_get_path('module', 'system') . '/admin.css');
   }
 
   // Check if language is RTL
@@ -94,25 +92,6 @@ function btrClient_init() {
 
   // Disable breadcrumb.
   drupal_set_breadcrumb(array());
-}
-
-/**
- * Implements hook_hybridauth_profile_alter().
- */
-function btrClient_hybridauth_profile_alter($profile) {
-  if (!isset($profile['remote_profile']))  return;
-
-  $btr_user = $profile['remote_profile'];
-  $btr_profile = array(
-    'translation_lng' => $btr_user->translation_lng,
-    'string_order' => $btr_user->string_order,
-    'preferred_projects' => $btr_user->preferred_projects,
-    'auxiliary_languages' => $btr_user->auxiliary_languages,
-    'translations_per_day' => $btr_user->translations_per_day,
-    'feedback_channels' => $btr_user->feedback_channels,
-    'permissions' => $btr_user->permissions,
-  );
-  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
 }
 
 /**

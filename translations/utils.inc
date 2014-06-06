@@ -36,7 +36,7 @@ function btrClient_pack_string($strings) {
 }
 
 /**
- * Check whether the btr_user has the given permission.
+ * Check whether the current user has the given permission (on B-Translator server).
  *
  * @param $permission
  *   The name of the permission (like btranslator-*).
@@ -44,12 +44,40 @@ function btrClient_pack_string($strings) {
  *   TRUE or FALSE
  */
 function btr_user_access($permission) {
-  if (!isset($_SESSION['btrClient']['btr_profile']['permissions'])) {
-    return FALSE;
-  }
-  $btr_permissions = &$_SESSION['btrClient']['btr_profile']['permissions'];
-  return in_array($permission, $btr_permissions);
+  if (!user_is_logged_in())  return FALSE;
+
+  $btr_profile = btr_get_user_profile();
+  return in_array($permission, $btr_profile['permissions']);
 }
+
+/**
+ * Return the profile of the user on B-Translator server.
+ */
+function btr_get_user_profile() {
+  // Return the cached one, if possible.
+  if (isset($_SESSION['btrClient']['btr_profile'])) {
+    return $_SESSION['btrClient']['btr_profile'];
+  }
+
+  // Get the profile from the B-Translator server.
+  $btr = wsclient_service_load('btr');
+  $btr_user = $btr->user_profile();
+  $btr_profile = array(
+    'translation_lng' => $btr_user['translation_lng'],
+    'string_order' => $btr_user['string_order'],
+    'preferred_projects' => $btr_user['preferred_projects'],
+    'auxiliary_languages' => $btr_user['auxiliary_languages'],
+    'translations_per_day' => $btr_user['translations_per_day'],
+    'feedback_channels' => $btr_user['feedback_channels'],
+    'permissions' => $btr_user['permissions'],
+  );
+
+  // Save it in session.
+  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
+
+  return $btr_profile;
+}
+
 
 /**
  * Display any messages, warnings and errors.

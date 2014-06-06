@@ -20,6 +20,7 @@ function _btrClient_services_authenticated_service($service_name) {
 
   $service->operations += _btrClient_services_authenticated_translations();
   $service->operations += _btrClient_services_authenticated_projects();
+  $service->operations += _btrClient_services_authenticated_users();
 
   return $service;
 }
@@ -95,6 +96,28 @@ function _btrClient_services_authenticated_projects() {
     'export_projects' => 'project/export',
     'add_string' => 'project/add_string',
     'del_string' => 'project/del_string',
+  );
+  foreach($POST_operations as $name  => $url) {
+    $operations[$name] = array(
+      'label' => $name,
+      'url' => $url,
+      'type' => 'POST',
+      'data' => 'params',
+      'parameter' => array(
+        'params' => array('type' => 'array'),
+      ),
+    );
+  }
+
+  return $operations;
+}
+
+/**
+ * Return definitions for operations about users.
+ */
+function _btrClient_services_authenticated_users() {
+  $POST_operations = array(
+    'user_profile' => 'user/profile',
   );
   foreach($POST_operations as $name  => $url) {
     $operations[$name] = array(
