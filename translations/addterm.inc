@@ -86,7 +86,8 @@ function btrClient_addterm_form_submit($form, &$form_state) {
   $project = check_plain(trim($form_state['values']['project']));
   $string = check_plain(trim($form_state['values']['newterm']));
 
-  $result = $GLOBALS['btr']->add_string(array(
+  $btr = wsclient_service_load('btr');
+  $result = $btr->add_string(array(
               'origin' => 'vocabulary',
               'project' => $project,
               'tplname' => $project,
@@ -144,8 +145,9 @@ function btrClient_delterm_form() {
  * Submission handler for delterm form.
  */
 function btrClient_delterm_form_submit($form, &$form_state) {
+  $btr = wsclient_service_load('btr');
   $sguid = check_plain(trim($form_state['values']['sguid']));
-  $GLOBALS['btr']->del_string(array('sguid' => $sguid));
+  $btr->del_string(array('sguid' => $sguid));
 
   // redirect to the list of terms
   $lng = variable_get('btrClient_translation_lng', 'fr');

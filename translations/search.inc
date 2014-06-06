@@ -27,7 +27,10 @@ function btrClient_search() {
   $params = btrClient_get_search_params();
 
   // Get the strings that match the search params.
-  $result = $GLOBALS['btr']->search($params);
+  $btr = user_is_logged_in() ?
+    wsclient_service_load('btr') :
+    wsclient_service_load('public_btr');
+  $result = $btr->search($params);
   $filter = $result['filter'];
   $pager = $result['pager'];
   $strings = $result['strings'];

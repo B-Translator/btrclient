@@ -76,15 +76,6 @@ function btrClient_flush_caches() {
  * Implements hook_init().
  */
 function btrClient_init() {
-  // Load the public B-Translator service or the authenticated one.
-  global $btr;
-  if (user_is_logged_in()) {
-    $btr = wsclient_service_load('btr');
-  }
-  else {
-    $btr = wsclient_service_load('public_btr');
-  }
-
   if (arg(0) == 'translations') {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient.css');
     // For the translation overview pages. This is used to present admin page like panels.
@@ -103,18 +94,6 @@ function btrClient_init() {
 
   // Disable breadcrumb.
   drupal_set_breadcrumb(array());
-}
-
-/**
- * Invoked when a user has logged in through HybridAuth.
- * @param object $account
- *   User account object.
- * @param array $data
- *   HybridAuth identity data.
- */
-function btrClient_hybridauth_user_login($account, $data) {
-  global $btr;
-  $btr = wsclient_service_load('btr');
 }
 
 /**
@@ -151,3 +130,11 @@ function btrClient_oauth2_login_enabled($enabled) {
     ->condition('module', 'menu')
     ->execute();
 }
+
+/*
+function btr_log($var, $comment ='') {
+  $file = '/tmp/btr.log';
+  $content = "\n==> $comment: " . print_r($var, true);
+  file_put_contents($file, $content, FILE_APPEND);
+}
+*/

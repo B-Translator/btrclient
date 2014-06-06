@@ -23,19 +23,16 @@ require_once(dirname(__FILE__) . '/utils.inc');
  */
 function btrClient_vote($lng =NULL, $sguid =NULL, $one_time_login =NULL) {
 
+  /***** one time login is not used anymore
   if ($one_time_login != NULL) {
     btrClient_login_one_time($one_time_login);
     drupal_goto("translations/$lng/$sguid");
     return;
   }
+  *****/
 
-  if ($lng == NULL) {
-    $lng = variable_get('btrClient_translation_lng', 'fr');
-  }
-
-  if ($sguid==NULL)  {
-    $sguid = 'next';
-  }
+  if ($lng == NULL)  $lng = variable_get('btrClient_translation_lng', 'fr');
+  if ($sguid == NULL)  $sguid = 'next';
 
   if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
     // If checkbox same_project is checked, constrain the list
@@ -46,7 +43,10 @@ function btrClient_vote($lng =NULL, $sguid =NULL, $one_time_login =NULL) {
       {
 	$last_sguid = $_SESSION['btrClient']['last_sguid'];
       }
-    $result = $GLOBALS['btr']->get_random_sguid(
+    $btr = user_is_logged_in() ?
+      wsclient_service_load('btr') :
+      wsclient_service_load('public_btr');
+    $result = $btr->get_random_sguid(
       array(
         'target' => $sguid,
         'lng' => $lng,
@@ -78,7 +78,8 @@ function btrClient_vote($lng =NULL, $sguid =NULL, $one_time_login =NULL) {
   }
 
   // Get the string and its translations.
-  $result = $GLOBALS['btr']->get_translations($sguid, $lng);
+  $btr = wsclient_service_load('public_btr');
+  $result = $btr->get_translations($sguid, $lng);
 
   // If the request has the header 'Accept: application/json'
   // return the output in JSON format and stop.
@@ -119,6 +120,7 @@ function btrClient_vote($lng =NULL, $sguid =NULL, $one_time_login =NULL) {
   return $output;
 }
 
+/****** one time login is not being used anymore ***************
 function btrClient_login_one_time($one_time_login =NULL) {
 
   if ($one_time_login == NULL)  return FALSE;
@@ -157,3 +159,4 @@ function btrClient_login_one_time($one_time_login =NULL) {
   user_login_finalize();
   return TRUE;
 }
+*********/

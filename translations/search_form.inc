@@ -330,12 +330,13 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
     '#collapsed' => FALSE,
   );
 
+  $btr_server = variable_get('btrClient_server');
   $form['advanced_search']['projects']['project'] = array(
     '#type' => 'textfield',
     '#title' => t('Project'),
     '#description' => t('Search only the strings belonging to the matching project.'),
     '#default_value' => $form_state['values']['project'],
-    '#autocomplete_path' => 'translations/autocomplete/project',
+    '#autocomplete_path' => $btr_server . '/translations/autocomplete/project',
   );
 
   $form['advanced_search']['projects']['origin'] = array(
@@ -343,7 +344,7 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
     '#title' => t('Origin'),
     '#description' => t('Limit search only to the projects from a certain origin.'),
     '#default_value' => $form_state['values']['origin'],
-    '#autocomplete_path' => 'translations/autocomplete/origin',
+    '#autocomplete_path' => $btr_server . '/translations/autocomplete/origin',
   );
 }
 
@@ -368,13 +369,14 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#default_value' => $form_state['values']['only_mine'],
   );
 
+  $btr_server = variable_get('btrClient_server');
   $lng = variable_get('btrClient_translation_lng', 'fr');
   $form['advanced_search']['author']['translated_by'] = array(
     '#type' => 'textfield',
     '#title' => t('Translated By'),
     '#description' => t('Search only the strings with translations suggested by the selected user.'),
     '#default_value' => $form_state['values']['translated_by'],
-    '#autocomplete_path' => "translations/autocomplete/user/$lng",
+    '#autocomplete_path' => $btr_server.'/translations/autocomplete/user/'.$lng,
     '#states' => array(
       'visible' => array(
         ':input[name="only_mine"]' => array('checked' => FALSE),
@@ -387,7 +389,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#title' => t('Voted By'),
     '#description' => t('Search only the strings with translations voted by the selected user.'),
     '#default_value' => $form_state['values']['voted_by'],
-    '#autocomplete_path' => "translations/autocomplete/user/$lng",
+    '#autocomplete_path' => $btr_server.'/translations/autocomplete/user/'.$lng,
     '#states' => array(
       'visible' => array(
         ':input[name="only_mine"]' => array('checked' => FALSE),

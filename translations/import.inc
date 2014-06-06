@@ -132,7 +132,7 @@ function btrClient_import_form_submit($form, &$form_state) {
  *       (requires PHP 5.4).
  */
 function _btrClient_import_translations() {
-  global $btr;
+  $btr = wsclient_service_load('btr');
 
   // Get an access_token.
   module_load_include('inc', 'oauth2_client', 'oauth2_client');

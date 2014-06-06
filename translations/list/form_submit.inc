@@ -39,6 +39,8 @@ function btrClient_translate_form_submit($form, &$form_state) {
 
   // Save the values selected on the form (votes or new suggestions).
   if (user_is_logged_in()) {
+    global $btr;
+    $btr = wsclient_service_load('btr');
     _btrClient_translate_form_save($form_values);
   }
   else {
@@ -119,8 +121,9 @@ function _btrClient_translate_form_save($form_values) {
   }
 
   // Submit the actions.
-  global $btr, $_btrClient_actions;
+  global $_btrClient_actions;
   if (empty($_btrClient_actions))  return;
+  $btr = wsclient_service_load('btr');
   $result = $btr->submit($_btrClient_actions);
 
   // Display any messages, warnings and errors.

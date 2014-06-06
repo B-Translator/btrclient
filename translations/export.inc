@@ -30,19 +30,20 @@ function btrClient_export_form() {
     '#collapsed' => FALSE,
   );
 
+  $btr_server = variable_get('btrClient_server');
   $form['export']['origin'] = array(
     '#type' => 'textfield',
     '#title' => t('Origin'),
     '#required' => TRUE,
     '#description' => t('The origin of the project.'),
-    '#autocomplete_path' => 'translations/autocomplete/origin',
+    '#autocomplete_path' => $btr_server . '/translations/autocomplete/origin',
   );
 
   $form['export']['project'] = array(
     '#type' => 'textfield',
     '#title' => t('Project'),
     '#description' => t('The name of the project.'),
-    '#autocomplete_path' => 'translations/autocomplete/project',
+    '#autocomplete_path' => $btr_server . '/translations/autocomplete/project',
     // Those that have the export access right (usually translators)
     // can also export all the projects from the same origin.
     // Contributors can export only a single project at a time.
@@ -109,6 +110,7 @@ function btrClient_export_form_submit($form, &$form_state) {
     'export_mode' => check_plain($values['export_mode']),
     'friends' => check_plain($values['friends']),
   );
-  $result = $GLOBALS['btr']->export_project($params);
+  $btr = wsclient_service_load('btr');
+  $result = $btr->export_projects($params);
   btrClient_display_messages($result['messages']);
 }
