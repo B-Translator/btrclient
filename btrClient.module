@@ -95,6 +95,48 @@ function btrClient_init() {
 }
 
 /**
+ * Implements hook_hybridauth_provider_config_alter().
+ */
+function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
+  if ($provider_id != 'DrupalOAuth2')  return;
+
+  // Get some extra fields from the remote user profile.
+  // These fields can be defined by the oauth2 server
+  // on hook_oauth2_loginprovider_userprofile_alter().
+  $config['profile_fields'] = array(
+    /*
+    // These are the default profile field mappings.
+    'identifier' => 'uid',
+    'displayName' => 'name',
+    'photoURL' => 'picture.url',
+    'email' => 'mail',
+    'emailVerified' => 'mail',
+    'language' => 'language',
+    */
+    // Get these extra fields as well.
+    'translation_lng' => 'translation_lng',
+    'string_order' => 'string_order',
+    'preferred_projects' => 'preferred_projects',
+    'auxiliary_languages' => 'auxiliary_languages',
+    'translations_per_day' => 'translations_per_day',
+    'feedback_channels' => 'feedback_channels',
+    'permissions' => 'permissions',
+  );
+}
+
+/**
+ * Invoked when a user has logged in through HybridAuth.
+ * @param object $account
+ *   User account object.
+ * @param array $data
+ *   HybridAuth identity data.
+ */
+function btrClient_hybridauth_user_login($account, $data) {
+  $btr_profile = _btrClient_get_user_profile($data);
+  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
+}
+
+/**
  * Implements hook_oauth2_login_enabled().
  */
 function btrClient_oauth2_login_enabled($enabled) {
@@ -110,10 +152,8 @@ function btrClient_oauth2_login_enabled($enabled) {
     ->execute();
 }
 
-/*
 function btr_log($var, $comment ='') {
   $file = '/tmp/btr.log';
   $content = "\n==> $comment: " . print_r($var, true);
   file_put_contents($file, $content, FILE_APPEND);
 }
-*/

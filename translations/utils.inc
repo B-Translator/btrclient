@@ -60,8 +60,24 @@ function btr_get_user_profile() {
   }
 
   // Get the profile from the B-Translator server.
-  $btr = wsclient_service_load('btr');
-  $btr_user = $btr->user_profile();
+  $btr_profile = _btrClient_get_user_profile();
+
+  // Save it in session.
+  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
+
+  return $btr_profile;
+}
+
+/**
+ * Get and return the remote profile of the user.
+ */
+function _btrClient_get_user_profile($btr_user =NULL) {
+  if ($btr_user == NULL) {
+    $btr = wsclient_service_load('btr');
+    $btr_user = $btr->user_profile();
+  }
+
+  // Get the profile fields.
   $btr_profile = array(
     'translation_lng' => $btr_user['translation_lng'],
     'string_order' => $btr_user['string_order'],
@@ -71,9 +87,6 @@ function btr_get_user_profile() {
     'feedback_channels' => $btr_user['feedback_channels'],
     'permissions' => $btr_user['permissions'],
   );
-
-  // Save it in session.
-  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
 
   return $btr_profile;
 }
