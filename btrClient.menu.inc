@@ -57,7 +57,7 @@ function btrClient_menu() {
     'description'     => 'Export the most voted translations of a project into a PO file.',
     'page callback'   => 'btrClient_export',
     'file'            => 'translations/export.inc',
-    'access callback' => 'user_is_logged_in',
+    'access callback' => 'btr_user_is_authenticated',
     'weight'          => 3,
   );
 

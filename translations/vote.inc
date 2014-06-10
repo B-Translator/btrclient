@@ -21,7 +21,7 @@ require_once(dirname(__FILE__) . '/utils.inc');
  *   curl -k -i -H 'Accept: application/json' \
  *     'https://dev.l10n.org.xx/translations/sq/ee178b82f7ff3b5fb48537b834db673b42d48556'
  */
-function btrClient_vote($lng =NULL, $sguid =NULL, $one_time_login =NULL) {
+function btrClient_vote($lng =NULL, $sguid =NULL) {
   if ($lng == NULL)  $lng = variable_get('btrClient_translation_lng', 'fr');
   if ($sguid == NULL)  $sguid = 'next';
 
@@ -34,7 +34,7 @@ function btrClient_vote($lng =NULL, $sguid =NULL, $one_time_login =NULL) {
       {
 	$last_sguid = $_SESSION['btrClient']['last_sguid'];
       }
-    $btr = user_is_logged_in() ?
+    $btr = btr_user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid(

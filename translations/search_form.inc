@@ -146,7 +146,7 @@ function btrClient_get_query_values($form_values) {
   if (trim($form_values['origin']) != '' )
     $query['origin'] = $form_values['origin'];
 
-  if (user_is_logged_in()) {
+  if (btr_user_is_authenticated()) {
     //only_mine
     if ($form_values['only_mine'] == 1) {
       $query['only_mine'] = '1';
@@ -220,7 +220,7 @@ function btrClient_filter_form($form, &$form_state, $filter) {
 
   // Search by author and serach by date
   // are available only to logged in users.
-  if (user_is_logged_in()) {
+  if (btr_user_is_authenticated()) {
     // Add fieldset advanced_search/author,
     // with fields: only_mine, translated_by, voted_by
     _btrClient_filter_form_author($form, $form_state);

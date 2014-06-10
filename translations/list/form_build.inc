@@ -92,7 +92,7 @@ function _btrClient_translate_form_buttons($lng) {
   $buttons['login'] = array(
     '#type' => 'submit',
     '#value' => t('Login'),
-    '#access' => !user_is_logged_in(),
+    '#access' => !btr_user_is_authenticated(),
   );
 
   // The submit buttons will appear only when the user has

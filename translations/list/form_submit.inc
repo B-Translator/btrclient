@@ -31,20 +31,24 @@ function btrClient_translate_form_submit($form, &$form_state) {
     // practically ends here, does not continue further down.
   }
 
-  if ($op == t('Save') and !user_is_logged_in()) {
-    // Save $form_state to session and redirect to login.
-    $_SESSION['btrClient']['translate_form']['state'] = $form_state;
-    oauth2_login();
+  if ($op == t('Save') and !btr_user_is_authenticated()) {
+    if (isset($_SESSION['btrClient']['translate_form']['authenticating'])) {
+      unset($_SESSION['btrClient']['translate_form']['authenticating']);
+      return;
+    }
+    else {
+      session_destroy();
+      $_SESSION['btrClient']['translate_form']['state'] = $form_state;
+      $_SESSION['btrClient']['translate_form']['authenticating'] = TRUE;
+      oauth2_login();
+    }
   }
 
-  // Save the values selected on the form (votes or new suggestions).
-  if (user_is_logged_in()) {
-    global $btr;
+  if (btr_user_is_authenticated()) {
+    // Save the values selected on the form
+    // (votes or new suggestions).
     $btr = wsclient_service_load('btr');
     _btrClient_translate_form_save($form_values);
-  }
-  else {
-    drupal_set_message(t("You need to be logged in, in order to be able to submit votes and suggestions."));
   }
 
   $_SESSION['btrClient']['same_project'] = isset($form_state['input']['same_project']) ? TRUE : FALSE;
