@@ -67,6 +67,11 @@ function btrClient_vote($lng =NULL, $sguid =NULL) {
     //drupal_form_submit('btrClient_translate_form', $form_state);
     btrClient_translate_form_submit(NULL, $form_state);
   }
+  if ($lng == 'all') {
+    $lng = 'fr';
+    drupal_goto("translations/$lng/$sguid");
+    return;
+  }
 
   // Get the string and its translations.
   $btr = wsclient_service_load('public_btr');

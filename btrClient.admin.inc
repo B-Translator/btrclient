@@ -19,13 +19,14 @@ function btrClient_config() {
 
   // get a list of available languages
   $languages = btrClient_get_languages();
+  $lang_options['all'] = t('All languages');
   foreach ($languages as $code => $lang)  $lang_options[$code] = $lang['name'];
 
   // btrClient_translation_lng
   $form['defaults']['btrClient_translation_lng'] = array(
     '#type' => 'select',
-    '#title' => t('Default Translation Language'),
-    '#description' => t('The default language of translations (for anonymous users).'),
+    '#title' => t('Translation Language'),
+    '#description' => t('The translation language of the client. If <em>All languages</em> is selected, the client will not restrict the language of the translations and votes (it will be restricted only by the translation language of the user).'),
     '#options' => $lang_options,
     '#default_value' => variable_get('btrClient_translation_lng', 'fr'),
   );

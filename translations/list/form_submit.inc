@@ -84,22 +84,8 @@ function btrClient_translate_form_submit($form, &$form_state) {
  * Save the values selected on the form (votes or new suggestions).
  */
 function _btrClient_translate_form_save($form_values) {
-
-  $save_access = (btr_user_access('btranslator-vote') || btr_user_access('btranslator-suggest'));
-  if (!$save_access) {
-    drupal_set_message(t("You don't have access for giving feedback!"), 'error');
-    return;
-  }
-
   // get the langcode submitted with the form
   $lng = $form_values['langcode'];
-
-  // check whether the submitted lng is valid for providing feedback on this site
-  $translation_lng = variable_get('btrClient_translation_lng', 'fr');
-  if ($lng != $translation_lng) {
-    drupal_set_message(t("You cannot give feedback for the language '@lng' on this site!", array('@lng' => $lng)), 'error');
-    return;
-  }
 
   // Get the voting mode.
   $voting_mode = variable_get('btrClient_voting_mode', 'single');

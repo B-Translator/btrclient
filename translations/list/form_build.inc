@@ -97,8 +97,8 @@ function _btrClient_translate_form_buttons($lng) {
 
   // The submit buttons will appear only when the user has
   // permissions to submit votes and suggestions.
-  $translation_lng = variable_get('btrClient_translation_lng', 'fr');
-  $enable_submit = ($lng==$translation_lng);
+  $translation_lng = variable_get('btrClient_translation_lng', 'all');
+  $enable_submit = ($translation_lng=='all' or ($translation_lng==$lng));
   $buttons['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
