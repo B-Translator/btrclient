@@ -125,6 +125,7 @@ function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
 }
 
 /**
+ * Implements hook_hybridauth_user_login().
  * Invoked when a user has logged in through HybridAuth.
  * @param object $account
  *   User account object.
@@ -134,6 +135,15 @@ function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
 function btrClient_hybridauth_user_login($account, $data) {
   $btr_profile = _btrClient_get_user_profile($data);
   $_SESSION['btrClient']['btr_profile'] = $btr_profile;
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function btrClient_user_login($account, $data) {
+  if (_btrClient_installed_on_server()) {
+    btr_get_user_profile();
+  }
 }
 
 /**
@@ -152,8 +162,10 @@ function btrClient_oauth2_login_enabled($enabled) {
     ->execute();
 }
 
+/*
 function btr_log($var, $comment ='') {
   $file = '/tmp/btr.log';
   $content = "\n==> $comment: " . print_r($var, true);
   file_put_contents($file, $content, FILE_APPEND);
 }
+*/

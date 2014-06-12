@@ -60,6 +60,10 @@ function btr_user_access($permission) {
  * Return true if there is an oauth2 access_token.
  */
 function btr_user_is_authenticated() {
+  if (_btrClient_installed_on_server()) {
+    return user_is_logged_in();
+  }
+
   $server_url = variable_get('oauth2_login_oauth2_server', '');
   $token_endpoint = $server_url . '/oauth2/token';
   $client_id = variable_get('oauth2_login_client_id', '');
@@ -72,6 +76,13 @@ function btr_user_is_authenticated() {
   // Check the access token.
   $authenticated = !empty($token['access_token']);
   return $authenticated;
+}
+
+/**
+ * Return true if btrClient is installed on B-Translator server.
+ */
+function _btrClient_installed_on_server() {
+  return module_exists('btrCore');
 }
 
 /**
@@ -134,6 +145,7 @@ function btrClient_display_messages($messages) {
   }
 }
 
+
 /**
  * Return an array of languages and their details.
  */
@@ -144,18 +156,12 @@ function btrClient_get_languages() {
     return $cache->data;
   }
 
-  // If $btr_server is the same as the current server, recursive call
-  // will happen. Using a lock (semaphore) to avoid recursion.
-  if (!lock_acquire('btrClient_get_languages', 100)) {
-    return _btrClient_get_languages();
-  }
-
   // Get an array of languages from the server.
-  $btr_server = variable_get('btrClient_server', NULL);
-  if (empty($btr_server)) {
-    $languages = _btrClient_get_languages();
+  if (_btrClient_installed_on_server()) {
+    $languages = btr_get_languages();
   }
   else {
+    $btr_server = variable_get('btrClient_languages', 'https://dev.btranslator.org');
     $output = drupal_http_request("$btr_server/translations/languages");
     $languages = json_decode($output->data, TRUE);
   }
@@ -163,33 +169,7 @@ function btrClient_get_languages() {
   // Cache until a general cache wipe.
   cache_set('btrClient_languages', $languages, 'cache_btrClient', CACHE_TEMPORARY);
 
-  lock_release('btrClient_get_languages');
   return $languages;
-}
-
-/**
- * Returns an array of languages and their details.
- */
-function _btrClient_get_languages() {
-
-  $arr_langs = array(
-    'fr' => array(
-      'code' => 'fr',
-      'name' => 'French',
-      'encoding' => 'latin1',
-      'direction' => LANGUAGE_LTR,
-      'plurals' => 2,
-    ),
-    'sq' => array(
-      'code' => 'sq',
-      'name' => 'Albanian',
-      'encoding' => 'latin1',
-      'direction' => LANGUAGE_LTR,
-      'plurals' => 2,
-    ),
-  );
-
-  return $arr_langs;
 }
 
 /**

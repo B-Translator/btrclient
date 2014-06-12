@@ -26,28 +26,36 @@ function btrClient_translate_form_submit($form, &$form_state) {
   if (!in_array($op, $operations))  return;
 
   if ($op == t('Login')) {
-    oauth2_login();
+    if (_btrClient_installed_on_server()) {
+      drupal_goto('user/login', array('query' => drupal_get_destination()));
+    }
+    else {
+      oauth2_login();
+    }
     // Function oauth2_login() calls drupal_goto(), so this function
     // practically ends here, does not continue further down.
   }
 
   if ($op == t('Save') and !btr_user_is_authenticated()) {
-    if (isset($_SESSION['btrClient']['translate_form']['authenticating'])) {
-      unset($_SESSION['btrClient']['translate_form']['authenticating']);
-      return;
+    if (_btrClient_installed_on_server()) {
+      drupal_goto('user/login', array('query' => drupal_get_destination()));
     }
     else {
-      session_destroy();
-      $_SESSION['btrClient']['translate_form']['state'] = $form_state;
-      $_SESSION['btrClient']['translate_form']['authenticating'] = TRUE;
-      oauth2_login();
+      if (isset($_SESSION['btrClient']['translate_form']['authenticating'])) {
+	unset($_SESSION['btrClient']['translate_form']['authenticating']);
+	return;
+      }
+      else {
+	session_destroy();
+	$_SESSION['btrClient']['translate_form']['state'] = $form_state;
+	$_SESSION['btrClient']['translate_form']['authenticating'] = TRUE;
+	oauth2_login();
+      }
     }
   }
 
   if (btr_user_is_authenticated()) {
-    // Save the values selected on the form
-    // (votes or new suggestions).
-    $btr = wsclient_service_load('btr');
+    // Save the values selected on the form (votes or new suggestions).
     _btrClient_translate_form_save($form_values);
   }
 
