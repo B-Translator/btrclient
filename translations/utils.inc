@@ -173,6 +173,23 @@ function btrClient_get_languages() {
 }
 
 /**
+ * Return the language of translations.
+ */
+function btrClient_get_translation_lng() {
+  $lng = variable_get('btrClient_translation_lng', 'fr');
+  if ($lng == 'all') {
+    if (! btr_user_is_authenticated()) {
+      $lng = 'fr';
+    }
+    else {
+      $btr_profile = btr_get_user_profile();
+      $lng = $btr_profile['translation_lng'];
+    }
+  }
+  return $lng;
+}
+
+/**
  * From the given (possibly long) string, returns a short string
  * of the given length (that can be suitable for title, subject, etc.)
  */

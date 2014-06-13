@@ -22,7 +22,7 @@ require_once(dirname(__FILE__) . '/utils.inc');
  *     'https://dev.l10n.org.xx/translations/sq/ee178b82f7ff3b5fb48537b834db673b42d48556'
  */
 function btrClient_vote($lng =NULL, $sguid =NULL) {
-  if ($lng == NULL)  $lng = variable_get('btrClient_translation_lng', 'fr');
+  if ($lng == NULL)  $lng = btrClient_get_translation_lng();
   if ($sguid == NULL)  $sguid = 'next';
 
   if (in_array($sguid, array('next', 'translated', 'untranslated'))) {

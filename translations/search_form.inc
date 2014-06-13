@@ -17,7 +17,7 @@ function btrClient_get_search_params() {
   // If the search filter is empty, try to search for strings
   // similar to the last one that was reviewed.
   if (!isset($request['lng']) and isset($_SESSION['btrClient']['last_sguid'])) {
-    $request['lng'] = variable_get('btrClient_translation_lng', 'fr');
+    $request['lng'] = btrClient_get_translation_lng();
     $params['sguid'] = $_SESSION['btrClient']['last_sguid'];
   }
 
@@ -370,7 +370,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
   );
 
   $btr_server = variable_get('btrClient_server');
-  $lng = variable_get('btrClient_translation_lng', 'fr');
+  $lng = btrClient_get_translation_lng();
   $form['advanced_search']['author']['translated_by'] = array(
     '#type' => 'textfield',
     '#title' => t('Translated By'),

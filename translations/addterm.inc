@@ -21,7 +21,7 @@ function btrClient_addterm() {
  */
 function btrClient_addterm_form() {
   // get vocabulary projects
-  $lng = variable_get('btrClient_translation_lng', 'fr');
+  $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server', NULL);
   if (empty($btr_server)) {
     $projects = array("ICT_$lng" => "ICT_$lng");
@@ -103,7 +103,7 @@ function btrClient_addterm_form_submit($form, &$form_state) {
   }
 
   // redirect to translating the term
-  $lng = variable_get('btrClient_translation_lng', 'fr');
+  $lng = btrClient_get_translation_lng();
   drupal_goto("translations/$lng/$sguid");
 }
 
@@ -150,7 +150,7 @@ function btrClient_delterm_form_submit($form, &$form_state) {
   $btr->del_string(array('sguid' => $sguid));
 
   // redirect to the list of terms
-  $lng = variable_get('btrClient_translation_lng', 'fr');
+  $lng = btrClient_get_translation_lng();
   drupal_goto("translations/search",
     array('query' => array(
         'lng' => $lng,
