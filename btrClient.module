@@ -146,22 +146,6 @@ function btrClient_user_login($account, $data) {
   }
 }
 
-/**
- * Implements hook_oauth2_login_enabled().
- */
-function btrClient_oauth2_login_enabled($enabled) {
-  db_update('menu_links')
-    ->fields(array(
-        'hidden' => ($enabled ? 1 : 0),
-      ))
-    ->condition('menu_name', 'user-menu')
-    ->condition('link_path', 'user/login')
-    ->condition('router_path', 'user/login')
-    ->condition('plid', 0)
-    ->condition('module', 'menu')
-    ->execute();
-}
-
 /*
 function btr_log($var, $comment ='') {
   $file = '/tmp/btr.log';
