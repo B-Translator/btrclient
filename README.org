@@ -4,8 +4,8 @@
   This Drupal module implements a client based on the B-Translator
   API. For more info about /B-Translator/ see:
   http://info.btranslator.org For more details about /B-Translator API/
-  see: https://dev.l10n.org.al/api-docs/ and
-  https://dev.l10n.org.al/api-examples/js
+  see: https://dev.btranslator.org/api-docs/ and
+  https://dev.btranslator.org/api-examples/js
 
 ** Installation
 
@@ -18,7 +18,7 @@
       ;projects[btrClient][download][branch] = "7.x-1.x"
       #+END_EXAMPLE
 
-      For example, if you have innstalled the *standard* Drupal
+      For example, if you have installed the *standard* Drupal
       profile create the file ~standard.make~ with a content like
       this:
       #+BEGIN_EXAMPLE
