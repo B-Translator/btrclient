@@ -1,6 +1,8 @@
 <?php
 /**
  * @file
+ * Install and update functions for the module btrProject.
+ *
  * This file contains functions for creating and deleting
  * a custom content type and related fields for translation projects.
  * The page of a project is a central place for all the information
@@ -11,11 +13,23 @@
  */
 
 /**
- * Create a new content type for translation projects.
- *
- * This function is called by hook_install() of btrClient.
+ * Implements hook_install().
  */
-function btrClient_create_project_content_type() {
+function btrProject_install() {
+  btrProject_create_content_type();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function btrProject_uninstall() {
+  btrProject_delete_content_type();
+}
+
+/**
+ * Create a new content type for translation projects.
+ */
+function btrProject_create_content_type() {
   $t = get_t();
 
   /**** STEP 1 - Create and save a new content object ****/
@@ -73,10 +87,8 @@ function btrClient_create_project_content_type() {
 
 /**
  * Delete the project content type and anything related to it.
- *
- * This function is called by hook_uninstall() of btrClient.
  */
-function btrClient_delete_project_content_type() {
+function btrProject_delete_content_type() {
   // Machine name of the content type.
   $content_name = 'projects';
 

@@ -5,12 +5,6 @@ core = 7.x
 
 dependencies[] = libraries
 dependencies[] = entity
-dependencies[] = field_sql_storage
-dependencies[] = text
-dependencies[] = image
-;dependencies[] = list
-;dependencies[] = options
-;dependencies[] = number
 dependencies[] = wsclient
 dependencies[] = wsclient_rest
 dependencies[] = http_client

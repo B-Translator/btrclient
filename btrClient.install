@@ -4,16 +4,10 @@
  * Install and update functions for the module btrClient.
  */
 
-// Get the functions for creating/deleting a custom content type for projects.
-include drupal_get_path('module', 'btrClient') . '/btrClient.projects.inc';
-
 /**
  * Implements hook_install().
  */
 function btrClient_install() {
-  // Create a new content type for projects.
-  btrClient_create_project_content_type();
-
   // Set some default values for the variables.
   variable_set('oauth2_server_url', '');
 
@@ -32,20 +26,17 @@ function btrClient_install() {
   variable_set('oauth2_login_client_secret', $client_secret);
   variable_set('oauth2_login_skipssl', $skip_ssl);
 
-  // Enable the oauth2 login link and set the settings to hybridauth.
-  variable_set('oauth2_login_enabled', TRUE);
+  // Set the settings to hybridauth and call hook enabled.
   module_load_include('inc', 'oauth2_login', 'oauth2_login.admin');
-  oauth2_login_update_login_link();
+  variable_set('oauth2_login_enabled', TRUE);
   oauth2_login_admin_set_settings();
+  oauth2_login_call_hook_enabled();
 }
 
 /**
  * Implements hook_uninstall().
  */
 function btrClient_uninstall() {
-  // Delete the project content type and anything related to it.
-  btrClient_delete_project_content_type();
-
   // Delete variables that were used for this module.
   $variables = array(
     'btrClient_translation_lng',
