@@ -5,7 +5,8 @@
  */
 
 /**
- * Menu callback: translations/addterm
+ * Menu callback: translations/addterm.
+ *
  * Add a new term on a vocabulary.
  */
 function btrClient_addterm() {
@@ -17,10 +18,10 @@ function btrClient_addterm() {
 }
 
 /**
- * Form: addterm
+ * Form: addterm.
  */
 function btrClient_addterm_form() {
-  // get vocabulary projects
+  // Get vocabulary projects.
   $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server', NULL);
   if (empty($btr_server)) {
@@ -68,8 +69,8 @@ function btrClient_addterm_form() {
   );
 
   $form['addterm']['buttons'] = array(
-    //'#prefix' => '<div class="export-submit">',
-    //'#suffix' => '</div>',
+    // '#prefix' => '<div class="export-submit">',
+    // '#suffix' => '</div>',
   );
   $form['addterm']['buttons']['submit'] = array(
     '#value' => t('Add'),
@@ -102,13 +103,13 @@ function btrClient_addterm_form_submit($form, &$form_state) {
     return;
   }
 
-  // redirect to translating the term
+  // Redirect to translating the term.
   $lng = btrClient_get_translation_lng();
   drupal_goto("translations/$lng/$sguid");
 }
 
 /**
- * Form: delterm
+ * Form: delterm.
  */
 function btrClient_delterm_form() {
   $form = array(
@@ -130,8 +131,8 @@ function btrClient_delterm_form() {
   );
 
   $form['delterm']['buttons'] = array(
-    //'#prefix' => '<div class="export-submit">',
-    //'#suffix' => '</div>',
+    // '#prefix' => '<div class="export-submit">',
+    // '#suffix' => '</div>',
   );
   $form['delterm']['buttons']['submit'] = array(
     '#value' => t('Delete'),
@@ -149,10 +150,11 @@ function btrClient_delterm_form_submit($form, &$form_state) {
   $sguid = check_plain(trim($form_state['values']['sguid']));
   $btr->del_string(array('sguid' => $sguid));
 
-  // redirect to the list of terms
+  // Redirect to the list of terms.
   $lng = btrClient_get_translation_lng();
   drupal_goto("translations/search",
-    array('query' => array(
+    array(
+      'query' => array(
         'lng' => $lng,
         'project' => 'vocabulary',
         'limit' => 10,

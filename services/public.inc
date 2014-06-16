@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Define public web services.
  */
 

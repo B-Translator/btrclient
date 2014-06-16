@@ -7,12 +7,12 @@
 /**
  * Include utility and theme functions.
  */
-require_once(dirname(__FILE__) . '/search_form.inc');
-require_once(dirname(__FILE__) . '/list/list.inc');
-require_once(dirname(__FILE__) . '/utils.inc');
+require_once dirname(__FILE__) . '/search_form.inc';
+require_once dirname(__FILE__) . '/list/list.inc';
+require_once dirname(__FILE__) . '/utils.inc';
 
 /**
- * Menu callback: translations/search
+ * Menu callback: translations/search.
  *
  * Search strings and translations using various filters.
  *
@@ -48,7 +48,7 @@ function btrClient_search() {
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
 
-  // Add RTL style if the current language's direction is RTL
+  // Add RTL style if the current language's direction is RTL.
   $languages = btrClient_get_languages();
   $lng = btrClient_get_translation_lng();
   if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
@@ -60,7 +60,7 @@ function btrClient_search() {
 
   // Add the filter form.
   $output = array(
-    drupal_get_form('btrClient_filter_form', $filter)
+    drupal_get_form('btrClient_filter_form', $filter),
   );
 
   // Output the strings.

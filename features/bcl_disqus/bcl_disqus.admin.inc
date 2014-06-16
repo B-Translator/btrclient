@@ -24,7 +24,7 @@ function bcl_disqus_menu() {
 /**
  * Custom settings for Disqus.
  *
- * @return
+ * @return array
  *   An array containing form items to place on the module settings page.
  */
 function bcl_disqus_config() {

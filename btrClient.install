@@ -1,20 +1,20 @@
 <?php
 /**
- * @file btrClient.install
+ * @file
  * Install and update functions for the module btrClient.
  */
 
-// get the functions for creating/deleting a custom content type for projects
+// Get the functions for creating/deleting a custom content type for projects.
 include drupal_get_path('module', 'btrClient') . '/btrClient.projects.inc';
 
 /**
  * Implements hook_install().
  */
 function btrClient_install() {
-  // create a new content type for projects
+  // Create a new content type for projects.
   btrClient_create_project_content_type();
 
-  // set some default values for the variables
+  // Set some default values for the variables.
   variable_set('oauth2_server_url', '');
 
   // Set some test/dummy values for oauth2 variables.
@@ -23,7 +23,7 @@ function btrClient_install() {
   $client_secret = '0123456789';
   $skip_ssl = 1;
 
-  // Set the B-Translator API server
+  // Set the B-Translator API server.
   variable_set('btrClient_server', $server_url);
 
   // Set configuration variables of oauth2_login.
@@ -43,10 +43,10 @@ function btrClient_install() {
  * Implements hook_uninstall().
  */
 function btrClient_uninstall() {
-  // delete the project content type and anything related to it
+  // Delete the project content type and anything related to it.
   btrClient_delete_project_content_type();
 
-  // delete variables that were used for this module
+  // Delete variables that were used for this module.
   $variables = array(
     'btrClient_translation_lng',
     'btrClient_server',
@@ -65,7 +65,7 @@ function btrClient_uninstall() {
  * Implements hook_schema().
  */
 function btrClient_schema() {
-  // create a cache table for this module
+  // Create a cache table for this module.
   $schema['cache_btrClient'] = drupal_get_schema_unprocessed('system', 'cache');
 
   return $schema;

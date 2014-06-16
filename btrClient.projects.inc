@@ -6,11 +6,13 @@
  * The page of a project is a central place for all the information
  * and activity related to that translation project.
  *
- * Reference: http://www.thecarneyeffect.co.uk/creating-custom-content-type-adding-fields-programmatically-drupal-7
+ * Reference: http://www.thecarneyeffect.co.uk/
+ *   /creating-custom-content-type-adding-fields-programmatically-drupal-7
  */
 
 /**
  * Create a new content type for translation projects.
+ *
  * This function is called by hook_install() of btrClient.
  */
 function btrClient_create_project_content_type() {
@@ -18,10 +20,10 @@ function btrClient_create_project_content_type() {
 
   /**** STEP 1 - Create and save a new content object ****/
 
-  // machine name of the content type
+  // Machine name of the content type.
   $content_name = 'projects';
 
-  // define the node type
+  // Define the node type.
   $projects = array(
     'type' => $content_name,
     'name' => $t('Translation Projects'),
@@ -31,34 +33,36 @@ function btrClient_create_project_content_type() {
     'custom' => TRUE,
   );
 
-  // set other node defaults not declared above
+  // Set other node defaults not declared above.
   $content_type = node_type_set_defaults($projects);
-  // add the body field
+  // Add the body field.
   node_add_body_field($content_type, $t('Project Description'));
 
-  // save the content type
+  // Save the content type.
   node_type_save($content_type);
-
 
   /**** STEP 2 - update persistant variables with settings ****/
 
-  // add persistent variables that control settings
+  // Add persistent variables that control settings.
   variable_set('additional_settings__active_tab_' . $content_name, 'edit-menu');
-  variable_set('node_preview_' . $content_name, 1); // 0 = disabled, 1 = optional, 2 = required
-  variable_set('node_options_' . $content_name, array(0 => 'status')); // array(0 => 'status', 1 => 'promote', 2 => 'sticky', 3 => 'revision') remove to uncheck
-  variable_set('node_submitted_' . $content_name, 0); // 1 = Display author and date information, 0 = none
+  // 0 = disabled, 1 = optional, 2 = required.
+  variable_set('node_preview_' . $content_name, 1);
+  // array(0 => 'status', 1 => 'promote', 2 => 'sticky', 3 => 'revision')
+  // remove to uncheck.
+  variable_set('node_options_' . $content_name, array(0 => 'status'));
+  // 1 = Display author and date information, 0 = none.
+  variable_set('node_submitted_' . $content_name, 0);
   variable_set('menu_options_' . $content_name, array(0 => 'main_menu'));
   variable_set('menu_parent_' . $content_name, 'main-menu:0');
 
-
   /**** STEP 3 - create and add instances of new fields ****/
 
-  // create all the fields we are adding to our content type
+  // Create all the fields we are adding to our content type.
   foreach (_btrClient_project_content_type_fields() as $field) {
     field_create_field($field);
   }
 
-  // create all the instances for our fields
+  // Create all the instances for our fields.
   foreach (_btrClient_project_content_type_instances() as $instance) {
     $instance['entity_type'] = 'node';
     $instance['bundle'] = $projects['type'];
@@ -68,14 +72,15 @@ function btrClient_create_project_content_type() {
 
 
 /**
- * Delete the project content type and anything related to it
+ * Delete the project content type and anything related to it.
+ *
  * This function is called by hook_uninstall() of btrClient.
  */
 function btrClient_delete_project_content_type() {
-  // machine name of the content type
+  // Machine name of the content type.
   $content_name = 'projects';
 
-  // gather all project nodes created
+  // Gather all project nodes created.
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
   $result = db_query($sql, array(':type' => $content_name));
   $nids = array();
@@ -83,10 +88,10 @@ function btrClient_delete_project_content_type() {
     $nids[] = $row->nid;
   }
 
-  // delete all the project nodes at once
+  // Delete all the project nodes at once.
   node_delete_multiple($nids);
 
-  // remove persistant variables that control settings
+  // Remove persistant variables that control settings.
   variable_del('additional_settings__active_tab_' . $content_name);
   variable_del('node_preview_' . $content_name);
   variable_del('node_options_' . $content_name);
@@ -94,30 +99,30 @@ function btrClient_delete_project_content_type() {
   variable_del('menu_options_' . $content_name);
   variable_del('menu_parent_' . $content_name);
 
-  // delete our content type
+  // Delete our content type.
   node_type_delete($content_name);
 
-  // find all fields and delete them
+  // Find all fields and delete them.
   foreach (array_keys(_btrClient_project_content_type_fields()) as $field) {
     field_delete_field($field);
   }
 
-  // find all fields and delete instance
+  // Find all fields and delete instance.
   $instances = field_info_instances('node', $content_name);
   foreach ($instances as $instance_name => $instance) {
     field_delete_instance($instance);
   }
 
-  // purge all field info
+  // Purge all field info.
   field_purge_batch(1000);
 }
 
 /**
- * Returns a structured array defining the fields created by the project content type.
+ * Returns a structured array defining the fields of the project content type.
  *
- * @return
- *  An associative array specifying the fields we wish to add to our
- *  new content type.
+ * @return array
+ *   An associative array specifying the fields we wish to add to our
+ *   new content type.
  */
 function _btrClient_project_content_type_fields() {
   return array(
@@ -439,11 +444,11 @@ function _btrClient_project_content_type_fields() {
 }
 
 /**
- * Returns a structured array defining the instances for the project content type.
+ * Returns a structured array defining the instances for the project.
  *
- * @return
- *  An associative array specifying the instances we wish to add to our new
- *  content type.
+ * @return array
+ *   An associative array specifying the instances we wish to add to our new
+ *   content type.
  */
 function _btrClient_project_content_type_instances() {
   return array(

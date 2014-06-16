@@ -4,30 +4,10 @@
  * Module file for btrClient.
  */
 
-require_once(dirname(__FILE__) . '/translations/utils.inc');
-require_once(dirname(__FILE__) . '/btrClient.menu.inc');
-require_once(dirname(__FILE__) . '/btrClient.blocks.inc');
-require_once(dirname(__FILE__) . '/btrClient.services.inc');
-
-/**
- * Implements hook_help().
- */
-                               /*
-function btrClient_help($path, $args) {
-  switch($path)
-    {
-      case 'translations/get':
-        $help = t('Get translation suggestions for a given string.');
-        break;
-
-      case 'translations/vote':
-        $help = t('Vote the best translation for a string, or suggest a better translation.');
-        break;
-    }
-
-  return $help;
-}
-                               */
+require_once dirname(__FILE__) . '/translations/utils.inc';
+require_once dirname(__FILE__) . '/btrClient.menu.inc';
+require_once dirname(__FILE__) . '/btrClient.blocks.inc';
+require_once dirname(__FILE__) . '/btrClient.services.inc';
 
 /**
  * Implements hook_theme().
@@ -63,6 +43,7 @@ function btrClient_theme($existing, $type, $theme, $path) {
 
 /**
  * Implements hook_flush_caches().
+ *
  * Add cache table names to the list of cache tables
  * that will be cleared by the Clear button on the Performance page
  * or whenever drupal_flush_all_caches is invoked.
@@ -80,11 +61,11 @@ function btrClient_init() {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient.css');
   }
 
-  // Check if language is RTL
+  // Check if language is RTL.
   $languages = btrClient_get_languages();
   $lng = arg(1);
   if (array_key_exists($lng, $languages)) {
-    // Add RTL style if the current language's direction is RTL
+    // Add RTL style if the current language's direction is RTL.
     if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
       drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient-rtl.css');
     }
@@ -98,7 +79,9 @@ function btrClient_init() {
  * Implements hook_hybridauth_provider_config_alter().
  */
 function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
-  if ($provider_id != 'DrupalOAuth2')  return;
+  if ($provider_id != 'DrupalOAuth2') {
+    return;
+  }
 
   // Get some extra fields from the remote user profile.
   // These fields can be defined by the oauth2 server
@@ -126,11 +109,6 @@ function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
 
 /**
  * Implements hook_hybridauth_user_login().
- * Invoked when a user has logged in through HybridAuth.
- * @param object $account
- *   User account object.
- * @param array $data
- *   HybridAuth identity data.
  */
 function btrClient_hybridauth_user_login($account, $data) {
   $btr_profile = _btrClient_get_user_profile($data);

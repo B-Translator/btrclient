@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Define authenticated web services.
  */
 
@@ -63,7 +64,7 @@ function _btrClient_services_authenticated_translations() {
     ),
   );
 
-  $POST_operations = array(
+  $post_operations = array(
     'search' => 'translations/search',
     'get_random_sguid' => 'translations/get_random_sguid',
     'add_translation' => 'translations/add',
@@ -71,9 +72,9 @@ function _btrClient_services_authenticated_translations() {
     'del_translation' => 'translations/del',
     'del_vote' => 'translations/del_vote',
     'submit' => 'translations/submit',
-    //'import_translations' => 'translations/import',
+    'import_translations' => 'translations/import',
   );
-  foreach($POST_operations as $name  => $url) {
+  foreach ($post_operations as $name => $url) {
     $operations[$name] = array(
       'label' => $name,
       'url' => $url,
@@ -92,12 +93,12 @@ function _btrClient_services_authenticated_translations() {
  * Return definitions for operations about projects.
  */
 function _btrClient_services_authenticated_projects() {
-  $POST_operations = array(
+  $post_operations = array(
     'export_projects' => 'project/export',
     'add_string' => 'project/add_string',
     'del_string' => 'project/del_string',
   );
-  foreach($POST_operations as $name  => $url) {
+  foreach ($post_operations as $name => $url) {
     $operations[$name] = array(
       'label' => $name,
       'url' => $url,
@@ -116,10 +117,10 @@ function _btrClient_services_authenticated_projects() {
  * Return definitions for operations about users.
  */
 function _btrClient_services_authenticated_users() {
-  $POST_operations = array(
+  $post_operations = array(
     'user_profile' => 'user/profile',
   );
-  foreach($POST_operations as $name  => $url) {
+  foreach ($post_operations as $name => $url) {
     $operations[$name] = array(
       'label' => $name,
       'url' => $url,

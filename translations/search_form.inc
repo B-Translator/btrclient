@@ -7,11 +7,12 @@
  */
 
 /**
- * Get the search parameters from the GET request,
- * which is like: translations/search?lng=fr&words=xyz&limit=10
+ * Get the search parameters from the GET request.
+ *
+ * The GET request is like: translations/search?lng=fr&words=xyz&limit=10
  */
 function btrClient_get_search_params() {
-  //get a copy of the request parameters
+  // Get a copy of the request parameters.
   $request = $_GET;
 
   // If the search filter is empty, try to search for strings
@@ -21,26 +22,26 @@ function btrClient_get_search_params() {
     $params['sguid'] = $_SESSION['btrClient']['last_sguid'];
   }
 
-  //get and check the language
+  // Get and check the language.
   $lng = isset($request['lng']) ? trim($request['lng']) : '';
   $languages = btrClient_get_languages();
   $lng_codes = array_keys($languages);
   $params['lng'] = in_array($lng, $lng_codes) ? $lng : 'fr';
 
-  //number of results to be displayed
+  // Number of results to be displayed.
   if (isset($request['limit'])) {
-    $limit = (int)trim($request['limit']);
+    $limit = (int) trim($request['limit']);
     list($limit_options, $default_limit) = _btrClient_get_filter_options('limit');
     $params['limit'] = in_array($limit, $limit_options) ? $limit : $default_limit;
   }
-  //page of results to be displayed
+  // Page of results to be displayed.
   if (isset($request['page'])) {
-    $params['page'] = (int)trim($request['page']);
+    $params['page'] = (int) trim($request['page']);
   }
 
-  //search can be done either by similarity of l10n strings (natural search),
-  //or by matching words according to a certain logic (boolean search);
-  //search can be performed either on l10n strings or on the translations
+  // Search can be done either by similarity of l10n strings (natural search),
+  // or by matching words according to a certain logic (boolean search).
+  // Search can be performed either on l10n strings or on the translations.
   if (isset($request['mode'])) {
     $mode = $request['mode'];
     list($search_mode_options, $default_search_mode) = _btrClient_get_filter_options('mode');
@@ -50,21 +51,21 @@ function btrClient_get_search_params() {
     $params['words'] = $request['words'];
   }
 
-  //searching can be limited only to certain projects and/or origins
+  // Searching can be limited only to certain projects and/or origins.
   if (isset($request['project'])) {
     $params['project'] = trim($request['project']);
   }
   if (isset($request['origin'])) {
-  $params['origin'] = trim($request['origin']);
+    $params['origin'] = trim($request['origin']);
   }
 
-  //limit search only to the strings touched (translated or voted)
-  //by the current user
-  if (isset($request['only_mine']) && (int)$request['only_mine']) {
+  // Limit search only to the strings touched (translated or voted)
+  // by the current user.
+  if (isset($request['only_mine']) && (int) $request['only_mine']) {
     $params['only_mine'] = 1;
   }
 
-  //limit search by the editing users (used by admins)
+  // Limit search by the editing users (used by admins).
   if (isset($request['translated_by'])) {
     $params['translated_by'] = trim($request['translated_by']);
   }
@@ -72,14 +73,14 @@ function btrClient_get_search_params() {
     $params['voted_by'] = trim($request['voted_by']);
   }
 
-  //limit by date of string, translation or voting (used by admins)
+  // Limit by date of string, translation or voting (used by admins).
   if (isset($request['date_filter'])) {
     $date_filter = trim($request['date_filter']);
     list($date_filter_options, $default_date_filter) = _btrClient_get_filter_options('date_filter');
     $params['date_filter'] = in_array($date_filter, $date_filter_options) ? $date_filter : $default_date_filter;
   }
 
-  //from_date
+  // Get from_date.
   if (isset($request['from_date'])) {
     $from_date = trim($request['from_date']);
     if ($from_date != '') {
@@ -89,7 +90,7 @@ function btrClient_get_search_params() {
     $params['from_date'] = $from_date;
   }
 
-  //to_date
+  // Get to_date.
   if (isset($request['to_date'])) {
     $to_date = trim($request['to_date']);
     if ($to_date != '') {
@@ -106,19 +107,17 @@ function btrClient_get_search_params() {
  * Submission handler for filtering form.
  */
 function btrClient_filter_form_submit($form, &$form_state) {
-
-  //dpm($form_state['values']);  //debug
-
   if ($form_state['values']['op'] == t('Reset')) {
     // Just go with the redirection flow => removes URL params.
     return;
   }
 
   if ($form_state['values']['op'] == t('Filter')) {
-    // Redirect (with a GET request) keeping the relevant filters intact in the URL.
+    // Redirect (with a GET request) keeping the relevant filters intact
+    // in the URL.
     $form_state['redirect'] = array(
       $_GET['q'],
-      array('query' => btrClient_get_query_values($form_state['values']))
+      array('query' => btrClient_get_query_values($form_state['values'])),
     );
     return;
   }
@@ -126,67 +125,76 @@ function btrClient_filter_form_submit($form, &$form_state) {
 
 /**
  * Converts the array of form values into a suitable query (for redirect).
+ *
  * All non-string values are converted to string representations.
- * If a form value is equal to the default value, it is removed (unset) from the array.
+ * If a form value is equal to the default value, it is removed (unset)
+ * from the array.
  */
 function btrClient_get_query_values($form_values) {
-
   $query = array();
 
-  //lng
+  // Get lng.
   $languages = btrClient_get_languages();
   $lng_codes = array_keys($languages);
   $lng = trim($form_values['lng']);
-  if (in_array($lng, $lng_codes))
+  if (in_array($lng, $lng_codes)) {
     $query['lng'] = $lng;
+  }
 
-  //package, project, release
-  if (trim($form_values['project']) != '' )
+  // Get project and origin.
+  if (trim($form_values['project']) != '') {
     $query['project'] = $form_values['project'];
-  if (trim($form_values['origin']) != '' )
+  }
+  if (trim($form_values['origin']) != '') {
     $query['origin'] = $form_values['origin'];
+  }
 
   if (btr_user_is_authenticated()) {
-    //only_mine
+    // Get only_mine.
     if ($form_values['only_mine'] == 1) {
       $query['only_mine'] = '1';
     }
     else {
-      //translated_by, voted_by
-      if (trim($form_values['translated_by']) != '' )
+      // Get translated_by, voted_by.
+      if (trim($form_values['translated_by']) != '') {
         $query['translated_by'] = $form_values['translated_by'];
-      if (trim($form_values['voted_by']) != '' )
+      }
+      if (trim($form_values['voted_by']) != '') {
         $query['voted_by'] = $form_values['voted_by'];
+      }
     }
 
-    //date_filter
+    // Get date_filter.
     list($date_filter_options, $default_date_filter) = _btrClient_get_filter_options('date_filter');
-    if ( in_array($form_values['date_filter'], $date_filter_options) && $form_values['date_filter'] != $default_date_filter ) {
+    if (in_array($form_values['date_filter'], $date_filter_options) && $form_values['date_filter'] != $default_date_filter) {
       $query['date_filter'] = $form_values['date_filter'];
     }
 
-    //from_date
-    if (trim($form_values['from_date']) != '' )
+    // Get from_date.
+    if (trim($form_values['from_date']) != '') {
       $query['from_date'] = $form_values['from_date'];
+    }
 
-    //to_date
-    if (trim($form_values['to_date']) != '' )
+    // Get to_date.
+    if (trim($form_values['to_date']) != '') {
       $query['to_date'] = $form_values['to_date'];
+    }
   }
 
-  //limit
+  // Get limit.
   list($limit_options, $default_limit) = _btrClient_get_filter_options('limit');
-  if ( in_array($form_values['limit'], $limit_options) && $form_values['limit'] != $default_limit ) {
+  if (in_array($form_values['limit'], $limit_options) && $form_values['limit'] != $default_limit) {
     $query['limit'] = $form_values['limit'];
   }
 
-  //search mode and words
+  // Get search mode and words.
   list($search_mode_options, $default_search_mode) = _btrClient_get_filter_options('mode');
-  if ( in_array($form_values['mode'], $search_mode_options) && $form_values['mode'] != $default_search_mode ) {
+  if (in_array($form_values['mode'], $search_mode_options) && $form_values['mode'] != $default_search_mode) {
     $query['mode'] = $form_values['mode'];
   }
-  if (trim($form_values['words']) != '' )
+  if (trim($form_values['words']) != '') {
     $query['words'] = $form_values['words'];
+  }
 
   return $query;
 }
@@ -194,45 +202,50 @@ function btrClient_get_query_values($form_values) {
 /**
  * Translation form filter.
  *
- * @param $filters
+ * @param array $form
+ *   The form values.
+ * @param array $form_state
+ *   The form_state values
+ * @param array $filter
  *   Array of filter options.
  */
 function btrClient_filter_form($form, &$form_state, $filter) {
 
-  //if the form has no values yet (either it is the first time that
-  //the form is opened, or we have a get request), we set the values
-  //of the form according to the $filter values
+  // If the form has no values yet (either it is the first time that
+  // the form is opened, or we have a get request), we set the values
+  // of the form according to the $filter values.
   if (empty($form_state['values'])) {
     $form_state['values'] = $filter;
   }
 
   $form = array(
-    //'#prefix' => '<div class="bcl-ui-filter clear-block">',
+    // '#prefix' => '<div class="bcl-ui-filter clear-block">',
     '#prefix' => '<div class="clear-block">',
     '#suffix' => '</div>',
   );
 
-  // Add form fields: lng, mode, words, limit
+  // Add form fields: lng, mode, words, limit.
   _btrClient_filter_form_basic_search($form, $form_state);
 
-  // Add form fieldset advanced_search/projects, with the fields: project and origin.
+  // Add form fieldset advanced_search/projects, with the fields:
+  // project and origin.
   _btrClient_filter_form_advanced_search($form, $form_state);
 
   // Search by author and serach by date
   // are available only to logged in users.
   if (btr_user_is_authenticated()) {
     // Add fieldset advanced_search/author,
-    // with fields: only_mine, translated_by, voted_by
+    // with fields: only_mine, translated_by, voted_by.
     _btrClient_filter_form_author($form, $form_state);
 
     // Add fieldset advanced_search/date,
-    // with fields: date_filter, from_date, to_date
+    // with fields: date_filter, from_date, to_date.
     _btrClient_filter_form_date($form, $form_state);
   }
 
   $form['buttons'] = array(
-    //'#prefix' => '<div class="filter-submit">',
-    //'#suffix' => '</div>',
+    // '#prefix' => '<div class="filter-submit">',
+    // '#suffix' => '</div>',
   );
   $form['buttons']['submit'] = array(
     '#value' => t('Filter'),
@@ -243,26 +256,27 @@ function btrClient_filter_form($form, &$form_state, $filter) {
     '#value' => t('Reset'),
   );
 
-  // enclose the whole form in another fieldset/container
+  // Enclose the whole form in another fieldset/container.
   $form1['search_container'] = array(
     '#type' => 'fieldset',
     '#title' => t('Change Filter Parameters'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    $form,
-  );
+  ) + $form;
   $form = $form1;
 
   return $form;
 }
 
 /**
- * Add form fields: lng, mode, words, limit
+ * Add form fields: lng, mode, words, limit.
  */
 function _btrClient_filter_form_basic_search(&$form, &$form_state) {
 
   $languages = btrClient_get_languages();
-  foreach ($languages as $code => $lang)  $lang_options[$code] = $lang['name'];
+  foreach ($languages as $code => $lang) {
+    $lang_options[$code] = $lang['name'];
+  }
   $form['lng'] = array(
     '#type' => 'select',
     '#title' => t('Language of Translation'),
@@ -274,7 +288,6 @@ function _btrClient_filter_form_basic_search(&$form, &$form_state) {
   $form['basic_search'] = array(
     '#type' => 'fieldset',
     '#title' => t('What To Search For'),
-    //'#description' => t('What to search for.'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
@@ -310,14 +323,13 @@ function _btrClient_filter_form_basic_search(&$form, &$form_state) {
 }
 
 /**
- * Add form fieldset advanced_search/projects, with the fields: project and origin.
+ * Add fieldset advanced_search/projects, with the fields: project and origin.
  */
 function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
 
   $form['advanced_search'] = array(
     '#type' => 'fieldset',
     '#title' => t('Search Scope'),
-    //'#description' => t('Limit the search scope only to certain interesting areas.'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
@@ -325,7 +337,6 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
   $form['advanced_search']['projects'] = array(
     '#type' => 'fieldset',
     '#title' => t('Projects'),
-    //'#description' => t('Limit the search scope according to projects.'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
@@ -349,15 +360,15 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
 }
 
 /**
- * Add fieldset advanced_search/author, with fields:
- * only_mine, translated_by, voted_by
+ * Add fieldset advanced_search/author.
+ *
+ * With fields: only_mine, translated_by, voted_by.
  */
 function _btrClient_filter_form_author(&$form, &$form_state) {
 
   $form['advanced_search']['author'] = array(
     '#type' => 'fieldset',
     '#title' => t('Author'),
-    //'#description' => t('Limit the search scope according to the author.'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
@@ -376,7 +387,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#title' => t('Translated By'),
     '#description' => t('Search only the strings with translations suggested by the selected user.'),
     '#default_value' => $form_state['values']['translated_by'],
-    '#autocomplete_path' => $btr_server.'/translations/autocomplete/user/'.$lng,
+    '#autocomplete_path' => $btr_server . '/translations/autocomplete/user/' . $lng,
     '#states' => array(
       'visible' => array(
         ':input[name="only_mine"]' => array('checked' => FALSE),
@@ -389,7 +400,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#title' => t('Voted By'),
     '#description' => t('Search only the strings with translations voted by the selected user.'),
     '#default_value' => $form_state['values']['voted_by'],
-    '#autocomplete_path' => $btr_server.'/translations/autocomplete/user/'.$lng,
+    '#autocomplete_path' => $btr_server . '/translations/autocomplete/user/' . $lng,
     '#states' => array(
       'visible' => array(
         ':input[name="only_mine"]' => array('checked' => FALSE),
@@ -399,8 +410,9 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
 }
 
 /**
- * Add fieldset advanced_search/date,
- * with fields: date_filter, from_date, to_date
+ * Add fieldset advanced_search/date.
+ *
+ * With fields: date_filter, from_date, to_date.
  */
 function _btrClient_filter_form_date(&$form, &$form_state) {
   $form['advanced_search']['date'] = array(
@@ -436,28 +448,29 @@ function _btrClient_filter_form_date(&$form, &$form_state) {
 // ----------------------- utility functions ----------------------------
 
 /**
- * Utility function that returns an array of options for the given field
- * and the default value. If being associative ($assoc) is not required
- * then only the keys are retrned.
+ * Returns an array of options for the given field and the default value.
+ *
+ * If being associative ($assoc) is not required then only the keys are
+ * returned.
  */
-function _btrClient_get_filter_options($field, $assoc =FALSE) {
+function _btrClient_get_filter_options($field, $assoc = FALSE) {
 
   switch ($field) {
 
     case 'limit':
-      //number of results to be displayed per page
+      // Number of results to be displayed per page.
       $options = array(
         '5'  => '5',
         '10' => '10',
         '20' => '20',
         '30' => '30',
-        '50' => '50'
+        '50' => '50',
       );
       $default = 5;
       break;
 
     case 'mode':
-      //search mode
+      // Options for search mode.
       $options = array(
         'natural-strings' => t('Natural search on strings.'),
         'natural-translations' => t('Natural search on translations.'),
@@ -468,7 +481,7 @@ function _btrClient_get_filter_options($field, $assoc =FALSE) {
       break;
 
     case 'date_filter':
-      //which date to filter
+      // Which date to filter.
       $options = array(
         'strings' => t('Filter Strings By Date'),
         'translations' => t('Filter Translations By Date'),
@@ -477,6 +490,9 @@ function _btrClient_get_filter_options($field, $assoc =FALSE) {
       $default = 'translations';
       break;
   }
-  if (!$assoc) $options = array_keys($options);
+  if (!$assoc) {
+    $options = array_keys($options);
+  }
+
   return array($options, $default);
 }

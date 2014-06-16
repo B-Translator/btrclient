@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Misc utility functions.
+ */
 
 /**
  * Unpacks a string as retrieved from the database.
@@ -7,9 +11,10 @@
  * will have one item. If the string was a plural string, the array will have
  * as many items as the language requires (two for source strings).
  *
- * @param $string
- *   The string with optional separation markers (NULL bytes)
- * @return
+ * @param string $string
+ *   The string with optional separation markers (NULL bytes).
+ *
+ * @return array
  *   An array of strings with one element for each plural form in case of
  *   a plural string, or one element in case of a regular string. This
  *  is called a $textarray elsewhere.
@@ -21,9 +26,10 @@ function btrClient_unpack_string($string) {
 /**
  * Packs a string for storage in the database.
  *
- * @param $string
+ * @param array $strings
  *   An array of strings.
- * @return
+ *
+ * @return string
  *   A packed string with NULL bytes separating each string.
  */
 function btrClient_pack_string($strings) {
@@ -36,20 +42,25 @@ function btrClient_pack_string($strings) {
 }
 
 /**
- * Check whether the current user has the given permission (on B-Translator server).
+ * Check whether the current user has the given permission (on the server).
  *
- * @param $permission
- *   The name of the permission (like btranslator-*).
- * @return
+ * @param string $permission
+ *   The name of the permission (like 'btranslator-*').
+ *
+ * @return bool
  *   TRUE or FALSE
  */
 function btr_user_access($permission) {
   // If the user is not logged in, he doesn't have any permissions.
-  if (!user_is_logged_in())  return FALSE;
+  if (!user_is_logged_in()) {
+    return FALSE;
+  }
 
   // If the user has not been authenticated yet by oauth2,
   // he doesn't have any permissions.
-  if (!btr_user_is_authenticated())  return FALSE;
+  if (!btr_user_is_authenticated()) {
+    return FALSE;
+  }
 
   // Check the given permission on the list of permissions.
   $btr_profile = btr_get_user_profile();
@@ -106,7 +117,7 @@ function btr_get_user_profile() {
 /**
  * Get and return the remote profile of the user.
  */
-function _btrClient_get_user_profile($btr_user =NULL) {
+function _btrClient_get_user_profile($btr_user = NULL) {
   if ($btr_user == NULL) {
     $btr = wsclient_service_load('btr');
     $btr_user = $btr->user_profile();
@@ -130,7 +141,7 @@ function _btrClient_get_user_profile($btr_user =NULL) {
 /**
  * Display any messages, warnings and errors.
  *
- * @param $messages
+ * @param array $messages
  *   Array of messages, usually returned from btr rest services.
  *   Each item is an array that contains a string message and a type,
  *   where type can be one of: status, warning, error.
@@ -178,7 +189,7 @@ function btrClient_get_languages() {
 function btrClient_get_translation_lng() {
   $lng = variable_get('btrClient_translation_lng', 'fr');
   if ($lng == 'all') {
-    if (! btr_user_is_authenticated()) {
+    if (!btr_user_is_authenticated()) {
       $lng = 'fr';
     }
     else {
@@ -190,8 +201,10 @@ function btrClient_get_translation_lng() {
 }
 
 /**
+ * Shorten the given string.
+ *
  * From the given (possibly long) string, returns a short string
- * of the given length (that can be suitable for title, subject, etc.)
+ * of the given length that can be suitable for title, subject, etc.
  */
 function btrClient_shorten($string, $length) {
   $str = strip_tags(str_replace("\n", ' ', $string));

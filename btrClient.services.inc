@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Define web services.
  */
 
@@ -11,10 +12,6 @@
  * are loaded like this:
  *     $btr = wsclient_service_load('dev.l10n.org.xx');
  *     $result = $btr->statistics('sq');
- *
- * @return
- *     An array of web service descriptions
- *     with the web service names as keys.
  */
 function btrClient_default_wsclient_service() {
   module_load_include('inc', 'btrClient', 'services/public');
@@ -34,7 +31,7 @@ function _btrClient_services_dev_settings() {
 
   $dev_settings = array();
   if ($skipssl) {
-    // skip checking the SSL certificate, for testing
+    // Skip checking the SSL certificate, for testing.
     $dev_settings['curl options'] = array(
       CURLOPT_SSL_VERIFYPEER => FALSE,
       CURLOPT_SSL_VERIFYHOST => FALSE,

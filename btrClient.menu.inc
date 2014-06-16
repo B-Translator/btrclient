@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Menus.
+ */
+
+/**
  * Implements hook_menu().
  */
 function btrClient_menu() {
@@ -14,7 +19,6 @@ function btrClient_menu() {
     'file' => 'system.admin.inc',
     'file path' => drupal_get_path('module', 'system'),
     'access callback' => TRUE,
-    //'position' => 'right',
   );
 
   $items['admin/config/bcl/client'] = array(

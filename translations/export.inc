@@ -5,7 +5,8 @@
  */
 
 /**
- * Menu callback: translations/export
+ * Callback for translations/export.
+ *
  * Export the best translations of a project into PO format.
  */
 function btrClient_export() {
@@ -78,8 +79,8 @@ function btrClient_export_form() {
   }
 
   $form['buttons'] = array(
-    //'#prefix' => '<div class="export-submit">',
-    //'#suffix' => '</div>',
+    // '#prefix' => '<div class="export-submit">',
+    // '#suffix' => '</div>',
   );
   $form['buttons']['submit'] = array(
     '#value' => t('Export'),

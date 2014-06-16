@@ -4,16 +4,19 @@
  * Menu callbacks.
  */
 
-function btrClient_rss_feed($origin =NULL, $project =NULL) {
+/**
+ * Callback for 'translations/rss_feed'.
+ */
+function btrClient_rss_feed($origin = NULL, $project = NULL) {
   // Get the translation language.
   $lng = variable_get('btrClient_translation_lng', 'fr');
 
   // Get the domain of the feed in the form of 'origin/project'
   // (or just 'origin').
   $domain = '';
-  if ( ! empty($origin) ) {
+  if (!empty($origin)) {
     $domain = $origin;
-    if ( ! empty($project) ) {
+    if (!empty($project)) {
       $domain .= '/' . $project;
     }
   }
@@ -54,12 +57,12 @@ function btrClient_rss_feed($origin =NULL, $project =NULL) {
   else {
     $description = t('Latest translation suggestions on B-Translator, for @domain', array('@domain' => $domain));
   }
-  $ttl = 180;  // 3 hours = 3*60 min
+  $ttl = 180;
   $site_mail = variable_get('site_mail');
   $site_name = variable_get('site_name');
-  $webMaster = "$site_mail ($site_name)";
+  $web_master = "$site_mail ($site_name)";
 
-  $lastBuildDate = date('r');
+  $last_build_date = date('r');
   $rss_feed .= "
     <channel>
       <title>$title</title>
@@ -68,8 +71,8 @@ function btrClient_rss_feed($origin =NULL, $project =NULL) {
       <category>B-Translator</category>
       <language>$lng</language>
       <ttl>$ttl</ttl>
-      <webMaster>$webMaster</webMaster>
-      <lastBuildDate>$lastBuildDate</lastBuildDate>
+      <webMaster>$web_master</webMaster>
+      <lastBuildDate>$last_build_date</lastBuildDate>
     ";
 
   // Append an item for each translation.
@@ -79,7 +82,7 @@ function btrClient_rss_feed($origin =NULL, $project =NULL) {
     $title = btrClient_shorten($string, 60);
     $link = $base_url . "/$lng/$sguid";
     $description = "<xmp>$string</xmp> -- <xmp>$translation</xmp>";
-    $pubDate = date('r', strtotime($time));
+    $pub_date = date('r', strtotime($time));
     $rss_feed .= "
       <item>
         <title>$title</title>
@@ -89,7 +92,7 @@ function btrClient_rss_feed($origin =NULL, $project =NULL) {
         <category>$origin</category>
         <category>$project</category>
         <guid isPermaLink='false'>$tguid</guid>
-        <pubDate>$pubDate</pubDate>
+        <pubDate>$pub_date</pubDate>
       </item>
     ";
   }

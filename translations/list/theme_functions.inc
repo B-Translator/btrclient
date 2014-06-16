@@ -41,7 +41,12 @@ function theme_btrClient_translate_table($variables) {
     );
   }
 
-  return theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('class' => array('l10n-table'))));
+  return theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(
+        'class' => array('l10n-table'),
+      )));
 }
 
 /**
@@ -50,17 +55,15 @@ function theme_btrClient_translate_table($variables) {
 function theme_btrClient_translate_source($variables) {
   $element = $variables['element'];
   $output = theme('btrClient_translate_actions', array('element' => $element['source']));
-  //$filter_match = ($element['filters_match']['#value'] ? ' filter-match' : ' filter-no-match');
   $filter_match = ' filter-no-match';
   $output .= '<label class="l10n-string' . $filter_match . '">' . drupal_render($element['source']['string']) . '</label>';
   $output .= theme('btrClient_in_context', array('source' => $element['#string']));
 
   $url = variable_get('btrClient_server') . '/translations/string_details/' . $element['#string']['sguid'];
-  $output .= '<div class="l10n-usage"><a href="'.$url.'" class="l10n-more-link" title="' . t('Show the string context and a list of projects where this string is used.') . '">' . t('Show string details.') . '</a><div class="l10n-more-info"></div></div>';
+  $output .= '<div class="l10n-usage"><a href="' . $url . '" class="l10n-more-link" title="' . t('Show the string context and a list of projects where this string is used.') . '">' . t('Show string details.') . '</a><div class="l10n-more-info"></div></div>';
 
-  /** TODO: Improve alternatives in other languages.
-  $output .= drupal_render($element['alternatives']);
-  */
+  // TODO: Improve alternatives in other languages.
+  // $output .= drupal_render($element['alternatives']);
 
   return $output;
 }
@@ -86,9 +89,6 @@ function theme_btrClient_translate_actions($variables) {
 
 /**
  * Theme context information for source strings.
- *
- * @param $string
- *   Source string object.
  */
 function theme_btrClient_in_context($variables) {
   $string = $variables['source'];
@@ -110,7 +110,7 @@ function theme_btrClient_translate_translation($variables) {
   $element['#attributes']['class'][] = 'clearfix';
   $element['#attributes']['class'][] = 'translation';
 
-  //// Add is-selectable and is-declinable helpers for JS.
+  // Add is-selectable and is-declinable helpers for JS.
   $element['#attributes']['class'][] = 'is-selectable';
   if (isset($element['declined'])) {
     $element['#attributes']['class'][] = 'is-declinable';
@@ -118,7 +118,6 @@ function theme_btrClient_translate_translation($variables) {
 
   // Add information on whether this matched the filter.
   if ((int) $element['approved']['#return_value'] > 0) {
-    //$filters_match = ($element['filters_match']['#value']) ? 'filter-match' : 'filter-no-match';
     $filters_match = 'filter-no-match';
     $element['#attributes']['class'][] = $filters_match;
   }
@@ -127,6 +126,7 @@ function theme_btrClient_translate_translation($variables) {
     case 'new':
       $element['#attributes']['class'][] = 'new-translation';
       break;
+
     case '0':
       $element['#attributes']['class'][] = 'no-translation';
       // Fallthrough.
@@ -144,7 +144,7 @@ function theme_btrClient_translate_translation($variables) {
   if (isset($element['author'])) {
     $output .= '<div class="author">' . drupal_render($element['author']) . '</div>';
   }
-  //TODO: Improve displaying of vote count and the voters.
+  // TODO: Improve displaying of vote count and the voters.
   if (isset($element['votes'])) {
     $output .= '<div class="votes">' . drupal_render($element['votes']) . '</div>';
   }
@@ -160,7 +160,7 @@ function theme_btrClient_translate_translation($variables) {
  */
 function theme_btrClient_translate_radio($variables) {
   $element = $variables['element'];
-  $type = $element['#type'];  // radio or checkbox
+  $type = $element['#type'];
   _form_set_class($element, array('form-radio'));
   $output = '<input type="' . $type . '" ';
   $output .= 'id="' . $element['#id'] . '" ';

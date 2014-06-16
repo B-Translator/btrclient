@@ -8,7 +8,6 @@
  * Implements hook_block_info().
  *
  * This hook declares what blocks are provided by the module.
- * See: http://api.drupal.org/api/drupal/modules%21block%21block.api.php/function/hook_block_info/7
  */
 function btrClient_block_info() {
   // This hook returns an array, each component of which is an array of block
@@ -21,7 +20,7 @@ function btrClient_block_info() {
 
   // Displays top 5 (or 10) contributors, over the last week (or month).
   $blocks['topcontrib'] = array(
-    'info' => t('B-Translator: Top contributors during the last period'),  // The name of the block.
+    'info' => t('B-Translator: Top contributors during the last period'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 
@@ -97,13 +96,13 @@ function btrClient_block_save($delta = '', $edit = array()) {
     variable_set('btrClient_topcontrib_period', $edit['btrClient_topcontrib_period']);
   }
 
+  /*
   if ($delta == 'statistics') {
   }
 
   if ($delta == 'latest') {
   }
-
-  return;
+  */
 }
 
 
@@ -113,7 +112,7 @@ function btrClient_block_save($delta = '', $edit = array()) {
  * This hook generates the contents of the blocks themselves.
  */
 function btrClient_block_view($delta = '') {
-  //The $delta parameter tells us which block is being requested.
+  // The $delta parameter tells us which block is being requested.
   switch ($delta) {
     case 'topcontrib':
       // The subject is displayed at the top of the block. Note that it
@@ -125,10 +124,12 @@ function btrClient_block_view($delta = '') {
       // function.
       $block['content'] = _btrClient_block_topcontrib();
       break;
+
     case 'statistics':
       $block['subject'] = t('Contribution statistics');
       $block['content'] = _btrClient_block_statistics();
       break;
+
     case 'latest':
       $block['subject'] = t('Latest contributions');
       $block['content'] = _btrClient_block_latest();
@@ -150,7 +151,7 @@ function _btrClient_block_topcontrib() {
     return $cache->data;
   }
 
-  // get the list of top contributers
+  // Get the list of top contributers.
   try {
     $lng = variable_get('btrClient_translation_lng', 'fr');
     $period = variable_get('btrClient_topcontrib_period', 'week');
@@ -164,7 +165,7 @@ function _btrClient_block_topcontrib() {
   }
 
   $from_date = date('Y-m-d', strtotime("-1 $period"));
-  $output =  array(
+  $output = array(
     'first_para' => array(
       '#type' => 'markup',
       '#markup' => t("<p>Top !nr contributors since !date:</p>",
@@ -193,22 +194,22 @@ function _btrClient_block_topcontrib() {
                              'query' => array(
                                'lng' => $lng,
                                'translated_by' => $user['name'],
-                               'from_date' => $from_date
+                               'from_date' => $from_date,
                              ))),
       '@url_votes' => url('translations/search', array(
                       'query' => array(
                         'lng' => $lng,
                         'voted_by' => $user['name'],
                         'date_filter' => 'votes',
-                        'from_date' => $from_date
+                        'from_date' => $from_date,
                       ))),
     );
-    $output['second_para']['#items'][] = t(" <strong><a href='@url_user' target='_blank'>!name</a></strong><br/><a href='@url_translations' target='_blank'>!nr_translations translations</a> + <a href='@url_votes' target='_blank'>!nr_votes votes</a>",
+    $output['second_para']['#items'][] = t("<strong><a href='@url_user' target='_blank'>!name</a></strong><br/><a href='@url_translations' target='_blank'>!nr_translations translations</a> + <a href='@url_votes' target='_blank'>!nr_votes votes</a>",
                                          $args);
   }
 
   // Cache for 12 hours.
-  cache_set('btrClient_block_topcontrib', $output, 'cache_btrClient', time() + 12*60*60);
+  cache_set('btrClient_block_topcontrib', $output, 'cache_btrClient', time() + 12 * 60 * 60);
 
   return $output;
 }
@@ -225,7 +226,7 @@ function _btrClient_block_statistics() {
     return $cache->data;
   }
 
-  // get the statistics
+  // Get the statistics.
   try {
     $lng = variable_get('btrClient_translation_lng', 'fr');
     $btr = wsclient_service_load('public_btr');
@@ -236,7 +237,7 @@ function _btrClient_block_statistics() {
     $stats = array();
   }
 
-  $output['stats'] =  array(
+  $output['stats'] = array(
     '#items' => array(),
     '#theme' => 'item_list',
   );
@@ -259,8 +260,9 @@ function _btrClient_block_statistics() {
                                'from_date' => $stat['from_date'],
                              ))),
     );
-    $output['stats']['#items'][] = t("Last $period:") . '<br/>'
-      . t(" + <a href='@url_votes'>!nr_votes votes</a> <br/> + <a href='@url_translations'>!nr_translations translations</a>",
+    $output['stats']['#items'][] = t("Last !period:", array('!period' => $period))
+      . '<br/> '
+      . t("+ <a href='@url_votes'>!nr_votes votes</a> <br/> + <a href='@url_translations'>!nr_translations translations</a>",
         $args);
   }
   /*
@@ -270,7 +272,7 @@ function _btrClient_block_statistics() {
   */
 
   // Cache for 12 hours.
-  cache_set('btrClient_block_statistics', $output, 'cache_btrClient', time() + 12*60*60);
+  cache_set('btrClient_block_statistics', $output, 'cache_btrClient', time() + 12 * 60 * 60);
 
   return $output;
 }
@@ -287,12 +289,11 @@ function _btrClient_block_latest() {
     return $cache->data;
   }
 
-  // generate the output of the block
+  // Generate the output of the block.
   $output = '';
 
-
   // Cache for 12 hours.
-  cache_set('btrClient_block_latest', $output, 'cache_btrClient', time() + 12*60*60);
+  cache_set('btrClient_block_latest', $output, 'cache_btrClient', time() + 12 * 60 * 60);
 
   return $output;
 }

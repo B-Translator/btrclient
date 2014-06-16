@@ -24,26 +24,9 @@
  */
 
 /**
- * The module simpletest_clone must be installed:
- * + http://drupal.org/project/simpletest_clone
- *
- * It overrides the setUp() of DrupalWebTestCase
- * by making a full clone of the DB available to testing,
- * instead of installing everything from scratch.
- * This provides a better testing environment and also
- * has better performance (is faster).
- * See also:
- * + http://www.opensourcery.com/blog/jonathan-hedstrom/test-driven-drupal-development-take-2
- * + http://www.opensourcery.com/blog/jonathan-hedstrom/test-driven-drupal-development
- */
-// Include SimpleTestClone
-module_load_include('test', 'simpletest_clone');
-
-/**
  * btrClient test cases
  */
-//class BclUiTestCase extends DrupalWebTestCase {
-class BclUiTestCase extends SimpleTestCloneTestCase {
+class BclUiTestCase extends DrupalWebTestCase {
 
   protected $profile = 'btr_client';
 
@@ -55,11 +38,9 @@ class BclUiTestCase extends SimpleTestCloneTestCase {
     );
   }
 
-  // /*
   public function setUp() {
     parent::setUp();
   }
-  // */
 
   /*
   // Uncomment these setUp() and tearDown() function overrides

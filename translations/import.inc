@@ -6,7 +6,6 @@
 
 /**
  * Menu callback for 'translations/import'.
- * Import translations from PO files.
  */
 function btrClient_import() {
   return drupal_get_form('btrClient_import_form');
@@ -49,8 +48,8 @@ translated/corrected PO files.</p>
   );
 
   $form['buttons'] = array(
-    //'#prefix' => '<div class="import-submit">',
-    //'#suffix' => '</div>',
+    // '#prefix' => '<div class="import-submit">',
+    // '#suffix' => '</div>',
   );
   $form['buttons']['submit'] = array(
     '#value' => t('Upload'),
@@ -123,10 +122,10 @@ function btrClient_import_form_submit($form, &$form_state) {
 }
 
 /**
- * Make an http request for uploading the file
- * to the service 'btr/translations/import'.
- * This is done manually with curl because wsclient
- * cannot handle it.
+ * Make an http request for uploading a file.
+ *
+ * This file is uploaded to the service 'btr/translations/import'.
+ * It is done manually with curl because wsclient cannot handle it.
  *
  * TODO: Replace this function and wsclient by Guzzle
  *       (requires PHP 5.4).
@@ -165,8 +164,8 @@ function _btrClient_import_translations() {
         'Accept: application/json',
       ),
       CURLOPT_RETURNTRANSFER => TRUE,
-    )
-    + $btr->settings['curl options']
+    ) +
+    $btr->settings['curl options']
   );
   $result = curl_exec($ch);
 

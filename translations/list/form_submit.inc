@@ -8,7 +8,7 @@
 /**
  * Form submit callback for btrClient_translate_form().
  *
- * @see btrClient_translate_form().
+ * @see btrClient_translate_form()
  */
 function btrClient_translate_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
@@ -23,7 +23,9 @@ function btrClient_translate_form_submit($form, &$form_state) {
     t('Translated'),
     t('Untranslated'),
   );
-  if (!in_array($op, $operations))  return;
+  if (!in_array($op, $operations)) {
+    return;
+  }
 
   if ($op == t('Login')) {
     if (_btrClient_installed_on_server()) {
@@ -42,14 +44,14 @@ function btrClient_translate_form_submit($form, &$form_state) {
     }
     else {
       if (isset($_SESSION['btrClient']['translate_form']['authenticating'])) {
-	unset($_SESSION['btrClient']['translate_form']['authenticating']);
-	return;
+        unset($_SESSION['btrClient']['translate_form']['authenticating']);
+        return;
       }
       else {
-	session_destroy();
-	$_SESSION['btrClient']['translate_form']['state'] = $form_state;
-	$_SESSION['btrClient']['translate_form']['authenticating'] = TRUE;
-	oauth2_login();
+        session_destroy();
+        $_SESSION['btrClient']['translate_form']['state'] = $form_state;
+        $_SESSION['btrClient']['translate_form']['authenticating'] = TRUE;
+        oauth2_login();
       }
     }
   }
@@ -92,7 +94,7 @@ function btrClient_translate_form_submit($form, &$form_state) {
  * Save the values selected on the form (votes or new suggestions).
  */
 function _btrClient_translate_form_save($form_values) {
-  // get the langcode submitted with the form
+  // Get the langcode submitted with the form.
   $lng = $form_values['langcode'];
 
   // Get the voting mode.
@@ -112,25 +114,30 @@ function _btrClient_translate_form_save($form_values) {
         _btrClient_translate_form_submit_multiple($sguid, $tguid, $lng, $translation);
       }
       if ((strlen($tguid) == 40) && !empty($translation['declined'])) {
-	// Delete translation.
-	btrClient_add_action('del', array('tguid' => $tguid));
+        // Delete translation.
+        btrClient_add_action('del', array('tguid' => $tguid));
       }
     }
   }
 
   // Submit the actions.
-  global $_btrClient_actions;
-  if (empty($_btrClient_actions))  return;
+  global $_btrclient_actions;
+  if (empty($_btrclient_actions)) {
+    return;
+  }
   $btr = wsclient_service_load('btr');
-  $result = $btr->submit($_btrClient_actions);
+  $result = $btr->submit($_btrclient_actions);
 
   // Display any messages, warnings and errors.
   btrClient_display_messages($result['messages']);
 }
 
+/**
+ * Add an action to the list of actions.
+ */
 function btrClient_add_action($action, $params) {
-  global $_btrClient_actions;
-  $_btrClient_actions[] = array('action' => $action, 'params' => $params);
+  global $_btrclient_actions;
+  $_btrclient_actions[] = array('action' => $action, 'params' => $params);
 }
 
 /**
@@ -143,9 +150,12 @@ function is_not_empty_translation($translation) {
   return !empty($translation);
 }
 
+/**
+ * Form submit for the case of voting mode 'single'.
+ */
 function _btrClient_translate_form_submit_single($sguid, $lng, $string) {
 
-  if ( is_not_empty_translation($string['new']['value']) ) {
+  if (is_not_empty_translation($string['new']['value'])) {
     // Add a new suggestion.
     btrClient_add_action('add', array(
         'sguid' => $sguid,
@@ -167,6 +177,9 @@ function _btrClient_translate_form_submit_single($sguid, $lng, $string) {
   }
 }
 
+/**
+ * Form submit for the case of voting mode 'multiple'.
+ */
 function _btrClient_translate_form_submit_multiple($sguid, $tguid, $lng, $translation) {
 
   global $user;

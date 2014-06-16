@@ -24,7 +24,7 @@ function bcl_sharethis_menu() {
 /**
  * Custom settings for Sharethis.
  *
- * @return
+ * @return array
  *   An array containing form items to place on the module settings page.
  */
 function bcl_sharethis_config() {
@@ -56,13 +56,17 @@ function bcl_sharethis_config() {
   return system_settings_form($form);
 }
 
+/**
+ * Form validate for bcl_sharethis_config.
+ */
 function bcl_sharethis_config_validate($form, &$form_state) {
-  // Sanitize the publisher ID option.  Since it's a text field, remove anything that resembles code
+  // Sanitize the publisher ID option.  Since it's a text field,
+  // remove anything that resembles code.
   $form_state['values']['sharethis_publisherID'] = filter_xss($form_state['values']['sharethis_publisherID'], array());
 
-  // Ensure default value for twitter suffix
+  // Ensure default value for twitter suffix.
   $form_state['values']['sharethis_twitter_suffix'] = (isset($form_state['values']['sharethis_twitter_suffix'])) ? $form_state['values']['sharethis_twitter_suffix'] : '';
 
-  // Ensure default value for twitter handle
+  // Ensure default value for twitter handle.
   $form_state['values']['sharethis_twitter_handle'] = (isset($form_state['values']['sharethis_twitter_handle'])) ? $form_state['values']['sharethis_twitter_handle'] : '';
 }

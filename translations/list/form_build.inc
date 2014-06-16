@@ -9,14 +9,17 @@
 /**
  * Form callback: List strings and the corresponding translations/suggestions.
  *
- * @param $form_state
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
  *   The form state array.
- * @param $string
+ * @param array $strings
  *   A multi-dimentional associative array of the string and the corresponding
  *   translations that are to be rendered.
- * @param $lng
+ * @param string $lng
  *   The language code of the translations.
- * @return
+ *
+ * @return array
  *   A render array of the page.
  */
 function btrClient_translate_form($form, &$form_state, $strings, $lng) {
@@ -56,7 +59,7 @@ function btrClient_translate_form($form, &$form_state, $strings, $lng) {
   }
 
   // If there is only one string.
-  if (sizeof($strings)==1) {
+  if (count($strings) == 1) {
     // Set the page title (no longer than 20 chars).
     $title = btrClient_shorten($string['string'], 20);
     drupal_set_title(t('String: !string', array('!string' => $title),
@@ -78,11 +81,11 @@ function btrClient_translate_form($form, &$form_state, $strings, $lng) {
  * Get the buttons of the form.
  */
 function _btrClient_translate_form_buttons($lng) {
-  //$buttons['#prefix'] = '<div class="filter-submit">';
-  //$buttons['#suffix'] = '</div>';
+  // $buttons['#prefix'] = '<div class="filter-submit">';
+  // $buttons['#suffix'] = '</div>';
 
-  // don't show the Back button on the search interface
-  if ( current_path() != 'translations/search' && isset($_SESSION['btrClient']['previous_url']) ) {
+  // Don't show the Back button on the search interface.
+  if (current_path() != 'translations/search' && isset($_SESSION['btrClient']['previous_url'])) {
     $buttons['previous'] = array(
       '#type' => 'submit',
       '#value' => t('Previous'),
@@ -98,14 +101,14 @@ function _btrClient_translate_form_buttons($lng) {
   // The submit buttons will appear only when the user has
   // permissions to submit votes and suggestions.
   $translation_lng = variable_get('btrClient_translation_lng', 'all');
-  $enable_submit = ($translation_lng=='all' or ($translation_lng==$lng));
+  $enable_submit = ($translation_lng == 'all' or ($translation_lng == $lng));
   $buttons['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
     '#access' => $enable_submit,
   );
 
-  // don't show the Next buttons on the search interface
+  // Don't show the Next buttons on the search interface.
   if (current_path() != 'translations/search') {
     $buttons['next'] = array(
       '#type' => 'submit',
@@ -136,7 +139,7 @@ function _btrClient_translate_form_add_share_and_comment(&$form, $path, $title) 
   $url = url($path, array('absolute' => TRUE));
 
   if (module_exists('service_links')) {
-    // define the service_links form element
+    // Define the service_links form element.
     $style = SERVICE_LINKS_STYLE_IMAGE;
     $form['service_links'] = array(
       '#weight' => 100,
@@ -151,18 +154,22 @@ function _btrClient_translate_form_add_share_and_comment(&$form, $path, $title) 
   }
 
   if (module_exists('sharethis')) {
-    // define the sharethis form element
+    // Define the sharethis form element.
     $data_options = sharethis_get_options_array();
     $form['sharethis'] = array(
       '#weight' => 100,
       '#prefix' => '<div id="sharethis-buttons">',
-      '#markup' => theme('sharethis', array('data_options' => $data_options, 'm_path' => $url, 'm_title' => "String: $title")),
+      '#markup' => theme('sharethis', array(
+                   'data_options' => $data_options,
+                   'm_path' => $url,
+                   'm_title' => "String: $title",
+                 )),
       '#suffix' => '</div>',
     );
   }
 
   if (module_exists('disqus')) {
-    // define the disqus form element
+    // Define the disqus form element.
     $form['disqus'] = array(
       '#type' => 'disqus',
       '#disqus' => array(
@@ -178,6 +185,9 @@ function _btrClient_translate_form_add_share_and_comment(&$form, $path, $title) 
   }
 }
 
+/**
+ * Add metatags (og:title, og:description, og:image).
+ */
 function _btrClient_translate_form_add_metatags($string) {
   // Get the title.
   $title = btrClient_shorten($string['string'], 100);
@@ -202,7 +212,7 @@ function _btrClient_translate_form_add_metatags($string) {
       "content" => $title,
     ),
   );
-  drupal_add_html_head($element,'og_title');
+  drupal_add_html_head($element, 'og_title');
 
   $element = array(
     '#tag' => 'meta',
@@ -211,7 +221,7 @@ function _btrClient_translate_form_add_metatags($string) {
       "content" => $description,
     ),
   );
-  drupal_add_html_head($element,'og_description');
+  drupal_add_html_head($element, 'og_description');
 
   // Add og:image
   $element = array(
@@ -221,7 +231,7 @@ function _btrClient_translate_form_add_metatags($string) {
       "content" => $GLOBALS['base_url'] . '/logo.png',
     ),
   );
-  drupal_add_html_head($element,'facebook_share_image');
+  drupal_add_html_head($element, 'facebook_share_image');
 }
 
 /**
@@ -245,27 +255,28 @@ function _btrClient_translate_form_item(&$form_state, $string, $lng) {
     '#suffix' => '</label>',
   );
 
-  // Add alternative strings (in other languages).
-  /*******
-   * TODO: Improve alternatives in other languages.
-   $arr_items = array();
-   foreach ($string['alternatives'] as $langcode => $string) {
-   $string = btrClient_unpack_string($string);
-   $rendered_string = _btrClient_translate_render_textarray($string);
-   $arr_items = array(
-   '#markup' => "<strong>$langcode:</strong><label class='l10n-string'>$rendered_string</label>",
-   );
-   }
-   $form['alternatives'] = array(
-   '#theme' => 'item_list',
-   '#title' => t('Alternatives in other languages:'),
-   '#items' => $arr_items,
-   '#prefix' => '<div class="l10n-usage">',
-   '#suffix' => '</div>',
-   );
+  /*
+  // // Add alternative strings (in other languages).
+  // // TODO: Improve alternatives in other languages.
+  // $arr_items = array();
+  // foreach ($string['alternatives'] as $langcode => $string) {
+  //   $string = btrClient_unpack_string($string);
+  //   $rendered_string = _btrClient_translate_render_textarray($string);
+  //   $arr_items = array(
+  //     '#markup' => "<strong>$langcode:</strong>"
+  //                . "<label class='l10n-string'>$rendered_string</label>",
+  //   );
+  // }
+  // $form['alternatives'] = array(
+  //   '#theme' => 'item_list',
+  //   '#title' => t('Alternatives in other languages:'),
+  //   '#items' => $arr_items,
+  //   '#prefix' => '<div class="l10n-usage">',
+  //   '#suffix' => '</div>',
+  // );
   */
 
-  //---------------- Add translations. --------------------
+  // ---------------- Add translations. --------------------
 
   // Translations are stored in an array.
   $translations = $string['translations'];
@@ -330,7 +341,8 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
     ),
   );
 
-  // The 'approved' radio/checkbox is used to pick the approved (voted/liked) translation(s).
+  // The 'approved' radio/checkbox is used to pick the approved (voted/liked)
+  // translation(s).
   $voting_mode = variable_get('btrClient_voting_mode', 'single');
   $type = ($voting_mode == 'single') ? 'radio' : 'checkbox';
   $form['approved'] = array(
@@ -377,7 +389,7 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
         '#markup' => _btrClient_translate_byline($translation['author'], $translation['uid'], $translation['time']),
       );
     }
-    //TODO: Improve displaying of vote count and the voters.
+    // TODO: Improve displaying of vote count and the voters.
     if ($translation['count'] != '0') {
       $btr_server = variable_get('btrClient_server');
       $voters = array();
@@ -387,8 +399,8 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
       $form['votes'] = array(
         '#type' => 'fieldset',
         '#title' => t('Number of Votes: !count', array('!count' => $translation['count'])),
-        //'#prefix' => '<div class="l10n-more-info">',
-        //'#suffix' => '</div>',
+        // '#prefix' => '<div class="l10n-more-info">',
+        // '#suffix' => '</div>',
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         'voters' => array(
@@ -405,14 +417,14 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
 /**
  * Generate markup for an unpacked string.
  *
- * @param $textarray
+ * @param array $textarray
  *   An array of strings as generated by btrClient_unpack_string().
- * @param $empty
+ * @param string $empty
  *   Specific data to include as the data to use when empty.
  */
 function _btrClient_translate_render_textarray($textarray, $empty = '') {
-  // data-empty is a proprietary attribute used in editor.css to be displayed when
-  // starting to submit a new suggestion.
+  // data-empty is a proprietary attribute used in editor.css to be displayed
+  // when starting to submit a new suggestion.
   $empty = !empty($empty) ? ' data-empty="' . check_plain($empty) . '"' : '';
   return "<span$empty>" . implode("</span><br /><span$empty>", array_map('check_plain', $textarray)) . '</span>';
 }
