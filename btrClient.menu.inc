@@ -35,7 +35,7 @@ function btrClient_menu() {
     'title'           => 'Translations',
     'description'     => 'Vote the best translation for a string, or suggest a better translation.',
     'page callback'   => 'btrClient_vote',
-    'file'            => 'translations/vote.inc',
+    'file'            => 'includes/vote.inc',
     'access callback' => TRUE,
   );
 
@@ -50,7 +50,7 @@ function btrClient_menu() {
     'title'           => 'Search',
     'description'     => 'Search strings and translations using various filters.',
     'page callback'   => 'btrClient_search',
-    'file'            => 'translations/search.inc',
+    'file'            => 'includes/search.inc',
     'access callback' => TRUE,
     'weight'          => 2,
   );
@@ -60,7 +60,7 @@ function btrClient_menu() {
     'title'           => 'Export',
     'description'     => 'Export the most voted translations of a project into a PO file.',
     'page callback'   => 'btrClient_export',
-    'file'            => 'translations/export.inc',
+    'file'            => 'includes/export.inc',
     'access callback' => 'btr_user_is_authenticated',
     'weight'          => 3,
   );
@@ -70,7 +70,7 @@ function btrClient_menu() {
     'title'           => 'Import',
     'description'     => 'Import strings and translations from POT/PO files of projects.',
     'page callback'   => 'btrClient_import',
-    'file'            => 'translations/import.inc',
+    'file'            => 'includes/import.inc',
     'access callback' => 'btr_user_access',
     'access arguments' => array('btranslator-import'),
     'weight'          => 4,
@@ -81,7 +81,7 @@ function btrClient_menu() {
     'title'           => 'Add Term',
     'description'     => 'Add a new term on a vocabulary.',
     'page callback'   => 'btrClient_addterm',
-    'file'            => 'translations/addterm.inc',
+    'file'            => 'includes/addterm.inc',
     'access callback' => 'btr_user_access',
     'access arguments' => array('btranslator-import'),
     'weight'          => 5,
@@ -92,7 +92,7 @@ function btrClient_menu() {
     'type'            => MENU_CALLBACK,
     'title'           => 'Latest Translation Feedback',
     'page callback'   => 'btrClient_rss_feed',
-    'file'            => 'translations/rss_feed.inc',
+    'file'            => 'includes/rss_feed.inc',
     'access callback' => TRUE,
   );
 
@@ -101,7 +101,7 @@ function btrClient_menu() {
     'type'            => MENU_CALLBACK,
     'title'           => 'Return a random string (and translations) in a form suitable for twitter.',
     'page callback'   => 'btrCore_twitter',
-    'file'            => 'translations/twitter.inc',
+    'file'            => 'includes/twitter.inc',
     'access callback' => TRUE,
   );
 

@@ -7,7 +7,7 @@
 /**
  * Include utility and theme functions.
  */
-require_once dirname(__FILE__) . '/list/list.inc';
+require_once dirname(__FILE__) . '/translation_list/translation_list.inc';
 require_once dirname(__FILE__) . '/utils.inc';
 
 /**
