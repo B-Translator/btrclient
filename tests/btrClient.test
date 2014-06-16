@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Test cases for the module btrClient.
+ */
+
+/*
+   Some referencies for simpletest:
+     + http://drupal.org/simpletest-tutorial-drupal7
+     + http://drupal.org/simpletest
+     + http://drupal.org/node/278126
+     + http://drupal.org/node/265762
+     + http://drupal.org/node/265828
+ */
+
+/**
+ * Test btrClient module.
+ */
+class BtrClientTestCase extends DrupalWebTestCase {
+  protected $profile = 'testing';
+
+  /**
+   * Info about the test.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'btrClient',
+      'description' => 'Test the functionality of module btrClient.',
+      'group' => 'B-Translator',
+    );
+  }
+
+  /**
+   * Setup the environment for the test.
+   */
+  public function setUp() {
+    parent::setUp(array('libraries', 'btrClient'));
+  }
+
+  /**
+   * Test Case1.
+   */
+  public function testBtrClientCase1() {
+    $this->drupalGet('translations');
+    $this->assertText(t('Source text'), 'The text "Source text" appears on the translation page.');
+    $this->assertFieldById('edit-next', t('Next'), 'Button "Next" exists.');
+    $this->assertFieldById('edit-submit', t('Save'), 'Button "Save" exists.');
+    $this->asserText(t('New translation'), 'There is a field for submitting new translations.');
+
+    $this->clickLink(t('Next'));
+    $this->assertText(t('Source text'), 'The text "Source text" appears on the translation page.');
+
+    $this->drupalGet('translations/fr/37860b7c931350449a3e4ae0f3ff3fb32153c0ee');
+    $this->assertText('If only penguins could fly', 'Strings can be accessed by id.');
+    $this->clickLink(t('Show string details.'));
+
+    $this->clickLink(t('Search'));
+    $this->assertText(t('Change Filter Parameters'), 'The text "Change Filter Parameters" appears on the search page.');
+  }
+}
