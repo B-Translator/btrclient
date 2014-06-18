@@ -11,11 +11,12 @@
 
    1. Put these lines on the make file of your profile:
       #+BEGIN_EXAMPLE
-      projects[btrClient][type] = "module"
-      projects[btrClient][subdir] = "custom"
-      projects[btrClient][download][type] = "git"
-      projects[btrClient][download][url] = "https://github.com/B-Translator/btrClient.git"
-      ;projects[btrClient][download][branch] = "7.x-1.x"
+      projects[btrclient][version] = "1.0-dev"
+      ;projects[btrClient][type] = "module"
+      ;projects[btrClient][subdir] = "custom"
+      ;projects[btrClient][download][type] = "git"
+      ;projects[btrClient][download][url] = "https://github.com/B-Translator/btrClient.git"
+      ;;projects[btrClient][download][branch] = "7.x-1.x"
       #+END_EXAMPLE
 
       For example, if you have installed the *standard* Drupal
@@ -27,11 +28,12 @@
 
       defaults[projects][subdir] = "contrib"
 
-      projects[btrClient][type] = "module"
-      projects[btrClient][subdir] = "custom"
-      projects[btrClient][download][type] = "git"
-      projects[btrClient][download][url] = "https://github.com/B-Translator/btrClient.git"
-      ;projects[btrClient][download][branch] = "7.x-1.x"
+      projects[btrclient][version] = "1.0-dev"
+      ;projects[btrClient][type] = "module"
+      ;projects[btrClient][subdir] = "custom"
+      ;projects[btrClient][download][type] = "git"
+      ;projects[btrClient][download][url] = "https://github.com/B-Translator/btrClient.git"
+      ;;projects[btrClient][download][branch] = "7.x-1.x"
       #+END_EXAMPLE
 
    2. Install *drush_remake*: =drush dl drush_remake=
