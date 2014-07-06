@@ -3,9 +3,7 @@
 
   This Drupal module implements a client based on the B-Translator
   API. For more info about /B-Translator/ see:
-  http://info.btranslator.org For more details about /B-Translator API/
-  see: https://dev.btranslator.org/api-docs/ and
-  https://dev.btranslator.org/api-examples/js
+  http://info.btranslator.org
 
 ** Installation
 
