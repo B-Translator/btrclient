@@ -132,6 +132,8 @@ function _btrClient_get_user_profile($btr_user = NULL) {
     'translations_per_day' => $btr_user['translations_per_day'],
     'feedback_channels' => $btr_user['feedback_channels'],
     'permissions' => $btr_user['permissions'],
+    'identifier' => $btr_user['uid'],
+    'displayName' => $btr_user['name'],
   );
 
   return $btr_profile;
