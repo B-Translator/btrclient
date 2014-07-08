@@ -124,6 +124,27 @@ function btrClient_user_login($account, $data) {
   }
 }
 
+/**
+ * Implementation of hook_form_alter().
+ */
+function btrClient_form_alter(&$form, &$form_state, $form_id) {
+  if (_btrClient_installed_on_server())  return;
+
+  if ($form_id == 'user_profile_form') {
+    $form['remote_account'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Edit the profile on B-Translator Server'),
+      '#weight' => -500,
+      '#suffix' => '<hr/>',
+    );
+    $url = variable_get('btrClient_server') . '/user/';
+    $form['remote_account']['link_to_btranslator_profile'] = array(
+      '#markup' => '<a href="' . $url . '" target="_blank" class="btn">'
+      . t('Edit B-Translator Profile') . '</a>',
+    );
+  }
+}
+
 /*
 function btr_log($var, $comment ='') {
   $file = '/tmp/btr.log';
