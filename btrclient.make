@@ -15,7 +15,7 @@ projects[wsclient][patch][] = https://drupal.org/files/issues/wsclient-2138617-o
 
 projects[oauth2_login] = 1.x-dev
 
-projects[features] = 1.0
+projects[features] = 2.0
 projects[strongarm] = 2.0
 
 projects[disqus] = 1.10
