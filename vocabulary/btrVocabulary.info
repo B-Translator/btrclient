@@ -1,0 +1,6 @@
+name = B-Translator Vocabulary
+description = Interface for B-Translator Vocabulary.
+package = B-Translator
+core = 7.x
+
+dependencies[] = btrClient

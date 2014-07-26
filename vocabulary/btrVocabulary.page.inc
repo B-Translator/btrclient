@@ -1,32 +1,29 @@
 <?php
 /**
  * @file
- * Functions specific to the menu path: vocabulary .
+ * Functions for the page: vocabulary
  */
 
-/**
- * Include utility and theme functions.
- */
-require_once(dirname(__FILE__) . '/translation_list/translation_list.inc');
-require_once(dirname(__FILE__) . '/utils.inc');
+module_load_include('inc', 'btrClient', 'includes/utils');
+module_load_include('inc', 'btrClient', 'includes/translation_list/translation_list');
 
 /**
  * Menu callback: vocabulary.
  */
-function btrClient_vocabulary($vocabulary = NULL, $term = NULL) {
+function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   $lng = btrClient_get_translation_lng();
   if ($vocabulary == NULL) {
     $vocabulary = 'ICT_' . $lng;
     drupal_goto("vocabulary/$vocabulary");
   }
 
-  // If there is a $_SESSION['btrClient']['vocabulary_form']['state'],
+  // If there is a $_SESSION['btrVocabulary']['form_state'],
   // then this is a redirect after login. Call the submit function again.
-  if (isset($_SESSION['btrClient']['vocabulary_form']['state'])) {
-    $form_state = $_SESSION['btrClient']['vocabulary_form']['state'];
-    unset($_SESSION['btrClient']['vocabulary_form']['state']);
-    // drupal_form_submit('btrClient_vocabulary_form', $form_state); // ?
-    btrClient_vocabulary_form_submit(NULL, $form_state);
+  if (isset($_SESSION['btrVocabulary']['form_state'])) {
+    $form_state = $_SESSION['btrVocabulary']['form_state'];
+    unset($_SESSION['btrVocabulary']['form_state']);
+    // drupal_form_submit('btrVocabulary_form', $form_state); // ?
+    btrVocabulary_form_submit(NULL, $form_state);
   }
 
   // Set the page title.
@@ -46,18 +43,18 @@ function btrClient_vocabulary($vocabulary = NULL, $term = NULL) {
   }
 
   // Build and return the output.
-  $output = drupal_get_form('btrClient_vocabulary_form', $vocabulary, $term);
+  $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
   return $output;
 }
 
 /**
  * Form callback.
  */
-function btrClient_vocabulary_form($form, &$form_state, $vocabulary, $term) {
+function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Get a string to display on the form.
   $form_state_term = $form_state['values']['search_term'];
   $search_term = ($form_state_term ? $form_state_term : $term);
-  $string = _btrClient_vocabulary_getstring($vocabulary, $search_term);
+  $string = _btrVocabulary_get_string($vocabulary, $search_term);
   if (!$string) {
     drupal_set_message(t('No string found!'), 'error');
     return '';
@@ -88,8 +85,8 @@ function btrClient_vocabulary_form($form, &$form_state, $vocabulary, $term) {
     '#autocomplete_path' => $btr_server . '/translations/autocomplete/string/vocabulary/' . $vocabulary,
     //'#default_value' => $search_term,
     '#ajax' => array(
-      'callback' => 'btrClient_vocabulary_terms_callback',
-      'wrapper' => 'vocabulary-terms-div',
+      'callback' => 'btrVocabulary_get_strings',
+      'wrapper' => 'vocabulary-strings-div',
       'keypress' => TRUE,
       'effect' => 'fade',
     ),
@@ -97,14 +94,14 @@ function btrClient_vocabulary_form($form, &$form_state, $vocabulary, $term) {
 
   $form['strings'] = array(
     '#tree' => TRUE,
-    '#prefix' => '<div id="vocabulary-terms-div">',
+    '#prefix' => '<div id="vocabulary-strings-div">',
     '#suffix' => '</div>',
-    '#theme' => 'btrClient_vocabulary_table',
+    '#theme' => 'btrVocabulary_table',
     '#lng' => $lng,
     $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
   );
 
-  $form += _btrClient_vocabulary_form_buttons($vocabulary, $sguid);
+  $form += _btrVocabulary_buttons($vocabulary, $sguid);
 
   return $form;
 }
@@ -112,11 +109,11 @@ function btrClient_vocabulary_form($form, &$form_state, $vocabulary, $term) {
 /**
  * Add the buttons to the vocabulary form.
  */
-function _btrClient_vocabulary_form_buttons($vocabulary, $sguid) {
+function _btrVocabulary_buttons($vocabulary, $sguid) {
   $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server');
 
-  // Add the first row of buttons (#, Save, Next, List All Terms).
+  // Add the first row of buttons (#, Save, Next, 'List All Terms').
   $form['buttons'] = array(
     '#prefix' => '<div id="buttons" style="margin-bottom: 5px">',
     '#suffix' => '</div>',
@@ -136,7 +133,7 @@ function _btrClient_vocabulary_form_buttons($vocabulary, $sguid) {
       '#value' => t('Next'),
     ),
     'list_all' => array(
-      '#markup' => l(t('List All Terms'), "translations/search",
+      '#markup' => l(t('List All Terms'), 'translations/search',
                  array(
                    'query' => array(
                      'lng' => $lng,
@@ -201,14 +198,14 @@ function _btrClient_vocabulary_form_buttons($vocabulary, $sguid) {
 /**
  * Return the part of the form that is replaced by the ajax call.
  */
-function btrClient_vocabulary_terms_callback($form, $form_state) {
+function btrVocabulary_get_strings($form, $form_state) {
   return $form['strings'];
 }
 
 /**
  * Main theme function for vocabulary.
  */
-function theme_btrClient_vocabulary_table($variables) {
+function theme_btrVocabulary_table($variables) {
   $element = $variables['element'];
 
   $rows = array();
@@ -234,30 +231,31 @@ function theme_btrClient_vocabulary_table($variables) {
 }
 
 /**
- * Form submit callback for btrClient_vocabulary_form().
+ * Form submit callback for btrVocabulary_form().
  */
-function btrClient_vocabulary_form_submit($form, &$form_state) {
+function btrVocabulary_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
-
-  // Check that the button clicked was either Save, or Next, etc.
   $op = $form_values['op'];
-  if (!in_array($op, array(t('Save'), t('Next')))) {
-    return;
-  }
 
-  // If user is not authenticated, then login first (redirect to login).
-  if ($op == t('Save') and !btr_user_is_authenticated()) {
-    if (_btrClient_installed_on_server()) {
-      drupal_goto('user/login', array('query' => drupal_get_destination()));
-    }
-    else {
-      $_SESSION['btrClient']['vocabulary_form']['state'] = $form_state;
-      oauth2_login();
-    }
+  if ($op == t('Save')) {
+    _btrVocabulary_form_save($form, $form_state);
   }
+  elseif ($op == t('Next')) {
+    $vocabulary = $form_values['vocabulary'];
+    drupal_goto("vocabulary/$vocabulary");
+  }
+  else {
+    // Do nothing.
+  }
+}
 
-  // Save the values selected on the form (vote or new suggestion).
-  if ($op == t('Save') and btr_user_is_authenticated()) {
+/**
+ * The button 'Save' has been clicked.
+ */
+function _btrVocabulary_form_save($form, &$form_state) {
+  if (btr_user_is_authenticated()) {
+    // Save the values selected on the form (vote or new suggestion).
+    $form_values = $form_state['values'];
     _btrClient_translate_form_save($form_values);
 
     // Redirect to the same term.
@@ -265,17 +263,22 @@ function btrClient_vocabulary_form_submit($form, &$form_state) {
     $vocabulary = $form_values['vocabulary'];
     drupal_goto("vocabulary/$vocabulary/$term");
   }
-
-  if ($op == t('Next')) {
-    $vocabulary = $form_values['vocabulary'];
-    drupal_goto("vocabulary/$vocabulary");
+  else {
+    // User is not authenticated, login first (redirect to login).
+    if (_btrClient_installed_on_server()) {
+      drupal_goto('user/login', array('query' => drupal_get_destination()));
+    }
+    else {
+      $_SESSION['btrVocabulary']['form_state'] = $form_state;
+      oauth2_login();
+    }
   }
 }
 
 /**
  * Get and return a string from the vocabulary.
  */
-function _btrClient_vocabulary_getstring($vocabulary, $search_term = NULL) {
+function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
   $lng = btrClient_get_translation_lng();
 
   // Get the sguid of the given search_term, or a random sguid

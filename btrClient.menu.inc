@@ -105,15 +105,6 @@ function btrClient_menu() {
     'access callback' => TRUE,
   );
 
-  // Lookup vocabulary items.
-  $items['vocabulary'] = array(
-    'title'           => 'Vocabulary',
-    'description'     => 'Lookup vocabulary items.',
-    'page callback'   => 'btrClient_vocabulary',
-    'file'            => 'includes/vocabulary.inc',
-    'access callback' => TRUE,
-  );
-
   return $items;
 }
 
