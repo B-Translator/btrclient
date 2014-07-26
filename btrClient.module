@@ -38,6 +38,9 @@ function btrClient_theme($existing, $type, $theme, $path) {
     'btrClient_translate_table' => array(
       'render element' => 'element',
     ),
+    'btrClient_vocabulary_table' => array(
+      'render element' => 'element',
+    ),
   );
 }
 
