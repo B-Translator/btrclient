@@ -39,7 +39,7 @@
       }
       else if ($(this).siblings('.l10n-more-info').html()) {
         // Is shown and needs to be hidden.
-        $(this).html(Drupal.t('Show related projects')).siblings('.l10n-more-info').toggle();
+        $(this).html(Drupal.t('Show string details.')).siblings('.l10n-more-info').toggle();
       }
       else {
         // Was not yet loaded, we want to load the information fresh from the server.

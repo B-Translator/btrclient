@@ -375,6 +375,9 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
                        '#cols' => 60,
                        '#rows' => 3,
                        '#default_value' => t('<New translation>'),
+		       '#attributes' => array(
+                         'defaultValue' => t('<New translation>'),
+                       ),
                      ));
 
   }
