@@ -81,8 +81,6 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
     '#ajax' => array(
       'callback' => 'btrVocabulary_get_ajax',
       'wrapper' => 'vocabulary-ajax-div',
-      'keypress' => TRUE,
-      'effect' => 'fade',
     ),
   );
 
