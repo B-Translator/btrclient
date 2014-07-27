@@ -76,17 +76,6 @@ function btrClient_menu() {
     'weight'          => 4,
   );
 
-  $items['translations/addterm'] = array(
-    'type'            => MENU_LOCAL_TASK,
-    'title'           => 'Add Term',
-    'description'     => 'Add a new term on a vocabulary.',
-    'page callback'   => 'btrClient_addterm',
-    'file'            => 'includes/addterm.inc',
-    'access callback' => 'btr_user_access',
-    'access arguments' => array('btranslator-import'),
-    'weight'          => 5,
-  );
-
   // Return a RSS feed.
   $items['translations/rss-feed'] = array(
     'type'            => MENU_CALLBACK,
