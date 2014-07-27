@@ -6,6 +6,9 @@
 
 module_load_include('inc', 'btrClient', 'includes/utils');
 module_load_include('inc', 'btrClient', 'includes/translation_list/translation_list');
+module_load_include('inc', 'btrVocabulary', 'includes/submit');
+module_load_include('inc', 'btrVocabulary', 'includes/themes');
+module_load_include('inc', 'btrVocabulary', 'includes/utils');
 
 /**
  * Menu callback: vocabulary.
@@ -52,56 +55,58 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Get a string to display on the form.
-  $form_state_term = $form_state['values']['search_term'];
-  $search_term = ($form_state_term ? $form_state_term : $term);
+  $search_term = ($form_state['values']['search_term'] ?
+                 $form_state['values']['search_term'] : $term);
   $string = _btrVocabulary_get_string($vocabulary, $search_term);
-  if (!$string) {
-    drupal_set_message(t('No string found!'), 'error');
-    return '';
-  }
-
-  $term = $string['string'];
-  $sguid = $string['sguid'];
+  $term = ($string ? $string['string'] : NULL);
+  $sguid = ($string ? $string['sguid'] : NULL);
   $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server');
 
   $form = array(
-    'langcode' => array(
-      '#type' => 'value',
-      '#value' => $lng,
-    ),
     'vocabulary' => array(
       '#type' => 'value',
       '#value' => $vocabulary,
     ),
-    'term' => array(
+    'langcode' => array(
       '#type' => 'value',
-      '#value' => $term,
+      '#value' => $lng,
     ),
   );
 
   $form['search_term'] = array(
     '#type' => 'textfield',
     '#autocomplete_path' => $btr_server . '/translations/autocomplete/string/vocabulary/' . $vocabulary,
-    //'#default_value' => $search_term,
+    '#default_value' => $search_term,
     '#ajax' => array(
-      'callback' => 'btrVocabulary_get_strings',
-      'wrapper' => 'vocabulary-strings-div',
+      'callback' => 'btrVocabulary_get_ajax',
+      'wrapper' => 'vocabulary-ajax-div',
       'keypress' => TRUE,
       'effect' => 'fade',
     ),
   );
 
-  $form['strings'] = array(
-    '#tree' => TRUE,
-    '#prefix' => '<div id="vocabulary-strings-div">',
+  $form['ajax'] = array(
+    '#prefix' => '<div id="vocabulary-ajax-div" style="margin-bottom:15px">',
     '#suffix' => '</div>',
-    '#theme' => 'btrVocabulary_table',
-    '#lng' => $lng,
-    $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
   );
+  if ($sguid) {
+    $form['ajax'] += array(
+      'term' => array(
+        '#type' => 'value',
+        '#value' => $term,
+      ),
+      'strings' => array(
+        '#tree' => TRUE,
+        '#theme' => 'btrVocabulary_table',
+        '#lng' => $lng,
+        $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
+      ),
+    );
+  }
+  $form['ajax']['buttons'] = _btrVocabulary_form_buttons($vocabulary, $sguid);
 
-  $form += _btrVocabulary_buttons($vocabulary, $sguid);
+  $form['download'] = _btrVocabulary_form_download($vocabulary);
 
   return $form;
 }
@@ -109,66 +114,69 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
 /**
  * Add the buttons to the vocabulary form.
  */
-function _btrVocabulary_buttons($vocabulary, $sguid) {
+function _btrVocabulary_form_buttons($vocabulary, $sguid) {
   $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server');
 
-  // Add the first row of buttons (#, Save, Next, 'List All Terms').
-  $form['buttons'] = array(
-    '#prefix' => '<div id="buttons" style="margin-bottom: 5px">',
-    '#suffix' => '</div>',
-    'details' => array(
+  $buttons = array();
+
+  if ($sguid) {
+    $buttons['details'] = array(
       '#markup' => l('#', "translations/$lng/$sguid",
                  array('attributes' => array(
                      'class' => 'btn',
                      'style' => 'font-weight:bold; margin-right:4px',
                    ))),
-    ),
-    'submit' => array(
+    );
+    $buttons['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
-    ),
-    'next' => array(
+    );
+  }
+  else {
+    $buttons['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Next'),
-    ),
-    'list_all' => array(
-      '#markup' => l(t('List All Terms'), 'translations/search',
-                 array(
-                   'query' => array(
-                     'lng' => $lng,
-                     'origin' => 'vocabulary',
-                     'project' => $vocabulary,
-                   ),
-                   'attributes' => array(
-                     'class' => 'btn',
-                     'style' => 'margin-right:4px',
-                   ),
-                 )),
-    ),
+      '#value' => t('Add Term'),
+    );
+  }
+
+  $buttons['next'] = array(
+    '#type' => 'submit',
+    '#value' => t('Next'),
   );
 
-  // Buttons for adding/deleting a term.
-  /*
-  $form['admin'] = array(
-    '#prefix' => '<div id="admin" style="margin-bottom: 5px">',
-    '#suffix' => '</div>',
-    'add' => array(
-      '#markup' => l(t('Add Term'), "vocabulary/$vocabulary/add_term",
-                 array('attributes' => array(
-                     'class' => 'btn',
-                     'style' => 'margin-right:4px',
-                   ))),
-    ),
-    'del' => array(
-      '#markup' => l(t('Delete Term'), "vocabulary/$vocabulary/del_term",
-                 array('attributes' => array(
-                     'class' => 'btn',
-                     'style' => 'margin-right:4px',
-                   ))),
-    ),
+  // If the user is admin, he can delete the current term.
+  if ($sguid and btr_user_access('btranslator-admin')) {
+    $buttons['del_term'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete Term'),
+    );
+  }
+
+  // List all items.
+  $buttons['list_all'] = array(
+    '#markup' => l(t('List All Terms'), 'translations/search',
+               array(
+                 'query' => array(
+                   'lng' => $lng,
+                   'origin' => 'vocabulary',
+                   'project' => $vocabulary,
+                 ),
+                 'attributes' => array(
+                   'class' => 'btn',
+                   'style' => 'margin-right:4px',
+                 ),
+               )),
   );
-  */
+
+  return $buttons;
+}
+
+/**
+ * Add the download buttons to the vocabulary form.
+ */
+function _btrVocabulary_form_download($vocabulary) {
+  $btr_server = variable_get('btrClient_server');
 
   // Downloading the whole vocabulary in different formats.
   $download_formats = array(
@@ -177,7 +185,7 @@ function _btrVocabulary_buttons($vocabulary, $sguid) {
     'txt2' => 'TXT-2',
     'org' => 'ORG',
   );
-  $form['download'] = array(
+  $download = array(
     '#type' => 'fieldset',
     '#title' => t('Download'),
     '#collapsible' => TRUE,
@@ -185,134 +193,19 @@ function _btrVocabulary_buttons($vocabulary, $sguid) {
   );
   foreach ($download_formats as $key => $label) {
     $url = $btr_server . "/translations/vocabulary/export/$vocabulary/$key";
-    $form['download'][$key] = array(
+    $download[$key] = array(
       '#markup' => l($label,
                  $url, array('attributes' => array(
                      'class' => 'btn',
                      'style' => 'margin-right:4px',
                    ))));
   }
-  return $form;
+  return $download;
 }
 
 /**
  * Return the part of the form that is replaced by the ajax call.
  */
-function btrVocabulary_get_strings($form, $form_state) {
-  return $form['strings'];
-}
-
-/**
- * Main theme function for vocabulary.
- */
-function theme_btrVocabulary_table($variables) {
-  $element = $variables['element'];
-
-  $rows = array();
-  foreach (element_children($element) as $key) {
-    $rows[] = array(
-      array(
-        'class' => array('source'),
-        'data' => theme('btrClient_translate_source', array('element' => $element[$key])),
-      ),
-      array(
-        'class' => array('translation'),
-        'data' => theme('btrClient_translate_translation_list', array('element' => $element[$key])),
-      ),
-    );
-  }
-
-  return theme('table', array(
-      //'header' => array(t('Term'), t('Translation(s)')),
-      'rows' => $rows,
-      'attributes' => array(
-        'class' => array('l10n-table'),
-      )));
-}
-
-/**
- * Form submit callback for btrVocabulary_form().
- */
-function btrVocabulary_form_submit($form, &$form_state) {
-  $form_values = $form_state['values'];
-  $op = $form_values['op'];
-
-  if ($op == t('Save')) {
-    _btrVocabulary_form_save($form, $form_state);
-  }
-  elseif ($op == t('Next')) {
-    $vocabulary = $form_values['vocabulary'];
-    drupal_goto("vocabulary/$vocabulary");
-  }
-  else {
-    // Do nothing.
-  }
-}
-
-/**
- * The button 'Save' has been clicked.
- */
-function _btrVocabulary_form_save($form, &$form_state) {
-  if (btr_user_is_authenticated()) {
-    // Save the values selected on the form (vote or new suggestion).
-    $form_values = $form_state['values'];
-    _btrClient_translate_form_save($form_values);
-
-    // Redirect to the same term.
-    $term = $form_values['term'];
-    $vocabulary = $form_values['vocabulary'];
-    drupal_goto("vocabulary/$vocabulary/$term");
-  }
-  else {
-    // User is not authenticated, login first (redirect to login).
-    if (_btrClient_installed_on_server()) {
-      drupal_goto('user/login', array('query' => drupal_get_destination()));
-    }
-    else {
-      $_SESSION['btrVocabulary']['form_state'] = $form_state;
-      oauth2_login();
-    }
-  }
-}
-
-/**
- * Get and return a string from the vocabulary.
- */
-function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
-  $lng = btrClient_get_translation_lng();
-
-  // Get the sguid of the given search_term, or a random sguid
-  // from the vocabulary, if the search_term is empty.
-  if (!empty($search_term)) {
-    // $sguid = sha1($string . $context)
-    $sguid = sha1($search_term . 'vocabulary');
-  }
-  else {
-    // Get a random sguid from the vocabulary.
-    $btr = btr_user_is_authenticated() ?
-      wsclient_service_load('btr') :
-      wsclient_service_load('public_btr');
-    $result = $btr->get_random_sguid(
-      array(
-        'target' => 'next',
-        'lng' => $lng,
-        'scope' => "vocabulary/$vocabulary",
-      ));
-    btrClient_display_messages($result['messages']);
-    $sguid = $result['sguid'];
-    if (!$sguid) {
-      return NULL;
-    }
-  }
-
-  // Get the string details and its translations.
-  $btr = wsclient_service_load('public_btr');
-  $result = $btr->get_translations($sguid, $lng);
-  btrClient_display_messages($result['messages']);
-  $string = $result['string'];
-  if (empty($string)) {
-    return NULL;
-  }
-
-  return $string;
+function btrVocabulary_get_ajax($form, $form_state) {
+  return $form['ajax'];
 }
