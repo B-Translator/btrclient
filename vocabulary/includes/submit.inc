@@ -121,8 +121,9 @@ function _btrVocabulary_form_delete($form, &$form_state) {
   // Delete the term.
   $btr = wsclient_service_load('btr');
   try {
+    $term =  $form_state['values']['search_term'];
     $btr->del_string(array('sguid' => $sguid));
-    drupal_set_message(t('Term was deleted.'));
+    drupal_set_message(t('Term "!term" was deleted.', array('!term' => $term)));
     $vocabulary =  $form_state['values']['vocabulary'];
     drupal_goto("vocabulary/$vocabulary");
   }
