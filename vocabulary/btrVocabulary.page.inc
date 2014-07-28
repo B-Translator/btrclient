@@ -55,9 +55,9 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Get a string to display on the form.
-  $search_term = ($form_state['values']['search_term'] ?
+  $term = ($form_state['values']['search_term'] ?
                  $form_state['values']['search_term'] : $term);
-  $string = _btrVocabulary_get_string($vocabulary, $search_term);
+  $string = _btrVocabulary_get_string($vocabulary, $term);
   $term = ($string ? $string['string'] : NULL);
   $sguid = ($string ? $string['sguid'] : NULL);
   $lng = btrClient_get_translation_lng();
@@ -77,7 +77,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   $form['search_term'] = array(
     '#type' => 'textfield',
     '#autocomplete_path' => $btr_server . '/translations/autocomplete/string/vocabulary/' . $vocabulary,
-    '#default_value' => $search_term,
+    '#default_value' => $term,
     '#ajax' => array(
       'callback' => 'btrVocabulary_get_ajax',
       'wrapper' => 'vocabulary-ajax-div',

@@ -12,20 +12,14 @@ function theme_btrVocabulary_table($variables) {
 
   $rows = array();
   foreach (element_children($element) as $key) {
-    $rows[] = array(
-      array(
-        'class' => array('source'),
-        'data' => theme('btrClient_translate_source', array('element' => $element[$key])),
-      ),
+    $rows[] =  array(
       array(
         'class' => array('translation'),
         'data' => theme('btrClient_translate_translation_list', array('element' => $element[$key])),
-      ),
-    );
+      ));
   }
 
   return theme('table', array(
-      //'header' => array(t('Term'), t('Translation(s)')),
       'rows' => $rows,
       'attributes' => array(
         'class' => array('l10n-table'),

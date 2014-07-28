@@ -401,9 +401,7 @@ function _btrClient_translate_translation($translation, $string_sguid, $lng) {
       }
       $form['votes'] = array(
         '#type' => 'fieldset',
-        '#title' => t('Number of Votes: !count', array('!count' => $translation['count'])),
-        // '#prefix' => '<div class="l10n-more-info">',
-        // '#suffix' => '</div>',
+        '#title' => t('Votes: !count', array('!count' => $translation['count'])),
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         'voters' => array(
