@@ -19,6 +19,16 @@ function btrVocabulary_menu() {
 }
 
 /**
+ * Implements hook_menu_link_alter().
+ */
+function btrVocabulary_menu_link_alter(&$item) {
+  // Open vocabulary on a new tab.
+  if ($item['link_path'] == 'vocabulary') {
+    $item['options']['attributes']['target'] = '_blank';
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function btrVocabulary_theme($existing, $type, $theme, $path) {
