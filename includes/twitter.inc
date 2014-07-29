@@ -32,7 +32,16 @@ function btrCore_twitter($origin = NULL, $project = NULL) {
   }
 
   // Append the url.
-  $url = url("translations/$lng/$sguid", array('absolute' => TRUE));
+  if ((empty($origin) and empty($project)) or ($origin == 'vocabulary')) {
+    if (empty($project)) {
+      $project = "ICT_$lng";
+    }
+    list($term, $x) = explode(' <==> ', $twitter, 2);
+    $url = url("vocabulary/$project/$term", array('absolute' => TRUE));
+  }
+  else {
+    $url = url("translations/$lng/$sguid", array('absolute' => TRUE));
+  }
   $twitter .= ' ' . $url;
 
   print $twitter;

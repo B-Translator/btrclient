@@ -106,6 +106,9 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
 
   $form['download'] = _btrVocabulary_form_download($vocabulary);
 
+  // Add metatags (og:title, og:description, og:image).
+  _btrClient_translate_form_add_metatags($string);
+
   return $form;
 }
 
