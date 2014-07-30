@@ -16,7 +16,9 @@ function btrVocabulary_form_submit($form, &$form_state) {
   }
   elseif ($op == t('Next')) {
     $vocabulary = $form_values['vocabulary'];
-    drupal_goto("vocabulary/$vocabulary");
+    $query = $form_values['get_query'];
+    unset($query['q']);
+    drupal_goto("vocabulary/$vocabulary", array('query' => $query));
   }
   elseif ($op == t('Add Term')) {
     _btrVocabulary_form_add($form, $form_state);
@@ -45,7 +47,9 @@ function _btrVocabulary_form_save($form, &$form_state) {
   // Redirect to the same term.
   $term = $form_values['term'];
   $vocabulary = $form_values['vocabulary'];
-  drupal_goto("vocabulary/$vocabulary/$term");
+  $query = $form_values['get_query'];
+  unset($query['q']);
+  drupal_goto("vocabulary/$vocabulary/$term", array('query' => $query));
 }
 /**
  * Authenticate the user (redirect to login).
@@ -90,7 +94,9 @@ function _btrVocabulary_form_add($form, &$form_state) {
               ));
     if ($result['sguid']) {
       // Redirect to the new term.
-      drupal_goto("vocabulary/$vocabulary/$term");
+      $query = $form_values['get_query'];
+      unset($query['q']);
+      drupal_goto("vocabulary/$vocabulary/$term", array('query' => $query));
     }
   }
   catch (Exception $e) {
@@ -125,7 +131,9 @@ function _btrVocabulary_form_delete($form, &$form_state) {
     $btr->del_string(array('sguid' => $sguid));
     drupal_set_message(t('Term "!term" was deleted.', array('!term' => $term)));
     $vocabulary =  $form_state['values']['vocabulary'];
-    drupal_goto("vocabulary/$vocabulary");
+    $query = $form_values['get_query'];
+    unset($query['q']);
+    drupal_goto("vocabulary/$vocabulary", array('query' => $query));
   }
   catch (Exception $e) {
     drupal_set_message($e->getMessage(), 'error');

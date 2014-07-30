@@ -45,6 +45,14 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
   }
 
+  // Add the stylesheet of btrVocabulary.
+  if (isset($_GET['display']) and $_GET['display'] == 'iframe') {
+    drupal_add_css(drupal_get_path('module', 'btrVocabulary') . '/btrVocabulary.iframe.css');
+  }
+  else {
+    drupal_add_css(drupal_get_path('module', 'btrVocabulary') . '/btrVocabulary.css');
+  }
+
   // Build and return the output.
   $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
   return $output;
@@ -55,8 +63,8 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Get a string to display on the form.
-  $term = ($form_state['values']['search_term'] ?
-                 $form_state['values']['search_term'] : $term);
+  $form_values = $form_state['values'];
+  $term = ($form_values['search_term'] ? $form_values['search_term'] : $term);
   $string = _btrVocabulary_get_string($vocabulary, $term);
   $term = ($string ? $string['string'] : NULL);
   $sguid = ($string ? $string['sguid'] : NULL);
@@ -64,6 +72,11 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   $btr_server = variable_get('btrClient_server');
 
   $form = array(
+    'get_query' => array(
+      '#type' => 'value',
+      '#value' => (isset($form_values['get_query']) ?
+                ($form_values['get_query'] + $_GET) : $_GET),
+    ),
     'vocabulary' => array(
       '#type' => 'value',
       '#value' => $vocabulary,
@@ -85,7 +98,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   );
 
   $form['ajax'] = array(
-    '#prefix' => '<div id="vocabulary-ajax-div" style="margin-bottom:15px">',
+    '#prefix' => '<div id="vocabulary-ajax-div">',
     '#suffix' => '</div>',
   );
   if ($sguid) {
@@ -126,7 +139,8 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
       '#markup' => l('#', "translations/$lng/$sguid",
                  array('attributes' => array(
                      'class' => 'btn',
-                     'style' => 'font-weight:bold; margin-right:4px',
+                     'style' => 'font-weight:bold',
+		     'target' => 'translations',
                    ))),
     );
     $buttons['submit'] = array(
@@ -156,7 +170,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
 
   // List all items.
   $buttons['list_all'] = array(
-    '#markup' => l(t('List All Terms'), 'translations/search',
+    '#markup' => l(t('List'), 'translations/search',
                array(
                  'query' => array(
                    'lng' => $lng,
@@ -165,7 +179,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
                  ),
                  'attributes' => array(
                    'class' => 'btn',
-                   'style' => 'margin-right:4px',
+		   'target' => 'translations',
                  ),
                )),
   );
@@ -181,10 +195,10 @@ function _btrVocabulary_form_download($vocabulary) {
 
   // Downloading the whole vocabulary in different formats.
   $download_formats = array(
-    'pdf' => 'PDF',
     'txt1' => 'TXT-1',
     'txt2' => 'TXT-2',
     'org' => 'ORG',
+    //'json' => 'JSON',
   );
   $download = array(
     '#type' => 'fieldset',
@@ -198,7 +212,6 @@ function _btrVocabulary_form_download($vocabulary) {
       '#markup' => l($label,
                  $url, array('attributes' => array(
                      'class' => 'btn',
-                     'style' => 'margin-right:4px',
                    ))));
   }
   return $download;
