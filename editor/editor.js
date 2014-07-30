@@ -6,6 +6,9 @@
 
 (function($) {
 
+Drupal.behaviors.btrClient = {
+  attach: function (context, settings) {
+
   /**
    * Simple string encoding/escaping for proper HTML output.
    */
@@ -258,5 +261,8 @@
       });
     });
   });
+
+  }
+};
 
 })(jQuery);
