@@ -143,10 +143,15 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
 		     'target' => 'translations',
                    ))),
     );
-    $buttons['submit'] = array(
-      '#type' => 'submit',
-      '#value' => t('Save'),
-    );
+    if (!isset($_GET['display']) or $_GET['display'] != 'iframe') {
+      // Save and login from inside an iFrame need to be fixed.
+      // So, for the time being, the Save button is not displayed
+      // when we are inside an iFrame.
+      $buttons['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Save'),
+      );
+    }
   }
   else {
     $buttons['submit'] = array(
