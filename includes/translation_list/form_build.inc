@@ -25,10 +25,6 @@
 function btrClient_translate_form($form, &$form_state, $strings, $lng) {
   $pager = theme('pager', array('tags' => NULL, 'element' => 0));
   $form = array(
-    'target' => array(
-      '#type' => 'value',
-      '#value' => $_GET,
-    ),
     'langcode' => array(
       '#type' => 'value',
       '#value' => $lng,

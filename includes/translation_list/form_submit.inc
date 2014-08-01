@@ -28,32 +28,18 @@ function btrClient_translate_form_submit($form, &$form_state) {
   }
 
   if ($op == t('Login')) {
-    if (_btrClient_installed_on_server()) {
-      drupal_goto('user/login', array('query' => drupal_get_destination()));
-    }
-    else {
-      oauth2_login();
-    }
-    // Function oauth2_login() calls drupal_goto(), so this function
+    btrClient_authenticate();
+    // Authentication involves redirection, so the function
     // practically ends here, does not continue further down.
+    // return();
   }
 
   if ($op == t('Save') and !btr_user_is_authenticated()) {
-    if (_btrClient_installed_on_server()) {
-      drupal_goto('user/login', array('query' => drupal_get_destination()));
-    }
-    else {
-      if (isset($_SESSION['btrClient']['translate_form']['authenticating'])) {
-        unset($_SESSION['btrClient']['translate_form']['authenticating']);
-        return;
-      }
-      else {
-        session_destroy();
-        $_SESSION['btrClient']['translate_form']['state'] = $form_state;
-        $_SESSION['btrClient']['translate_form']['authenticating'] = TRUE;
-        oauth2_login();
-      }
-    }
+    $_SESSION['btrClient']['translate_form']['state'] = $form_state;
+    btrClient_authenticate();
+    // Authentication involves redirection, so the function
+    // practically ends here, does not continue further down.
+    // return();
   }
 
   if (btr_user_is_authenticated()) {
@@ -70,10 +56,6 @@ function btrClient_translate_form_submit($form, &$form_state) {
     }
   }
   elseif ($op == t('Save')) {
-    // Keep existing filters and other query arguments on form submission.
-    $redirect_args = $form_values['target'];
-    unset($redirect_args['q']);
-    $form_state['redirect'] = array($form_values['target']['q'], array('query' => $redirect_args));
   }
   else {
     $_SESSION['btrClient']['previous_url'] = htmlentities(request_uri());
@@ -87,6 +69,18 @@ function btrClient_translate_form_submit($form, &$form_state) {
     elseif ($op == t('Untranslated')) {
       drupal_goto("translations/$lng/untranslated");
     }
+  }
+}
+
+/**
+ * Authenticate the user (redirect to login).
+ */
+function btrClient_authenticate() {
+  if (_btrClient_installed_on_server()) {
+    drupal_goto('user/login', array('query' => drupal_get_destination()));
+  }
+  else {
+    oauth2_login();
   }
 }
 

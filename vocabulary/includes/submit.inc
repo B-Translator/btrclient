@@ -51,6 +51,7 @@ function _btrVocabulary_form_save($form, &$form_state) {
   unset($query['q']);
   drupal_goto("vocabulary/$vocabulary/$term", array('query' => $query));
 }
+
 /**
  * Authenticate the user (redirect to login).
  */

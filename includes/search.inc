@@ -23,6 +23,15 @@ require_once dirname(__FILE__) . '/utils.inc';
  *        'https://dev.l10n.org.xx/translations/search?lng=sq&words=space'
  */
 function btrClient_search() {
+  // If there is a $_SESSION['btrClient']['translate_form']['state'],
+  // then this is a redirect after login. Call the submit function again.
+  if (isset($_SESSION['btrClient']['translate_form']['state'])) {
+    $form_state = $_SESSION['btrClient']['translate_form']['state'];
+    unset($_SESSION['btrClient']['translate_form']['state']);
+    // drupal_form_submit('btrClient_translate_form', $form_state); // ?
+    btrClient_translate_form_submit(NULL, $form_state);
+  }
+
   // Get the search parameters from the GET request.
   $params = btrClient_get_search_params();
 
@@ -50,7 +59,7 @@ function btrClient_search() {
 
   // Add RTL style if the current language's direction is RTL.
   $languages = btrClient_get_languages();
-  $lng = btrClient_get_translation_lng();
+  $lng = isset($_GET['lng']) ? $_GET['lng'] : btrClient_get_translation_lng();
   if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
   }
