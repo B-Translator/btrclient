@@ -38,6 +38,7 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
+  drupal_add_js(drupal_get_path('module', 'btrClient') . '/js/popup.js');
 
   // Add RTL style if the current language's direction is RTL.
   $languages = btrClient_get_languages();
@@ -135,22 +136,26 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
   $buttons = array();
 
   if ($sguid) {
+    $attributes = array(
+      'class' => 'btn form-submit',
+      'style' => 'font-weight:bold',
+    );
+    if (_btrVocabulary_inside_iframe()) {
+      $attributes['target'] = '_blank';
+    }
     $buttons['details'] = array(
       '#markup' => l('#', "translations/$lng/$sguid",
-                 array('attributes' => array(
-                     'class' => 'btn',
-                     'style' => 'font-weight:bold',
-		     'target' => 'translations',
-                   ))),
+                 array('attributes' => $attributes)),
     );
-    if (!isset($_GET['display']) or $_GET['display'] != 'iframe') {
-      // Save and login from inside an iFrame need to be fixed.
-      // So, for the time being, the Save button is not displayed
-      // when we are inside an iFrame.
-      $buttons['submit'] = array(
-        '#type' => 'submit',
-        '#value' => t('Save'),
-      );
+    $buttons['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Save'),
+    );
+    // When the user is not authenticated, clicking Save will redirect
+    // to login. When we are inside an iFrame, it is better to do the
+    // login on a popup window (or a new tab).
+    if (!btr_user_is_authenticated() and _btrVocabulary_inside_iframe()) {
+      $buttons['submit']['#attributes'] = array('class' => array('popup'));
     }
   }
   else {
@@ -174,6 +179,10 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
   }
 
   // List all items.
+  $attributes = array('class' => 'btn form-submit');
+  if (_btrVocabulary_inside_iframe()) {
+    $attributes['target'] = '_blank';
+  }
   $buttons['list_all'] = array(
     '#markup' => l(t('List'), 'translations/search',
                array(
@@ -182,14 +191,18 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
                    'origin' => 'vocabulary',
                    'project' => $vocabulary,
                  ),
-                 'attributes' => array(
-                   'class' => 'btn',
-		   'target' => 'translations',
-                 ),
+                 'attributes' => $attributes,
                )),
   );
 
   return $buttons;
+}
+
+/**
+ * Return true if the vocabulary is being displayed inside an iframe.
+ */
+function _btrVocabulary_inside_iframe() {
+  return (isset($_GET['display']) and $_GET['display'] == 'iframe');
 }
 
 /**

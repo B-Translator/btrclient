@@ -6,7 +6,7 @@
 
 (function($) {
 
-Drupal.behaviors.btrClient = {
+Drupal.behaviors.btrClient_editor = {
   attach: function (context, settings) {
 
   /**
