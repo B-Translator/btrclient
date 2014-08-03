@@ -104,10 +104,6 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   );
   if ($sguid) {
     $form['ajax'] += array(
-      'term' => array(
-        '#type' => 'value',
-        '#value' => $term,
-      ),
       'strings' => array(
         '#tree' => TRUE,
         '#theme' => 'btrVocabulary_table',
@@ -136,17 +132,14 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
   $buttons = array();
 
   if ($sguid) {
-    $attributes = array(
-      'class' => 'btn form-submit',
-      'style' => 'font-weight:bold',
+    $buttons['details'] = array(
+      '#type' => 'submit',
+      '#value' => '#',
     );
     if (_btrVocabulary_inside_iframe()) {
-      $attributes['target'] = '_blank';
+      // If we are inside an iframe, open details in a new window/tab.
+      $buttons['details']['#attributes'] = array('class' => array('popup'));
     }
-    $buttons['details'] = array(
-      '#markup' => l('#', "translations/$lng/$sguid",
-                 array('attributes' => $attributes)),
-    );
     $buttons['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
@@ -179,21 +172,14 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
   }
 
   // List all items.
-  $attributes = array('class' => 'btn form-submit');
-  if (_btrVocabulary_inside_iframe()) {
-    $attributes['target'] = '_blank';
-  }
   $buttons['list_all'] = array(
-    '#markup' => l(t('List'), 'translations/search',
-               array(
-                 'query' => array(
-                   'lng' => $lng,
-                   'origin' => 'vocabulary',
-                   'project' => $vocabulary,
-                 ),
-                 'attributes' => $attributes,
-               )),
+    '#type' => 'submit',
+    '#value' => t('List'),
   );
+  if (_btrVocabulary_inside_iframe()) {
+    // If we are inside an iframe, open the list in a new window/tab.
+    $buttons['list_all']['#attributes'] = array('class' => array('popup'));
+  }
 
   return $buttons;
 }
