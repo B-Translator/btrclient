@@ -37,7 +37,8 @@ function btrVocabulary_form_submit($form, &$form_state) {
 function _btrVocabulary_form_save($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!btr_user_is_authenticated()) {
-    _btrVocabulary_authenticate($form_state);
+    _btrVocabulary_authenticate($form, $form_state);
+    return;
   }
 
   // Save the values selected on the form.
@@ -55,7 +56,15 @@ function _btrVocabulary_form_save($form, &$form_state) {
 /**
  * Authenticate the user (redirect to login).
  */
-function _btrVocabulary_authenticate($form_state) {
+function _btrVocabulary_authenticate($form, $form_state) {
+  if ($form === NULL) {
+    // We are in a redirect-after-login, but login has failed
+    // or was cancelled. Clear the session variable so that
+    // it does not keep redirecting.
+    unset($_SESSION['btrVocabulary']['form_state']);
+    return;
+  }
+
   if (_btrClient_installed_on_server()) {
     drupal_goto('user/login', array('query' => drupal_get_destination()));
   }

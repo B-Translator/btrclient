@@ -28,18 +28,13 @@ function btrClient_translate_form_submit($form, &$form_state) {
   }
 
   if ($op == t('Login')) {
-    btrClient_authenticate();
-    // Authentication involves redirection, so the function
-    // practically ends here, does not continue further down.
-    // return();
+    btrClient_authenticate($form, $form_state);
+    return;
   }
 
   if ($op == t('Save') and !btr_user_is_authenticated()) {
-    $_SESSION['btrClient']['translate_form']['state'] = $form_state;
-    btrClient_authenticate();
-    // Authentication involves redirection, so the function
-    // practically ends here, does not continue further down.
-    // return();
+    btrClient_authenticate($form, $form_state);
+    return;
   }
 
   if (btr_user_is_authenticated()) {
@@ -75,7 +70,17 @@ function btrClient_translate_form_submit($form, &$form_state) {
 /**
  * Authenticate the user (redirect to login).
  */
-function btrClient_authenticate() {
+function btrClient_authenticate($form, $form_state) {
+  if ($form === NULL) {
+    // We are in a redirect-after-login, but login has failed
+    // or was cancelled. Clear the session variable so that
+    // it does not keep redirecting.
+    unset($_SESSION['btrClient']['translate_form']['state']);
+    return;
+  }
+
+  $_SESSION['btrClient']['translate_form']['state'] = $form_state;
+
   if (_btrClient_installed_on_server()) {
     drupal_goto('user/login', array('query' => drupal_get_destination()));
   }
