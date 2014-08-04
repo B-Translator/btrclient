@@ -125,8 +125,10 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   $form['download'] = _btrVocabulary_form_download($vocabulary);
 
   // Add metatags (og:title, og:description, og:image).
+  // Append the social share buttons and comments to the form.
   if ($sguid and !btrVocabulary_inside_iframe()) {
     _btrClient_translate_form_add_metatags($string);
+    _btrClient_translate_form_add_share_and_comment($form, "translations/$lng/$sguid", $term);
   }
 
   return $form;
