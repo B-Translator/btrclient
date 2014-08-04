@@ -26,25 +26,6 @@ function btrVocabulary_form_submit($form, &$form_state) {
   elseif ($op == t('Delete Term')) {
     _btrVocabulary_form_delete($form, $form_state);
   }
-  elseif ($op == '#') {
-    // Get the details of the current string.
-    $lng = $form_values['langcode'];
-    $term = $form_values['search_term'];
-    // $sguid = sha1($string . $context)
-    $sguid = sha1($term . 'vocabulary');
-    drupal_goto("translations/$lng/$sguid");
-  }
-  elseif ($op == t('List')) {
-    // List all the terms of the vocabulary.
-    $lng = $form_values['langcode'];
-    $vocabulary = $form_values['vocabulary'];
-    drupal_goto('translations/search', array(
-        'query' => array(
-          'lng' => $lng,
-          'origin' => 'vocabulary',
-          'project' => $vocabulary,
-        )));
-  }
   else {
     // Do nothing.
   }
@@ -65,7 +46,7 @@ function _btrVocabulary_form_save($form, &$form_state) {
   _btrClient_translate_form_save($form_values);
 
   // Redirect to the same term.
-  $term = $form_values['search_term'];
+  $term = $form_values['term'];
   $vocabulary = $form_values['vocabulary'];
   $query = $form_values['get_query'];
   unset($query['q']);
