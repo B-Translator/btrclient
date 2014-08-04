@@ -38,7 +38,6 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/js/popup.js');
 
   // Add RTL style if the current language's direction is RTL.
   $languages = btrClient_get_languages();
@@ -47,12 +46,11 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   }
 
   // Add the stylesheet of btrVocabulary.
-  if (isset($_GET['display']) and $_GET['display'] == 'iframe') {
-    drupal_add_css(drupal_get_path('module', 'btrVocabulary') . '/btrVocabulary.iframe.css');
-  }
-  else {
-    drupal_add_css(drupal_get_path('module', 'btrVocabulary') . '/btrVocabulary.css');
-  }
+  $css_file = drupal_get_path('module', 'btrVocabulary');
+  $css_file .= (btrVocabulary_inside_iframe() ?
+               '/btrVocabulary.iframe.css' :
+               '/btrVocabulary.css');
+  drupal_add_css($css_file);
 
   // Build and return the output.
   $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
@@ -60,14 +58,23 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
 }
 
 /**
+ * Return true if the vocabulary is being displayed inside an iframe.
+ */
+function btrVocabulary_inside_iframe() {
+  return (isset($_GET['display']) and $_GET['display'] == 'iframe');
+}
+
+/**
  * Form callback.
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Get a string to display on the form.
-  $form_values = $form_state['values'];
-  $term = ($form_values['search_term'] ? $form_values['search_term'] : $term);
+  $op = $form_state['input']['op'];
+  if ($op == t('Save')) {
+    $term = $form_state['input']['search_term'];
+  }
   $string = _btrVocabulary_get_string($vocabulary, $term);
-  $term = ($string ? $string['string'] : NULL);
+  $term = ($string ? $string['string'] : $term);
   $sguid = ($string ? $string['sguid'] : NULL);
   $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server');
@@ -92,36 +99,35 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
     '#type' => 'textfield',
     '#autocomplete_path' => $btr_server . '/translations/autocomplete/string/vocabulary/' . $vocabulary,
     '#default_value' => $term,
-    '#ajax' => array(
-      'callback' => 'btrVocabulary_get_ajax',
-      'wrapper' => 'vocabulary-ajax-div',
+    '#attributes' => array(
+      'onblur' => 'this.form.submit()',
+    ),
+  );
+  $form['go'] = array(
+    '#type' => 'submit',
+    '#value' => t('Go'),
+    '#attributes' => array(
+      'style' => array('display:none'),
+      'onclick' => 'this.form.target="_self"',
     ),
   );
 
-  $form['ajax'] = array(
-    '#prefix' => '<div id="vocabulary-ajax-div">',
-    '#suffix' => '</div>',
-  );
   if ($sguid) {
-    $form['ajax'] += array(
-      'term' => array(
-        '#type' => 'value',
-        '#value' => $term,
-      ),
-      'strings' => array(
-        '#tree' => TRUE,
-        '#theme' => 'btrVocabulary_table',
-        '#lng' => $lng,
-        $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
-      ),
+    $form['strings'] = array(
+      '#tree' => TRUE,
+      '#theme' => 'btrVocabulary_table',
+      '#lng' => $lng,
+      $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
     );
   }
-  $form['ajax']['buttons'] = _btrVocabulary_form_buttons($vocabulary, $sguid);
+  $form['buttons'] = _btrVocabulary_form_buttons($vocabulary, $sguid);
 
   $form['download'] = _btrVocabulary_form_download($vocabulary);
 
   // Add metatags (og:title, og:description, og:image).
-  _btrClient_translate_form_add_metatags($string);
+  if ($sguid and !btrVocabulary_inside_iframe()) {
+    _btrClient_translate_form_add_metatags($string);
+  }
 
   return $form;
 }
@@ -140,34 +146,46 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
       'class' => 'btn form-submit',
       'style' => 'font-weight:bold',
     );
-    if (_btrVocabulary_inside_iframe()) {
+    if (btrVocabulary_inside_iframe()) {
       $attributes['target'] = '_blank';
     }
     $buttons['details'] = array(
       '#markup' => l('#', "translations/$lng/$sguid",
                  array('attributes' => $attributes)),
     );
-    $buttons['submit'] = array(
+    $buttons['save'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
+      '#attributes' => array(
+        'onclick' => 'this.form.target="_self"',
+      ),
     );
     // When the user is not authenticated, clicking Save will redirect
     // to login. When we are inside an iFrame, it is better to do the
     // login on a popup window (or a new tab).
-    if (!btr_user_is_authenticated() and _btrVocabulary_inside_iframe()) {
-      $buttons['submit']['#attributes'] = array('class' => array('popup'));
+    if (!btr_user_is_authenticated() and btrVocabulary_inside_iframe()) {
+      $buttons['save']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }
   else {
-    $buttons['submit'] = array(
+    $buttons['add_term'] = array(
       '#type' => 'submit',
       '#value' => t('Add Term'),
+      '#attributes' => array(
+        'onclick' => 'this.form.target="_self"',
+      ),
     );
+    if (!btr_user_is_authenticated() and btrVocabulary_inside_iframe()) {
+      $buttons['add_term']['#attributes']['onclick'] = 'this.form.target="_blank"';
+    }
   }
 
   $buttons['next'] = array(
     '#type' => 'submit',
     '#value' => t('Next'),
+    '#attributes' => array(
+      'onclick' => 'this.form.target="_self"',
+    ),
   );
 
   // If the user is admin, he can delete the current term.
@@ -175,12 +193,15 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
     $buttons['del_term'] = array(
       '#type' => 'submit',
       '#value' => t('Delete Term'),
+      '#attributes' => array(
+        'onclick' => 'this.form.target="_self"',
+      ),
     );
   }
 
   // List all items.
   $attributes = array('class' => 'btn form-submit');
-  if (_btrVocabulary_inside_iframe()) {
+  if (btrVocabulary_inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['list_all'] = array(
@@ -196,13 +217,6 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
   );
 
   return $buttons;
-}
-
-/**
- * Return true if the vocabulary is being displayed inside an iframe.
- */
-function _btrVocabulary_inside_iframe() {
-  return (isset($_GET['display']) and $_GET['display'] == 'iframe');
 }
 
 /**
@@ -233,11 +247,4 @@ function _btrVocabulary_form_download($vocabulary) {
                    ))));
   }
   return $download;
-}
-
-/**
- * Return the part of the form that is replaced by the ajax call.
- */
-function btrVocabulary_get_ajax($form, $form_state) {
-  return $form['ajax'];
 }

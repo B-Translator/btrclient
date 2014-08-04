@@ -11,14 +11,15 @@ function btrVocabulary_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
   $op = $form_values['op'];
 
-  if ($op == t('Save')) {
+  if ($op == t('Go')) {
+    btrVocabulary_form_go($form_state);
+  }
+  elseif ($op == t('Save')) {
     _btrVocabulary_form_save($form, $form_state);
   }
   elseif ($op == t('Next')) {
-    $vocabulary = $form_values['vocabulary'];
-    $query = $form_values['get_query'];
-    unset($query['q']);
-    drupal_goto("vocabulary/$vocabulary", array('query' => $query));
+    $form_state['values']['search_term'] = '';
+    btrVocabulary_form_go($form_state);
   }
   elseif ($op == t('Add Term')) {
     _btrVocabulary_form_add($form, $form_state);
@@ -32,31 +33,43 @@ function btrVocabulary_form_submit($form, &$form_state) {
 }
 
 /**
+ * Go to the selected term.
+ */
+function btrVocabulary_form_go($form_state) {
+  $form_values = $form_state['values'];
+  $term = $form_values['search_term'];
+  $vocabulary = $form_values['vocabulary'];
+  $query = $form_values['get_query'];
+  unset($query['q']);
+  $url = "vocabulary/$vocabulary";
+  if (trim($term) != '') {
+    $url .= "/$term";
+  }
+  // Redirect.
+  drupal_goto($url, array('query' => $query));
+}
+
+/**
  * The button 'Save' has been clicked.
  */
 function _btrVocabulary_form_save($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!btr_user_is_authenticated()) {
-    _btrVocabulary_authenticate($form, $form_state);
+    btrVocabulary_authenticate($form, $form_state);
     return;
   }
 
   // Save the values selected on the form.
-  $form_values = $form_state['values'];
-  _btrClient_translate_form_save($form_values);
+  _btrClient_translate_form_save($form_state['values']);
 
   // Redirect to the same term.
-  $term = $form_values['term'];
-  $vocabulary = $form_values['vocabulary'];
-  $query = $form_values['get_query'];
-  unset($query['q']);
-  drupal_goto("vocabulary/$vocabulary/$term", array('query' => $query));
+  btrVocabulary_form_go($form_state);
 }
 
 /**
  * Authenticate the user (redirect to login).
  */
-function _btrVocabulary_authenticate($form, $form_state) {
+function btrVocabulary_authenticate($form, $form_state) {
   if ($form === NULL) {
     // We are in a redirect-after-login, but login has failed
     // or was cancelled. Clear the session variable so that
@@ -80,7 +93,7 @@ function _btrVocabulary_authenticate($form, $form_state) {
 function _btrVocabulary_form_add($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!btr_user_is_authenticated()) {
-    _btrVocabulary_authenticate($form_state);
+    btrVocabulary_authenticate($form, $form_state);
   }
 
   // Check access rights.
@@ -90,10 +103,10 @@ function _btrVocabulary_form_add($form, &$form_state) {
   }
 
   // Add the new term.
-  $term =  $form_state['values']['search_term'];
-  $vocabulary =  $form_state['values']['vocabulary'];
-  $btr = wsclient_service_load('btr');
   try {
+    $term =  $form_state['values']['search_term'];
+    $vocabulary =  $form_state['values']['vocabulary'];
+    $btr = wsclient_service_load('btr');
     $result = $btr->add_string(array(
                 'origin' => 'vocabulary',
                 'project' => $vocabulary,
@@ -104,9 +117,7 @@ function _btrVocabulary_form_add($form, &$form_state) {
               ));
     if ($result['sguid']) {
       // Redirect to the new term.
-      $query = $form_values['get_query'];
-      unset($query['q']);
-      drupal_goto("vocabulary/$vocabulary/$term", array('query' => $query));
+      btrVocabulary_form_go($form_state);
     }
   }
   catch (Exception $e) {
@@ -120,7 +131,7 @@ function _btrVocabulary_form_add($form, &$form_state) {
 function _btrVocabulary_form_delete($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!btr_user_is_authenticated()) {
-    _btrVocabulary_authenticate($form_state);
+    btrVocabulary_authenticate($form, $form_state);
   }
 
   // Check access rights.
@@ -140,10 +151,7 @@ function _btrVocabulary_form_delete($form, &$form_state) {
     $term =  $form_state['values']['search_term'];
     $btr->del_string(array('sguid' => $sguid));
     drupal_set_message(t('Term "!term" was deleted.', array('!term' => $term)));
-    $vocabulary =  $form_state['values']['vocabulary'];
-    $query = $form_values['get_query'];
-    unset($query['q']);
-    drupal_goto("vocabulary/$vocabulary", array('query' => $query));
+    btrVocabulary_form_go($form_state);
   }
   catch (Exception $e) {
     drupal_set_message($e->getMessage(), 'error');
