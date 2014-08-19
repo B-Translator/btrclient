@@ -67,13 +67,24 @@ function btrClient_menu() {
 
   $items['translations/import'] = array(
     'type'            => MENU_LOCAL_TASK,
-    'title'           => 'Import',
-    'description'     => 'Import strings and translations from POT/PO files of projects.',
+    'title'           => 'Import Translations',
+    'description'     => 'Import translations from PO files.',
     'page callback'   => 'btrClient_import',
     'file'            => 'includes/import.inc',
     'access callback' => 'btr_user_access',
     'access arguments' => array('btranslator-import'),
     'weight'          => 4,
+  );
+
+  $items['translations/import_project'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Import Project',
+    'description'     => 'Import project from POT file(s).',
+    'page callback'   => 'btrClient_importproject',
+    'file'            => 'includes/import.inc',
+    'access callback' => 'btr_user_access',
+    'access arguments' => array('btranslator-import'),
+    'weight'          => 5,
   );
 
   // Return a RSS feed.
