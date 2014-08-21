@@ -17,27 +17,25 @@ function btrClient_import() {
  */
 function btrClient_import_form($form, &$form_state) {
   $form = array(
-    '#prefix' => '<div class="bcl-ui-filter clear-block">',
+    '#prefix' => '<div class="clear-block">',
     '#suffix' => '</div>',
   );
 
   $form['import'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Import PO files'),
+    '#title' => t('Import translations from PO files'),
     '#description' => t('
-<p>Importing translations from PO files is like a bulk translation and
-voting service. For any translation in the PO files, it will be added
-as a suggestion if such a translation does not exist, or it will just
-be voted if such a translation already exists. In case that the
-translation already exists but its author is not known, then you (the
+<p>This is like a bulk translation and voting service. For any translation in
+the PO files, it will be added as a suggestion if such a translation does not
+exist, or it will just be voted if such a translation already exists. In case
+that the translation already exists but its author is not known, then you (the
 user who makes the import) will be recorded as the author of the
 translation.</p>
 
-<p>This functionality can be useful if you prefer to work off-line
-with PO files. You can export the PO files of a project, work on them
-with desktop tools (like Lokalize) to translate or correct exported
-translations, and then import back to B-Translator the
-translated/corrected PO files.</p>
+<p>This functionality can be useful if you prefer to work off-line with PO
+files. You can export the PO files of a project, work on them with desktop
+tools (like Lokalize) to translate or correct exported translations, and then
+import back to B-Translator the translated/corrected PO files.</p>
 '),
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,
@@ -45,6 +43,7 @@ translated/corrected PO files.</p>
 
   $form['import']['file'] = array(
     '#type' => 'file',
+    '#title' => t('PO File(s)'),
     '#description' => t('Upload a PO file. If you have many files, upload them as an archive (tar, tgz, bz2, 7z, zip).'),
   );
 
@@ -157,7 +156,7 @@ function _btrClient_upload_file($endpoint, $params = array()) {
 
   // Make an http request with curl.
   $ch = curl_init($btr->url . $endpoint);
-  curl_setopt_array($ch, array(
+  @curl_setopt_array($ch, array(
       CURLOPT_POST => TRUE,
       CURLOPT_POSTFIELDS => array(
         'file' => "@$file_tmp_name;filename=$file_name",
@@ -193,7 +192,7 @@ function _btrClient_upload_file($endpoint, $params = array()) {
 
 /**
  * Menu callback for 'translations/import_project'.
- * Import strings and translations from a PO file.
+ * Import strings and translations from PO files.
  * It will create/update a project (both strings and translations).
  */
 function btrClient_importproject() {
@@ -205,19 +204,25 @@ function btrClient_importproject() {
  */
 function btrClient_importproject_form($form, &$form_state) {
   $form = array(
-    '#prefix' => '<div class="btr-ui-filter clear-block">',
+    '#prefix' => '<div class="clear-block">',
     '#suffix' => '</div>',
   );
 
   $form['import'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Create/Update a Project'),
+    '#title' => t('Create a project or update an existing one'),
     '#description' => t('
-<p>Create a custom project or update an existing one. The POT files
-that are uploaded will be used for importing strings. PO files can be
-uploaded instead of POT files, however only their strings will be used,
-any translations will be ignored.</p>
-'),
+<p>This is useful for creating custom translation projects. The PO/POT files
+that are uploaded will be used for importing strings and translations. If
+there are no POT files, then the PO files will be used both for importing
+strings and for importing translations. If there are POT files and PO files,
+their names have to match (except for the extension).</p>
+
+<p>If you want to create a vocabulary, use <strong>vocabulary</strong> as the
+origin of the project, and add the suffix \'<strong>_!lng</strong>\' to the
+project name. Also use <strong>msgctxt "vocabulary"</strong> as the context of
+each string in the PO/POT file.</p>
+', array('!lng' => variable_get('btrClient_translation_lng', 'fr'))),
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,
   );
@@ -227,7 +232,7 @@ any translations will be ignored.</p>
     '#title' => t('Origin'),
     '#default_value' => 'custom',
     '#required' => TRUE,
-    '#attributes' => array('readonly' => 'readonly'),
+    //'#attributes' => array('readonly' => 'readonly'),
   );
 
   $form['import']['project'] = array(
@@ -238,8 +243,8 @@ any translations will be ignored.</p>
 
   $form['import']['file'] = array(
     '#type' => 'file',
-    '#title' => t('POT File(s)'),
-    '#description' => t('Upload a POT/PO file. If the project has several template files, upload them as an archive (tar, tgz, bz2, 7z, zip).'),
+    '#title' => t('PO File(s)'),
+    '#description' => t('Upload a PO file. If there are several files, upload them as an archive (tar, tgz, bz2, 7z, zip).'),
   );
 
   $form['buttons'] = array(
@@ -269,6 +274,7 @@ function btrClient_importproject_form_submit($form, &$form_state) {
   $messages = _btrClient_upload_file(
     'project/import',
     array(
+      'origin' => $form_state['values']['origin'],
       'project' => $form_state['values']['project'],
     )
   );

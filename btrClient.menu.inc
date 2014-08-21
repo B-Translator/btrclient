@@ -79,7 +79,7 @@ function btrClient_menu() {
   $items['translations/import_project'] = array(
     'type'            => MENU_LOCAL_TASK,
     'title'           => 'Import Project',
-    'description'     => 'Import project from POT file(s).',
+    'description'     => 'Import project from PO/POT file(s).',
     'page callback'   => 'btrClient_importproject',
     'file'            => 'includes/import.inc',
     'access callback' => 'btr_user_access',
