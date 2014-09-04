@@ -220,8 +220,11 @@ their names have to match (except for the extension).</p>
 
 <p>If you want to create a vocabulary, use <strong>vocabulary</strong> as the
 origin of the project, and add the suffix \'<strong>_!lng</strong>\' to the
-project name. Also use <strong>msgctxt "vocabulary"</strong> as the context of
-each string in the PO/POT file.</p>
+project name. Use <strong>msgctxt "vocabulary"</strong> as the context of each
+string in the PO/POT file. Also the uploaded PO file must have the same name
+as the project, for example <strong>ICT_sq.po</strong>. These restrictions are
+needed because vocabularies are pseudo-projects (for example you can add
+strings to them) and certain assumptions are made about them.</p>
 ', array('!lng' => variable_get('btrClient_translation_lng', 'fr'))),
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,
