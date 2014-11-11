@@ -171,7 +171,7 @@ function btrClient_get_languages() {
 
   // Get an array of languages from the server.
   if (_btrClient_installed_on_server()) {
-    $languages = btr_get_languages();
+    $languages = btr::languages_get_details();
   }
   else {
     $btr_server = variable_get('btrClient_server', 'https://dev.btranslator.org');
