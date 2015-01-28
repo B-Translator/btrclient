@@ -38,7 +38,7 @@ function btrCore_twitter($origin = NULL, $project = NULL) {
     }
     list($term, $x) = explode(' <==> ', $twitter, 2);
     if ($project == 'ICT_sq') {
-      $url = 'http://fjalori.fs.al/#' + $term;
+      $url = "http://fjalori.fs.al/#$term";
     }
     else {
       $url = url("vocabulary/$project/$term", array('absolute' => TRUE));
