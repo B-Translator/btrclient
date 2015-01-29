@@ -120,7 +120,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
       $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
     );
   }
-  $form['buttons'] = _btrVocabulary_form_buttons($vocabulary, $sguid);
+  $form['buttons'] = _btrVocabulary_form_buttons($vocabulary, $sguid, $term);
 
   $form['download'] = _btrVocabulary_form_download($vocabulary);
 
@@ -137,7 +137,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
 /**
  * Add the buttons to the vocabulary form.
  */
-function _btrVocabulary_form_buttons($vocabulary, $sguid) {
+function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   $lng = btrClient_get_translation_lng();
   $btr_server = variable_get('btrClient_server');
 
@@ -217,6 +217,16 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid) {
                  'attributes' => $attributes,
                )),
   );
+
+  // Link to the mobile app.
+  if ($vocabulary=='ICT_sq') {
+    $buttons['mobile'] = array(
+      '#markup' => l(t('Go To The Mobile App'), "http://fjalori.fs.al/#$term",
+                 array('attributes' => array(
+                     'class' => 'btn form-submit',
+                   ))),
+    );
+  }
 
   return $buttons;
 }
