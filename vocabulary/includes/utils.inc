@@ -14,7 +14,7 @@ function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
   // from the vocabulary, if the search_term is empty.
   if (!empty($search_term)) {
     // $sguid = sha1($string . $context)
-    $sguid = sha1($search_term . 'vocabulary');
+    $sguid = sha1($search_term . $vocabulary);
   }
   else {
     // Get a random sguid from the vocabulary.

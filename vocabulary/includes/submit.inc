@@ -112,7 +112,7 @@ function _btrVocabulary_form_add($form, &$form_state) {
                 'project' => $vocabulary,
                 'tplname' => $vocabulary,
                 'string' => $term,
-                'context' => 'vocabulary',
+                'context' => $vocabulary,
                 'notify' => TRUE,
               ));
     if ($result['sguid']) {
