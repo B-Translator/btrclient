@@ -8,7 +8,7 @@
  * Get and return a string from the vocabulary.
  */
 function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
-  $lng = btrClient_get_translation_lng();
+  list($_, $lng) = explode('_', $vocabulary, 2);
 
   // Get the sguid of the given search_term, or a random sguid
   // from the vocabulary, if the search_term is empty.

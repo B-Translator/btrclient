@@ -14,8 +14,8 @@ module_load_include('inc', 'btrVocabulary', 'includes/utils');
  * Menu callback: vocabulary.
  */
 function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
-  $lng = btrClient_get_translation_lng();
   if ($vocabulary == NULL) {
+    $lng = btrClient_get_translation_lng();
     $vocabulary = 'ICT_' . $lng;
     drupal_goto("vocabulary/$vocabulary");
   }
@@ -41,6 +41,7 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
 
   // Add RTL style if the current language's direction is RTL.
   $languages = btrClient_get_languages();
+  list($_, $lng) = explode('_', $vocabulary, 2);
   if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
   }
@@ -76,7 +77,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   $string = _btrVocabulary_get_string($vocabulary, $term);
   $term = ($string ? $string['string'] : $term);
   $sguid = ($string ? $string['sguid'] : NULL);
-  $lng = btrClient_get_translation_lng();
+  list($_, $lng) = explode('_', $vocabulary, 2);
   $btr_server = variable_get('btrClient_server');
 
   $form = array(
@@ -138,7 +139,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
  * Add the buttons to the vocabulary form.
  */
 function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
-  $lng = btrClient_get_translation_lng();
+  list($_, $lng) = explode('_', $vocabulary, 2);
   $btr_server = variable_get('btrClient_server');
 
   $buttons = array();
