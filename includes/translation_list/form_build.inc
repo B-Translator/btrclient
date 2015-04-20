@@ -182,7 +182,7 @@ function _btrClient_translate_form_add_share_and_comment(&$form, $path, $title) 
 }
 
 /**
- * Add metatags (og:title, og:description, og:image).
+ * Add metatags (og:title, og:description, og:image, og:image:size).
  */
 function _btrClient_translate_form_add_metatags($string) {
   // Get the title.
@@ -195,11 +195,16 @@ function _btrClient_translate_form_add_metatags($string) {
     $arr_translations[] = strip_tags($trans['translation']);
   }
   if (!empty($arr_translations)) {
-    $description = implode(' / ', $arr_translations);
+    $description .= ' <==> ' . implode(' / ', $arr_translations);
   }
 
-  // Get the image.
-  $image = $GLOBALS['base_url'] . '/logo.png';
+  // Get the url.
+  if (isset($_GET['url'])) {
+    $url = $_GET['url'];
+  }
+  else {
+    $url = $GLOBALS['base_root'] . request_uri();
+  }
 
   $element = array(
     '#tag' => 'meta',
@@ -219,6 +224,15 @@ function _btrClient_translate_form_add_metatags($string) {
   );
   drupal_add_html_head($element, 'og_description');
 
+  $element = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      "property" => "og:url",
+      "content" => $url,
+    ),
+  );
+  drupal_add_html_head($element, 'og_url');
+
   // Add og:image
   $element = array(
     '#tag' => 'meta',
@@ -227,7 +241,57 @@ function _btrClient_translate_form_add_metatags($string) {
       "content" => $GLOBALS['base_url'] . '/logo.png',
     ),
   );
-  drupal_add_html_head($element, 'facebook_share_image');
+  drupal_add_html_head($element, 'og_image');
+
+  // Add og:image:width
+  $element = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      "property" => "og:image:width",
+      "content" => '24',
+    ),
+  );
+  drupal_add_html_head($element, 'og_image_width');
+
+  // twitter:card
+  $element = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      "property" => "twitter:card",
+      "content" => 'Summary',
+    ),
+  );
+  drupal_add_html_head($element, 'twitter_card');
+
+  // twitter:site
+  $element = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      "property" => "twitter:site",
+      "content" => '@l10n_sq',
+    ),
+  );
+  drupal_add_html_head($element, 'twitter_site');
+
+  // twitter:title
+  $element = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      "property" => "twitter:title",
+      "content" => $title,
+    ),
+  );
+  drupal_add_html_head($element, 'twitter_title');
+
+  // twitter:description
+  $element = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      "property" => "twitter:description",
+      "content" => $description,
+    ),
+  );
+  drupal_add_html_head($element, 'twitter_description');
 }
 
 /**
