@@ -184,9 +184,16 @@ function _btrClient_translate_form_add_share_and_comment(&$form, $path, $title) 
 /**
  * Add metatags (og:title, og:description, og:image, og:image:size).
  */
-function _btrClient_translate_form_add_metatags($string) {
+function _btrClient_translate_form_add_metatags($string, $vocabulary = NULL) {
   // Get the title.
-  $title = btrClient_shorten($string['string'], 100);
+  $str = $string['string'];
+  if ($vocabulary) {
+    $str = t('Vocabulary') . " $vocabulary: " . $str;
+  }
+  else {
+    $str = t('String') . ': ' . $str;
+  }
+  $title = btrClient_shorten($str, 100);
 
   // Get the description.
   $description = $string['string'];
@@ -201,6 +208,7 @@ function _btrClient_translate_form_add_metatags($string) {
   // Get the url.
   if (isset($_GET['url'])) {
     $url = $_GET['url'];
+    $description .= " (see: $url)";
   }
   else {
     $url = $GLOBALS['base_root'] . request_uri();
