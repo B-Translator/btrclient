@@ -175,7 +175,7 @@ function btrClient_get_languages() {
   }
   else {
     $btr_server = variable_get('btrClient_server', 'https://dev.btranslator.org');
-    $output = drupal_http_request("$btr_server/translations/languages");
+    $output = drupal_http_request("$btr_server/langs");
     if (isset($output->data)) {
       $languages = json_decode($output->data, TRUE);
     }
@@ -184,7 +184,6 @@ function btrClient_get_languages() {
         'fr' => array(
           'code' => 'fr',
           'name' => 'French',
-          'encoding' => 'latin1',
           'direction' => LANGUAGE_LTR,
           'plurals' => 2,
         ));

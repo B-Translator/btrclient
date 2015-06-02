@@ -5,15 +5,15 @@
  */
 
 /**
- * Callback for translations/twitter.
+ * Callback for 'btr/tweet'.
  */
-function btrCore_twitter($origin = NULL, $project = NULL) {
+function btrCore_tweet($origin = NULL, $project = NULL) {
   // Get the translation language.
   $lng = variable_get('btrClient_translation_lng', 'fr');
 
   // Get a tweet from the B-Translator server.
   $btr_server = variable_get('btrClient_server', 'https://dev.btranslator.org');
-  $url = $btr_server . "/translations/twitter/$lng/$origin/$project";
+  $url = $btr_server . "/tweet/$lng/$origin/$project";
   $output = drupal_http_request($url, array(
               'headers' => array(
                 'Accept' => 'application/json',
