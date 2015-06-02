@@ -347,7 +347,7 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
     '#title' => t('Project'),
     '#description' => t('Search only the strings belonging to the matching project.'),
     '#default_value' => $form_state['values']['project'],
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/project',
+    '#autocomplete_path' => $btr_server . '/auto/project',
   );
 
   $form['advanced_search']['projects']['origin'] = array(
@@ -355,7 +355,7 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
     '#title' => t('Origin'),
     '#description' => t('Limit search only to the projects from a certain origin.'),
     '#default_value' => $form_state['values']['origin'],
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/origin',
+    '#autocomplete_path' => $btr_server . '/auto/origin',
   );
 }
 
@@ -387,7 +387,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#title' => t('Translated By'),
     '#description' => t('Search only the strings with translations suggested by the selected user.'),
     '#default_value' => $form_state['values']['translated_by'],
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/user/' . $lng,
+    '#autocomplete_path' => $btr_server . '/auto/user/' . $lng,
     '#states' => array(
       'visible' => array(
         ':input[name="only_mine"]' => array('checked' => FALSE),
@@ -400,7 +400,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#title' => t('Voted By'),
     '#description' => t('Search only the strings with translations voted by the selected user.'),
     '#default_value' => $form_state['values']['voted_by'],
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/user/' . $lng,
+    '#autocomplete_path' => $btr_server . '/auto/user/' . $lng,
     '#states' => array(
       'visible' => array(
         ':input[name="only_mine"]' => array('checked' => FALSE),
