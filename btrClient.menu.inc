@@ -88,7 +88,7 @@ function btrClient_menu() {
   );
 
   // Return a RSS feed.
-  $items['translations/rss-feed'] = array(
+  $items['btr/rss-feed'] = array(
     'type'            => MENU_CALLBACK,
     'title'           => 'Latest Translation Feedback',
     'page callback'   => 'btrClient_rss_feed',
