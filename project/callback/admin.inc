@@ -7,7 +7,7 @@
 /**
  * Menu callback for 'btr/project/%/%/%/admin'
  */
-function btrProject_admin() {
-  $output = 'btrProject_admin()';
+function btrProject_admin($origin, $project, $lng) {
+  $output = "btrProject_admin($origin, $project, $lng)";
   return $output;
 }

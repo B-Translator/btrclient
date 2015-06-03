@@ -7,7 +7,7 @@
 /**
  * Menu callback for 'btr/project/%/%/%/search'
  */
-function btrProject_search() {
-  $output = 'btrProject_search()';
+function btrProject_search($origin, $project, $lng) {
+  $output = "btrProject_search($origin, $project, $lng)";
   return $output;
 }

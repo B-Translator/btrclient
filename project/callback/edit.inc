@@ -7,7 +7,7 @@
 /**
  * Menu callback for 'btr/project/%/%/%/edit'
  */
-function btrProject_edit() {
-  $output = 'btrProject_edit()';
+function btrProject_edit($origin, $project, $lng) {
+  $output = "btrProject_edit($origin, $project, $lng)";
   return $output;
 }

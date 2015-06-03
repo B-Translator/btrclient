@@ -7,7 +7,7 @@
 /**
  * Menu callback for 'btr/project/%/%/%'
  */
-function btrProject_random() {
-  $output = 'btrProject_random()';
+function btrProject_random($origin, $project, $lng) {
+  $output = "btrProject_random($origin, $project, $lng)";
   return $output;
 }
