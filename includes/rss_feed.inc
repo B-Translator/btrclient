@@ -5,7 +5,7 @@
  */
 
 /**
- * Callback for 'translations/rss_feed'.
+ * Callback for 'btr/rss-feed'.
  */
 function btrClient_rss_feed($origin = NULL, $project = NULL) {
   // Get the translation language.
@@ -46,7 +46,7 @@ function btrClient_rss_feed($origin = NULL, $project = NULL) {
   $rss_feed = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   $rss_feed .= '<rss version="2.0">';
 
-  $link = url("rss-feed/$lng", array('absolute' => TRUE));
+  $link = url('btr/rss-feed', array('absolute' => TRUE));
   if (!empty($domain)) {
     $link .= '/' . $domain;
   }
