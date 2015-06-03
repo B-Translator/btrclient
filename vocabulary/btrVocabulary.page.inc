@@ -98,7 +98,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
 
   $form['search_term'] = array(
     '#type' => 'textfield',
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/string/vocabulary/' . $vocabulary,
+    '#autocomplete_path' => $btr_server . '/auto/string/vocabulary/' . $vocabulary,
     '#default_value' => $term,
     '#attributes' => array(
       'onblur' => 'this.form.submit()',

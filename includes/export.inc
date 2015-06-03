@@ -37,7 +37,7 @@ function btrClient_export_form() {
     '#title' => t('Origin'),
     '#required' => TRUE,
     '#description' => t('The origin of the project.'),
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/origin',
+    '#autocomplete_path' => $btr_server . '/auto/origin',
   );
 
   $form['export']['project'] = array(
@@ -45,7 +45,7 @@ function btrClient_export_form() {
     '#title' => t('Project'),
     '#required' => TRUE,
     '#description' => t('The name of the project.'),
-    '#autocomplete_path' => $btr_server . '/translations/autocomplete/project',
+    '#autocomplete_path' => $btr_server . '/auto/project',
   );
 
   $form['export']['export_mode'] = array(

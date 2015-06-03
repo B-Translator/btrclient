@@ -88,7 +88,7 @@ function btrClient_menu() {
   );
 
   // Return a RSS feed.
-  $items['translations/rss-feed'] = array(
+  $items['btr/rss-feed'] = array(
     'type'            => MENU_CALLBACK,
     'title'           => 'Latest Translation Feedback',
     'page callback'   => 'btrClient_rss_feed',
@@ -96,12 +96,12 @@ function btrClient_menu() {
     'access callback' => TRUE,
   );
 
-  // Return a random twitter.
-  $items['translations/twitter'] = array(
+  // Return a random tweet from B-Translator.
+  $items['btr/tweet'] = array(
     'type'            => MENU_CALLBACK,
     'title'           => 'Return a random string (and translations) in a form suitable for twitter.',
-    'page callback'   => 'btrCore_twitter',
-    'file'            => 'includes/twitter.inc',
+    'page callback'   => 'btrCore_tweet',
+    'file'            => 'includes/tweet.inc',
     'access callback' => TRUE,
   );
 

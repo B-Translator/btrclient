@@ -5,7 +5,7 @@
  */
 
 /**
- * Callback for 'translations/rss_feed'.
+ * Callback for 'btr/rss-feed'.
  */
 function btrClient_rss_feed($origin = NULL, $project = NULL) {
   // Get the translation language.
@@ -37,7 +37,7 @@ function btrClient_rss_feed($origin = NULL, $project = NULL) {
     $translations = array();
   }
   else {
-    $url = $btr_server . "/translations/latest/$lng/$origin/$project";
+    $url = $btr_server . "/latest/$lng/$origin/$project";
     $output = drupal_http_request($url);
     $translations = json_decode($output->data, TRUE);
   }
@@ -46,7 +46,7 @@ function btrClient_rss_feed($origin = NULL, $project = NULL) {
   $rss_feed = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   $rss_feed .= '<rss version="2.0">';
 
-  $link = url("translations/rss-feed/$lng", array('absolute' => TRUE));
+  $link = url('btr/rss-feed', array('absolute' => TRUE));
   if (!empty($domain)) {
     $link .= '/' . $domain;
   }
