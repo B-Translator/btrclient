@@ -175,7 +175,7 @@ function btrClient_get_languages() {
   }
   else {
     $btr_server = variable_get('btrClient_server', 'https://dev.btranslator.org');
-    $output = drupal_http_request("$btr_server/langs");
+    $output = drupal_http_request("$btr_server/languages");
     if (isset($output->data)) {
       $languages = json_decode($output->data, TRUE);
     }
