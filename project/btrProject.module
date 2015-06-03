@@ -41,7 +41,7 @@ function btrProject_menu() {
 
   $items['btr/project/%/%/%/random'] = array(
     'type'            => MENU_DEFAULT_LOCAL_TASK,
-    'title'           => 'Random String From Project',
+    'title'           => 'Random',
     'weight'          => 2,
   );
 
