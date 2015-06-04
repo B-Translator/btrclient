@@ -11,6 +11,51 @@
 function theme_btrClient_translate_table($variables) {
 
   $element = $variables['element'];
+  if (sizeof(element_children($element)) == 1) {
+    $output = _theme_btrClient_translate_table_1col($element);
+  }
+  else {
+    $output = _theme_btrClient_translate_table_2col($element);
+  }
+
+  return $output;
+}
+
+/**
+ * Format the output as 1-column table.
+ */
+function _theme_btrClient_translate_table_1col($element) {
+
+  // Get the first element.
+  foreach (element_children($element) as $key) { break; }
+  $elem = $element[$key];
+
+  return theme('table', [
+      'attributes' => ['class' => ['l10n-table']],
+      'rows' => [
+        // row of the english string
+        [
+          [
+            'class' => ['source'],
+            'data' => theme('btrClient_translate_source', ['element' => $elem]),
+          ],
+        ],
+        // row of the translations
+        [
+          [
+            'class' => array('translation'),
+            'data' => theme('btrClient_translate_translation_list', ['element' => $elem]),
+          ],
+        ],
+      ],
+    ]);
+}
+
+/**
+ * Format the output as 2-column table.
+ */
+function _theme_btrClient_translate_table_2col($element) {
+
   $lng = $element['#lng'];
   $header = array(
     array(
@@ -41,12 +86,11 @@ function theme_btrClient_translate_table($variables) {
     );
   }
 
-  return theme('table', array(
+  return theme('table', [
+      'attributes' => ['class' => ['l10n-table']],
       'header' => $header,
       'rows' => $rows,
-      'attributes' => array(
-        'class' => array('l10n-table'),
-      )));
+    ]);
 }
 
 /**
