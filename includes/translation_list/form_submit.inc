@@ -13,11 +13,10 @@
 function btrClient_translate_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
 
-  // Check that the button clicked was either Save, or Next, or Previous, etc.
+  // Check that the button clicked was either Save, or Next etc.
   $op = $form_values['op'];
   $operations = array(
     t('Login'),
-    t('Previous'),
     t('Save'),
     t('Next'),
     t('Translated'),
@@ -43,17 +42,9 @@ function btrClient_translate_form_submit($form, &$form_state) {
   }
 
   $_SESSION['btrClient']['same_project'] = isset($form_state['input']['same_project']) ? TRUE : FALSE;
-  if ($op == t('Previous')) {
-    if (isset($_SESSION['btrClient']['previous_url'])) {
-      $previous_url = $_SESSION['btrClient']['previous_url'];
-      $_SESSION['btrClient']['previous_url'] = htmlentities(request_uri());
-      drupal_goto($previous_url);
-    }
-  }
-  elseif ($op == t('Save')) {
+  if ($op == t('Save')) {
   }
   else {
-    $_SESSION['btrClient']['previous_url'] = htmlentities(request_uri());
     $lng = $form_values['langcode'];
     if ($op == t('Next')) {
       drupal_goto("translations/$lng/");

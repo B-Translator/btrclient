@@ -82,14 +82,6 @@ function btrClient_translate_form_buttons($lng) {
   // $buttons['#prefix'] = '<div class="filter-submit">';
   // $buttons['#suffix'] = '</div>';
 
-  // Don't show the Back button on the search interface.
-  if (current_path() != 'translations/search' && isset($_SESSION['btrClient']['previous_url'])) {
-    $buttons['previous'] = array(
-      '#type' => 'submit',
-      '#value' => t('Previous'),
-    );
-  }
-
   $buttons['login'] = array(
     '#type' => 'submit',
     '#value' => t('Login'),
