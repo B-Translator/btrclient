@@ -27,13 +27,6 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   }
 
   if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
-    // If checkbox same_project is checked, constrain the list
-    // of projects by the projects of the last string.
-    $last_sguid = NULL;
-    if (isset($_SESSION['btrClient']['same_project'])
-      && $_SESSION['btrClient']['same_project']) {
-      $last_sguid = $_SESSION['btrClient']['last_sguid'];
-    }
     $btr = btr_user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
@@ -41,7 +34,6 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
       array(
         'target' => $sguid,
         'lng' => $lng,
-        'last_sguid' => $last_sguid,
       ));
 
     btrClient_display_messages($result['messages']);

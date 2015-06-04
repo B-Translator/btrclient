@@ -41,7 +41,6 @@ function btrClient_translate_form_submit($form, &$form_state) {
     _btrClient_translate_form_save($form_values);
   }
 
-  $_SESSION['btrClient']['same_project'] = isset($form_state['input']['same_project']) ? TRUE : FALSE;
   if ($op == t('Save')) {
   }
   else {

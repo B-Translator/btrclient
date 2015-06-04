@@ -112,11 +112,6 @@ function btrClient_translate_form_buttons($lng) {
       '#type' => 'submit',
       '#value' => t('Untranslated'),
     );
-    $buttons['same_project'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Same Project'),
-      '#value' => isset($_SESSION['btrClient']['same_project']) ? $_SESSION['btrClient']['same_project'] : FALSE,
-    );
   }
 
   return $buttons;
