@@ -18,11 +18,13 @@
  *   translations that are to be rendered.
  * @param string $lng
  *   The language code of the translations.
+ * @param string $form_buttons
+ *   A render array with the buttons of the form.
  *
  * @return array
  *   A render array of the page.
  */
-function btrClient_translate_form($form, &$form_state, $strings, $lng) {
+function btrClient_translate_form($form, &$form_state, $strings, $lng, $form_buttons = array()) {
   $pager = theme('pager', array('tags' => NULL, 'element' => 0));
   $form = array(
     'langcode' => array(
@@ -39,7 +41,7 @@ function btrClient_translate_form($form, &$form_state, $strings, $lng) {
       '#lng' => $lng,
     ),
 
-    'buttons' => _btrClient_translate_form_buttons($lng),
+    'buttons' => $form_buttons,
 
     'pager_bottom' => array(
       '#weight' => 10,
@@ -76,7 +78,7 @@ function btrClient_translate_form($form, &$form_state, $strings, $lng) {
 /**
  * Get the buttons of the form.
  */
-function _btrClient_translate_form_buttons($lng) {
+function btrClient_translate_form_buttons($lng) {
   // $buttons['#prefix'] = '<div class="filter-submit">';
   // $buttons['#suffix'] = '</div>';
 

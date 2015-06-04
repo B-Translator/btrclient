@@ -110,8 +110,10 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
   }
 
-  // Output the string and its translations.
-  $output = drupal_get_form('btrClient_translate_form', array($sguid => $string), $lng);
+  // Output the form of the strings and translations.
+  $output = drupal_get_form('btrClient_translate_form',
+            array($sguid => $string), $lng,
+            btrClient_translate_form_buttons($lng));
 
   return $output;
 }

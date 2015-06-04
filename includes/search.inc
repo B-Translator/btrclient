@@ -78,7 +78,9 @@ function btrClient_search() {
   }
   else {
     pager_default_initialize($pager['number_of_items'], $pager['items_per_page']);
-    $output[] = drupal_get_form('btrClient_translate_form', $strings, $lng);
+    $output[] = drupal_get_form('btrClient_translate_form', $strings, $lng,
+                btrClient_translate_form_buttons($lng));
+
   }
 
   return $output;
