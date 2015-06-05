@@ -31,29 +31,25 @@ function btrClient_translate_form_submit($form, &$form_state) {
     return;
   }
 
-  if ($op == t('Save') and !btr_user_is_authenticated()) {
+  if ($op == t('Save') and !bcl::user_is_authenticated()) {
     btrClient_authenticate($form, $form_state);
     return;
   }
 
-  if (btr_user_is_authenticated()) {
+  if (bcl::user_is_authenticated()) {
     // Save the values selected on the form (votes or new suggestions).
     _btrClient_translate_form_save($form_values);
   }
 
-  if ($op == t('Save')) {
+  $lng = $form_values['langcode'];
+  if ($op == t('Next')) {
+    drupal_goto("translations/$lng/");
   }
-  else {
-    $lng = $form_values['langcode'];
-    if ($op == t('Next')) {
-      drupal_goto("translations/$lng/");
-    }
-    elseif ($op == t('Translated')) {
-      drupal_goto("translations/$lng/translated");
-    }
-    elseif ($op == t('Untranslated')) {
-      drupal_goto("translations/$lng/untranslated");
-    }
+  elseif ($op == t('Translated')) {
+    drupal_goto("translations/$lng/translated");
+  }
+  elseif ($op == t('Untranslated')) {
+    drupal_goto("translations/$lng/untranslated");
   }
 }
 
@@ -71,7 +67,7 @@ function btrClient_authenticate($form, $form_state) {
 
   $_SESSION['btrClient']['translate_form']['state'] = $form_state;
 
-  if (_btrClient_installed_on_server()) {
+  if (bcl::installed_on_server()) {
     drupal_goto('user/login', array('query' => drupal_get_destination()));
   }
   else {
@@ -118,7 +114,7 @@ function _btrClient_translate_form_save($form_values) {
   $result = $btr->submit($_btrclient_actions);
 
   // Display any messages, warnings and errors.
-  btrClient_display_messages($result['messages']);
+  bcl::display_messages($result['messages']);
 }
 
 /**
@@ -133,7 +129,7 @@ function btrClient_add_action($action, $params) {
  * Return true if a new translation has been submitted.
  */
 function is_not_empty_translation($translation) {
-  $translation = btrClient_pack_string($translation);
+  $translation = bcl::string_pack($translation);
   $translation = str_replace(t('<New translation>'), '', $translation);
   $translation = trim($translation);
   return !empty($translation);

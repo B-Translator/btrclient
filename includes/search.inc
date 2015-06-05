@@ -9,7 +9,6 @@
  */
 require_once dirname(__FILE__) . '/search_form.inc';
 require_once dirname(__FILE__) . '/translation_list/translation_list.inc';
-require_once dirname(__FILE__) . '/utils.inc';
 
 /**
  * Menu callback: translations/search.
@@ -36,7 +35,7 @@ function btrClient_search() {
   $params = btrClient_get_search_params();
 
   // Get the strings that match the search params.
-  $btr = btr_user_is_authenticated() ?
+  $btr = bcl::user_is_authenticated() ?
     wsclient_service_load('btr') :
     wsclient_service_load('public_btr');
   $result = $btr->search($params);
@@ -58,8 +57,8 @@ function btrClient_search() {
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
 
   // Add RTL style if the current language's direction is RTL.
-  $languages = btrClient_get_languages();
-  $lng = isset($_GET['lng']) ? $_GET['lng'] : btrClient_get_translation_lng();
+  $languages = bcl::get_languages();
+  $lng = isset($_GET['lng']) ? $_GET['lng'] : bcl::get_translation_lng();
   if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
   }

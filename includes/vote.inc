@@ -8,7 +8,6 @@
  * Include utility and theme functions.
  */
 require_once dirname(__FILE__) . '/translation_list/translation_list.inc';
-require_once dirname(__FILE__) . '/utils.inc';
 
 /**
  * Menu callback: translations/vote.
@@ -20,14 +19,14 @@ require_once dirname(__FILE__) . '/utils.inc';
  */
 function btrClient_vote($lng = NULL, $sguid = NULL) {
   if ($lng == NULL) {
-    $lng = btrClient_get_translation_lng();
+    $lng = bcl::get_translation_lng();
   }
   if ($sguid == NULL) {
     $sguid = 'next';
   }
 
   if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
-    $btr = btr_user_is_authenticated() ?
+    $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid(
@@ -36,7 +35,7 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
         'lng' => $lng,
       ));
 
-    btrClient_display_messages($result['messages']);
+    bcl::display_messages($result['messages']);
 
     $sguid = $result['sguid'];
     if (!$sguid) {
@@ -48,7 +47,7 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
     }
     return;
   }
-  // last_sguid is also used in search, to get similar results.
+  // last_sguid is used in search, to get similar results.
   $_SESSION['btrClient']['last_sguid'] = $sguid;
 
   // If there is a $_SESSION['btrClient']['translate_form']['state'],
@@ -78,7 +77,7 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   }
 
   // Display any messages, warnings and errors.
-  btrClient_display_messages($result['messages']);
+  bcl::display_messages($result['messages']);
 
   // Go to home if there is no string.
   $string = $result['string'];
@@ -97,7 +96,7 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
 
   // Add RTL style if the current language's direction is RTL.
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
   }

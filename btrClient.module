@@ -4,7 +4,8 @@
  * Module file for btrClient.
  */
 
-require_once dirname(__FILE__) . '/includes/utils.inc';
+module_load_include('php', 'btrClient', 'lib/bcl');
+
 require_once dirname(__FILE__) . '/btrClient.menu.inc';
 require_once dirname(__FILE__) . '/btrClient.blocks.inc';
 require_once dirname(__FILE__) . '/btrClient.services.inc';
@@ -62,7 +63,7 @@ function btrClient_init() {
   }
 
   // Check if language is RTL.
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   $lng = arg(1);
   if (array_key_exists($lng, $languages)) {
     // Add RTL style if the current language's direction is RTL.
@@ -111,7 +112,7 @@ function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
  * Implements hook_hybridauth_user_login().
  */
 function btrClient_hybridauth_user_login($account, $data) {
-  $btr_profile = _btrClient_get_user_profile($data);
+  $btr_profile = bcl::user_get_remote_profile($data);
   $_SESSION['btrClient']['btr_profile'] = $btr_profile;
 }
 
@@ -119,8 +120,8 @@ function btrClient_hybridauth_user_login($account, $data) {
  * Implements hook_user_login().
  */
 function btrClient_user_login($account, $data) {
-  if (_btrClient_installed_on_server()) {
-    btr_get_user_profile();
+  if (bcl::installed_on_server()) {
+    bcl::user_get_profile();
   }
 }
 
@@ -128,7 +129,7 @@ function btrClient_user_login($account, $data) {
  * Implementation of hook_form_alter().
  */
 function btrClient_form_alter(&$form, &$form_state, $form_id) {
-  if (_btrClient_installed_on_server())  return;
+  if (bcl::installed_on_server())  return;
 
   if ($form_id == 'user_profile_form') {
     $form['remote_account'] = array(
@@ -152,4 +153,3 @@ function btr_log($var, $comment ='') {
   file_put_contents($file, $content, FILE_APPEND);
 }
 */
-

@@ -18,7 +18,7 @@ function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
   }
   else {
     // Get a random sguid from the vocabulary.
-    $btr = btr_user_is_authenticated() ?
+    $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid(

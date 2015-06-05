@@ -54,7 +54,7 @@ function btrVocabulary_form_go($form_state) {
  */
 function _btrVocabulary_form_save($form, &$form_state) {
   // Make sure that user is authenticated.
-  if (!btr_user_is_authenticated()) {
+  if (!bcl::user_is_authenticated()) {
     btrVocabulary_authenticate($form, $form_state);
     return;
   }
@@ -78,7 +78,7 @@ function btrVocabulary_authenticate($form, $form_state) {
     return;
   }
 
-  if (_btrClient_installed_on_server()) {
+  if (bcl::installed_on_server()) {
     drupal_goto('user/login', array('query' => drupal_get_destination()));
   }
   else {
@@ -92,12 +92,12 @@ function btrVocabulary_authenticate($form, $form_state) {
  */
 function _btrVocabulary_form_add($form, &$form_state) {
   // Make sure that user is authenticated.
-  if (!btr_user_is_authenticated()) {
+  if (!bcl::user_is_authenticated()) {
     btrVocabulary_authenticate($form, $form_state);
   }
 
   // Check access rights.
-  if (!btr_user_access('btranslator-import')) {
+  if (!bcl::user_access('btranslator-import')) {
     drupal_set_message(t("You don't have enough rights for adding new terms."), 'error');
     return;
   }
@@ -130,12 +130,12 @@ function _btrVocabulary_form_add($form, &$form_state) {
  */
 function _btrVocabulary_form_delete($form, &$form_state) {
   // Make sure that user is authenticated.
-  if (!btr_user_is_authenticated()) {
+  if (!bcl::user_is_authenticated()) {
     btrVocabulary_authenticate($form, $form_state);
   }
 
   // Check access rights.
-  if (!btr_user_access('btranslator-admin')) {
+  if (!bcl::user_access('btranslator-admin')) {
     drupal_set_message(t('Only an admin can delete vocabulary terms.'), 'error');
     return;
   }

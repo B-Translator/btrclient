@@ -15,7 +15,7 @@ module_load_include('inc', 'btrVocabulary', 'includes/utils');
  */
 function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   if ($vocabulary == NULL) {
-    $lng = btrClient_get_translation_lng();
+    $lng = bcl::get_translation_lng();
     $vocabulary = 'ICT_' . $lng;
     drupal_goto("vocabulary/$vocabulary");
   }
@@ -40,7 +40,7 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
 
   // Add RTL style if the current language's direction is RTL.
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   list($_, $lng) = explode('_', $vocabulary, 2);
   if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
@@ -166,7 +166,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     // When the user is not authenticated, clicking Save will redirect
     // to login. When we are inside an iFrame, it is better to do the
     // login on a popup window (or a new tab).
-    if (!btr_user_is_authenticated() and btrVocabulary_inside_iframe()) {
+    if (!bcl::user_is_authenticated() and btrVocabulary_inside_iframe()) {
       $buttons['save']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }
@@ -178,7 +178,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
         'onclick' => 'this.form.target="_self"',
       ),
     );
-    if (!btr_user_is_authenticated() and btrVocabulary_inside_iframe()) {
+    if (!bcl::user_is_authenticated() and btrVocabulary_inside_iframe()) {
       $buttons['add_term']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }
@@ -192,7 +192,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   );
 
   // If the user is admin, he can delete the current term.
-  if ($sguid and btr_user_access('btranslator-admin')) {
+  if ($sguid and bcl::user_access('btranslator-admin')) {
     $buttons['del_term'] = array(
       '#type' => 'submit',
       '#value' => t('Delete Term'),

@@ -18,13 +18,13 @@ function btrClient_get_search_params() {
   // If the search filter is empty, try to search for strings
   // similar to the last one that was reviewed.
   if (!isset($request['lng']) and isset($_SESSION['btrClient']['last_sguid'])) {
-    $request['lng'] = btrClient_get_translation_lng();
+    $request['lng'] = bcl::get_translation_lng();
     $params['sguid'] = $_SESSION['btrClient']['last_sguid'];
   }
 
   // Get and check the language.
   $lng = isset($request['lng']) ? trim($request['lng']) : '';
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   $lng_codes = array_keys($languages);
   $params['lng'] = in_array($lng, $lng_codes) ? $lng : 'fr';
 
@@ -134,7 +134,7 @@ function btrClient_get_query_values($form_values) {
   $query = array();
 
   // Get lng.
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   $lng_codes = array_keys($languages);
   $lng = trim($form_values['lng']);
   if (in_array($lng, $lng_codes)) {
@@ -149,7 +149,7 @@ function btrClient_get_query_values($form_values) {
     $query['origin'] = $form_values['origin'];
   }
 
-  if (btr_user_is_authenticated()) {
+  if (bcl::user_is_authenticated()) {
     // Get only_mine.
     if ($form_values['only_mine'] == 1) {
       $query['only_mine'] = '1';
@@ -233,7 +233,7 @@ function btrClient_filter_form($form, &$form_state, $filter) {
 
   // Search by author and serach by date
   // are available only to logged in users.
-  if (btr_user_is_authenticated()) {
+  if (bcl::user_is_authenticated()) {
     // Add fieldset advanced_search/author,
     // with fields: only_mine, translated_by, voted_by.
     _btrClient_filter_form_author($form, $form_state);
@@ -273,7 +273,7 @@ function btrClient_filter_form($form, &$form_state, $filter) {
  */
 function _btrClient_filter_form_basic_search(&$form, &$form_state) {
 
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   foreach ($languages as $code => $lang) {
     $lang_options[$code] = $lang['name'];
   }
@@ -381,7 +381,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
   );
 
   $btr_server = variable_get('btrClient_server');
-  $lng = btrClient_get_translation_lng();
+  $lng = bcl::get_translation_lng();
   $form['advanced_search']['author']['translated_by'] = array(
     '#type' => 'textfield',
     '#title' => t('Translated By'),
