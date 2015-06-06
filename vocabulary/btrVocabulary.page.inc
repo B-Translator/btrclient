@@ -42,7 +42,7 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
 
   // Add the stylesheet of btrVocabulary.
   $css_file = drupal_get_path('module', 'btrVocabulary');
-  $css_file .= (btrVocabulary_inside_iframe() ?
+  $css_file .= (bcl::inside_iframe() ?
                '/btrVocabulary.iframe.css' :
                '/btrVocabulary.css');
   drupal_add_css($css_file);
@@ -50,13 +50,6 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   // Build and return the output.
   $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
   return $output;
-}
-
-/**
- * Return true if the vocabulary is being displayed inside an iframe.
- */
-function btrVocabulary_inside_iframe() {
-  return (isset($_GET['display']) and $_GET['display'] == 'iframe');
 }
 
 /**
@@ -121,7 +114,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
 
   // Add metatags (og:title, og:description, og:image).
   // Append the social share buttons and comments to the form.
-  if ($sguid and !btrVocabulary_inside_iframe()) {
+  if ($sguid and !bcl::inside_iframe()) {
     _btrClient_translate_form_add_metatags($string, $vocabulary);
     _btrClient_translate_form_add_share_and_comment($form, "translations/$lng/$sguid", $term);
   }
@@ -185,7 +178,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
       'class' => 'btn form-submit',
       'style' => 'font-weight:bold',
     );
-    if (btrVocabulary_inside_iframe()) {
+    if (bcl::inside_iframe()) {
       $attributes['target'] = '_blank';
     }
     $buttons['details'] = array(
@@ -202,7 +195,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     // When the user is not authenticated, clicking Save will redirect
     // to login. When we are inside an iFrame, it is better to do the
     // login on a popup window (or a new tab).
-    if (!bcl::user_is_authenticated() and btrVocabulary_inside_iframe()) {
+    if (!bcl::user_is_authenticated() and bcl::inside_iframe()) {
       $buttons['save']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }
@@ -214,7 +207,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
         'onclick' => 'this.form.target="_self"',
       ),
     );
-    if (!bcl::user_is_authenticated() and btrVocabulary_inside_iframe()) {
+    if (!bcl::user_is_authenticated() and bcl::inside_iframe()) {
       $buttons['add_term']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }
@@ -240,7 +233,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
 
   // List all items.
   $attributes = array('class' => 'btn form-submit');
-  if (btrVocabulary_inside_iframe()) {
+  if (bcl::inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['list_all'] = array(
