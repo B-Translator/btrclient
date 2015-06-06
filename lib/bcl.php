@@ -62,10 +62,12 @@ class bcl {
   public static function __callStatic($function, $args) {
     $bcl_function = self::function_name($function);
     if (!function_exists($bcl_function)) {
+      self::log($bcl_function, 'Autoload');
       // Try to load the file that contains the function.
       if (!self::load_search_dirs($function) or !function_exists($bcl_function)) {
         $dir = dirname(self::file($fname));
         $dir = str_replace(DRUPAL_ROOT, '', $dir);
+        self::log("Raising an exception.\n", 'Not found');
         throw new Exception("Function $bcl_function could not be found on $dir");
       }
     }
@@ -78,8 +80,9 @@ class bcl {
    */
   protected static function load_search_dirs($fname) {
     do {
-      self::debug($fname);
+      self::debug_file($fname);
       if (file_exists(self::file($fname))) {
+        self::log("Loading.\n", 'Found');
         require_once(self::file($fname));
         return TRUE;
       }
@@ -101,8 +104,9 @@ class bcl {
     $fname1 = $fname;
     $fname = preg_replace('/_[^_]*$/', '', $fname);
     while ($fname != $fname1) {
-      self::debug($fname);
+      self::debug_file($fname);
       if (file_exists(self::file($fname))) {
+        self::log("Loading.\n", 'Found');
         require_once(self::file($fname));
         return TRUE;
       }
@@ -116,19 +120,18 @@ class bcl {
   /**
    * Debug the order in which the files are tried to be loaded.
    */
-  protected static function debug($fname) {
-    if (!self::DEBUG) {
-      return;
-    }
+  protected static function debug_file($fname) {
+    if (!self::DEBUG)  return;
     $file = self::file($fname);
     $file = str_replace(DRUPAL_ROOT, '', $file);
-    self::log($file, 'Autoload');
+    self::log($file, 'Trying');
   }
 
   /**
    * Output the given parameter to a log file (useful for debugging).
    */
   public static function log($var, $comment ='') {
+    if (!self::DEBUG)  return;
     $file = '/tmp/bcl.log';
     $content = "\n==> $comment: " . print_r($var, true);
     file_put_contents($file, $content, FILE_APPEND);
