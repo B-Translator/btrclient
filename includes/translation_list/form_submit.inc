@@ -27,12 +27,12 @@ function btrClient_translate_form_submit($form, &$form_state) {
   }
 
   if ($op == t('Login')) {
-    btrClient_authenticate($form, $form_state);
+    bcl::user_authenticate($form, $form_state);
     return;
   }
 
   if ($op == t('Save') and !bcl::user_is_authenticated()) {
-    btrClient_authenticate($form, $form_state);
+    bcl::user_authenticate($form, $form_state);
     return;
   }
 
@@ -50,28 +50,6 @@ function btrClient_translate_form_submit($form, &$form_state) {
   }
   elseif ($op == t('Untranslated')) {
     drupal_goto("translations/$lng/untranslated");
-  }
-}
-
-/**
- * Authenticate the user (redirect to login).
- */
-function btrClient_authenticate($form, $form_state) {
-  if ($form === NULL) {
-    // We are in a redirect-after-login, but login has failed
-    // or was cancelled. Clear the session variable so that
-    // it does not keep redirecting.
-    unset($_SESSION['btrClient']['translate_form']['state']);
-    return;
-  }
-
-  $_SESSION['btrClient']['translate_form']['state'] = $form_state;
-
-  if (bcl::installed_on_server()) {
-    drupal_goto('user/login', array('query' => drupal_get_destination()));
-  }
-  else {
-    oauth2_login();
   }
 }
 

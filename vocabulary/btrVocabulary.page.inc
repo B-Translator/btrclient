@@ -8,7 +8,6 @@ module_load_include('inc', 'btrClient', 'includes/utils');
 module_load_include('inc', 'btrClient', 'includes/translation_list/translation_list');
 module_load_include('inc', 'btrVocabulary', 'includes/submit');
 module_load_include('inc', 'btrVocabulary', 'includes/themes');
-module_load_include('inc', 'btrVocabulary', 'includes/utils');
 
 /**
  * Menu callback: vocabulary.
@@ -20,14 +19,9 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
     drupal_goto("vocabulary/$vocabulary");
   }
 
-  // If there is a $_SESSION['btrVocabulary']['form_state'],
-  // then this is a redirect after login. Call the submit function again.
-  if (isset($_SESSION['btrVocabulary']['form_state'])) {
-    $form_state = $_SESSION['btrVocabulary']['form_state'];
-    unset($_SESSION['btrVocabulary']['form_state']);
-    // drupal_form_submit('btrVocabulary_form', $form_state); // ?
-    btrVocabulary_form_submit(NULL, $form_state);
-  }
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  bcl::form_resubmit();
 
   // Set the page title.
   drupal_set_title(t('Vocabulary: !vocabulary',
@@ -133,6 +127,48 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   }
 
   return $form;
+}
+
+/**
+ * Get and return a string from the vocabulary.
+ */
+function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
+  list($_, $lng) = explode('_', $vocabulary, 2);
+
+  // Get the sguid of the given search_term, or a random sguid
+  // from the vocabulary, if the search_term is empty.
+  if (!empty($search_term)) {
+    // $sguid = sha1($string . $context)
+    $sguid = sha1($search_term . $vocabulary);
+  }
+  else {
+    // Get a random sguid from the vocabulary.
+    $btr = bcl::user_is_authenticated() ?
+      wsclient_service_load('btr') :
+      wsclient_service_load('public_btr');
+    $result = $btr->get_random_sguid(
+      array(
+        'target' => 'next',
+        'lng' => $lng,
+        'scope' => "vocabulary/$vocabulary",
+      ));
+    bcl::display_messages($result['messages']);
+    $sguid = $result['sguid'];
+    if (!$sguid) {
+      return NULL;
+    }
+  }
+
+  // Get the string details and its translations.
+  $btr = wsclient_service_load('public_btr');
+  $result = $btr->get_translations($sguid, $lng);
+  bcl::display_messages($result['messages']);
+  $string = $result['string'];
+  if (empty($string)) {
+    return NULL;
+  }
+
+  return $string;
 }
 
 /**

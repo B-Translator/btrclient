@@ -22,14 +22,9 @@ require_once dirname(__FILE__) . '/translation_list/translation_list.inc';
  *        'https://dev.l10n.org.xx/translations/search?lng=sq&words=space'
  */
 function btrClient_search() {
-  // If there is a $_SESSION['btrClient']['translate_form']['state'],
-  // then this is a redirect after login. Call the submit function again.
-  if (isset($_SESSION['btrClient']['translate_form']['state'])) {
-    $form_state = $_SESSION['btrClient']['translate_form']['state'];
-    unset($_SESSION['btrClient']['translate_form']['state']);
-    // drupal_form_submit('btrClient_translate_form', $form_state); // ?
-    btrClient_translate_form_submit(NULL, $form_state);
-  }
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  bcl::form_resubmit();
 
   // Get the search parameters from the GET request.
   $params = btrClient_get_search_params();

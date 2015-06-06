@@ -50,14 +50,10 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   // last_sguid is used in search, to get similar results.
   $_SESSION['btrClient']['last_sguid'] = $sguid;
 
-  // If there is a $_SESSION['btrClient']['translate_form']['state'],
-  // then this is a redirect after login. Call the submit function again.
-  if (isset($_SESSION['btrClient']['translate_form']['state'])) {
-    $form_state = $_SESSION['btrClient']['translate_form']['state'];
-    unset($_SESSION['btrClient']['translate_form']['state']);
-    // drupal_form_submit('btrClient_translate_form', $form_state); // ?
-    btrClient_translate_form_submit(NULL, $form_state);
-  }
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  bcl::form_resubmit();
+
   if ($lng == 'all') {
     $lng = 'fr';
     drupal_goto("translations/$lng/$sguid");

@@ -55,7 +55,7 @@ function btrVocabulary_form_go($form_state) {
 function _btrVocabulary_form_save($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!bcl::user_is_authenticated()) {
-    btrVocabulary_authenticate($form, $form_state);
+    bcl::user_authenticate($form, $form_state);
     return;
   }
 
@@ -67,33 +67,12 @@ function _btrVocabulary_form_save($form, &$form_state) {
 }
 
 /**
- * Authenticate the user (redirect to login).
- */
-function btrVocabulary_authenticate($form, $form_state) {
-  if ($form === NULL) {
-    // We are in a redirect-after-login, but login has failed
-    // or was cancelled. Clear the session variable so that
-    // it does not keep redirecting.
-    unset($_SESSION['btrVocabulary']['form_state']);
-    return;
-  }
-
-  if (bcl::installed_on_server()) {
-    drupal_goto('user/login', array('query' => drupal_get_destination()));
-  }
-  else {
-    $_SESSION['btrVocabulary']['form_state'] = $form_state;
-    oauth2_login();
-  }
-}
-
-/**
  * The button 'Add Term' has been clicked.
  */
 function _btrVocabulary_form_add($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!bcl::user_is_authenticated()) {
-    btrVocabulary_authenticate($form, $form_state);
+    bcl::user_authenticate($form, $form_state);
   }
 
   // Check access rights.
@@ -131,7 +110,7 @@ function _btrVocabulary_form_add($form, &$form_state) {
 function _btrVocabulary_form_delete($form, &$form_state) {
   // Make sure that user is authenticated.
   if (!bcl::user_is_authenticated()) {
-    btrVocabulary_authenticate($form, $form_state);
+    bcl::user_authenticate($form, $form_state);
   }
 
   // Check access rights.
