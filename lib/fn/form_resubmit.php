@@ -17,6 +17,8 @@ function form_resubmit() {
     unset($_SESSION['btrClient']['form_state']);
     $form_id = $form_state['values']['form_id'];
     $submit = $form_id . '_submit';
-    $submit(NULL, $form_state);
+    if (function_exists($submit)) {
+      $submit(NULL, $form_state);
+    }
   }
 }

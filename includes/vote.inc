@@ -7,7 +7,6 @@
 /**
  * Include utility and theme functions.
  */
-require_once dirname(__FILE__) . '/translation_list/translation_list.inc';
 
 /**
  * Menu callback: translations/vote.
@@ -98,9 +97,77 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   }
 
   // Output the form of the strings and translations.
-  $output = drupal_get_form('btrClient_translate_form',
-            array($sguid => $string), $lng,
-            btrClient_translate_form_buttons($lng));
+  $output = drupal_get_form('btrClient_vote_form', $sguid, $string, $lng);
 
   return $output;
+}
+
+/**
+ * Form callback for: btrClient_vote_form
+ */
+function btrClient_vote_form($form, &$form_state, $sguid, $string, $lng) {
+  $form = bcl::translateform_build([$sguid => $string], $lng);
+  $form['buttons'] = _btrClient_vote_form_buttons($lng);
+  $form['langcode'] = array(
+    '#type' => 'value',
+    '#value' => $lng,
+  );
+  return $form;
+}
+
+/**
+ * Get the buttons of the form.
+ */
+function _btrClient_vote_form_buttons($lng) {
+  $buttons['login'] = array(
+    '#type' => 'submit',
+    '#value' => t('Login'),
+    '#access' => !bcl::user_is_authenticated(),
+  );
+
+  // The submit buttons will appear only when the user has
+  // permissions to submit votes and suggestions.
+  $translation_lng = variable_get('btrClient_translation_lng', 'all');
+  $enable_submit = ($translation_lng == 'all' or ($translation_lng == $lng));
+  $buttons['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+    '#access' => $enable_submit,
+  );
+
+  $attributes = array(
+    'attributes' => array(
+      'class' => 'btn form-submit',
+      'style' => 'margin-right:3px',
+    ),
+  );
+  $buttons['next'] = array(
+    '#markup' => l(t('Next'), "translations/$lng/",
+               $attributes),
+  );
+  $buttons['translated'] = array(
+    '#markup' => l(t('Translated'), "translations/$lng/translated",
+               $attributes),
+  );
+  $buttons['untranslated'] = array(
+    '#markup' => l(t('Untranslated'), "translations/$lng/untranslated",
+               $attributes),
+  );
+
+  return $buttons;
+}
+
+/**
+ * Submit callback for the form: btrClient_vote_form
+ */
+function btrClient_vote_form_submit($form, &$form_state) {
+  $op = $form_state['values']['op'];
+  if ($op == t('Login')) {
+    bcl::user_authenticate($form, $form_state);
+  }
+  elseif ($op == t('Save')) {
+    bcl::user_is_authenticated() ?
+      bcl::translateform_save($form_state['values']) :
+      bcl::user_authenticate($form, $form_state);
+  }
 }

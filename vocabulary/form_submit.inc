@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- * Submit functions for the form btrVocabulary.
+ * Submit functions for btrVocabulary_form.
  */
 
 /**
- * Form submit callback for btrVocabulary_form().
+ * Submit callback for: btrVocabulary_form
  */
 function btrVocabulary_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];

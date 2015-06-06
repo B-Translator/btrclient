@@ -1,59 +1,11 @@
 <?php
 /**
  * @file
- * Functions for the page: vocabulary
+ * Form: btrVocabulary_form
  */
 
-module_load_include('inc', 'btrClient', 'includes/utils');
-module_load_include('inc', 'btrClient', 'includes/translation_list/translation_list');
-module_load_include('inc', 'btrVocabulary', 'includes/submit');
-module_load_include('inc', 'btrVocabulary', 'includes/themes');
-
 /**
- * Menu callback: vocabulary.
- */
-function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
-  if ($vocabulary == NULL) {
-    $lng = bcl::get_translation_lng();
-    $vocabulary = 'ICT_' . $lng;
-    drupal_goto("vocabulary/$vocabulary");
-  }
-
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  bcl::form_resubmit();
-
-  // Set the page title.
-  drupal_set_title(t('Vocabulary: !vocabulary',
-      array('!vocabulary' => $vocabulary),
-      array('context' => 'set the page title')));
-
-  // Add the CSS and JS files.
-  drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = bcl::get_languages();
-  list($_, $lng) = explode('_', $vocabulary, 2);
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
-  }
-
-  // Add the stylesheet of btrVocabulary.
-  $css_file = drupal_get_path('module', 'btrVocabulary');
-  $css_file .= (bcl::inside_iframe() ?
-               '/btrVocabulary.iframe.css' :
-               '/btrVocabulary.css');
-  drupal_add_css($css_file);
-
-  // Build and return the output.
-  $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
-  return $output;
-}
-
-/**
- * Form callback.
+ * Form callback for: btrVocabulary_form
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Get a string to display on the form.
@@ -105,21 +57,35 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
       '#tree' => TRUE,
       '#theme' => 'btrVocabulary_table',
       '#lng' => $lng,
-      $sguid => _btrClient_translate_form_item($form_state, $string, $lng),
+      $sguid => bcl::translateform_string($string, $lng),
     );
   }
-  $form['buttons'] = _btrVocabulary_form_buttons($vocabulary, $sguid, $term);
-
+  $form['buttons']  = _btrVocabulary_form_buttons($vocabulary, $sguid, $term);
   $form['download'] = _btrVocabulary_form_download($vocabulary);
 
-  // Add metatags (og:title, og:description, og:image).
-  // Append the social share buttons and comments to the form.
-  if ($sguid and !bcl::inside_iframe()) {
-    _btrClient_translate_form_add_metatags($string, $vocabulary);
-    _btrClient_translate_form_add_share_and_comment($form, "translations/$lng/$sguid", $term);
+  return $form;
+}
+
+/**
+ * Main theme function for vocabulary.
+ */
+function theme_btrVocabulary_table($variables) {
+  $element = $variables['element'];
+
+  $rows = array();
+  foreach (element_children($element) as $key) {
+    $rows[] =  array(
+      array(
+        'class' => array('translation'),
+        'data' => theme('btrClient_translate_translation_list', array('element' => $element[$key])),
+      ));
   }
 
-  return $form;
+  return theme('table', array(
+      'rows' => $rows,
+      'attributes' => array(
+        'class' => array('l10n-table'),
+      )));
 }
 
 /**
@@ -174,17 +140,23 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   $buttons = array();
 
   if ($sguid) {
-    $attributes = array(
-      'class' => 'btn form-submit',
-      'style' => 'font-weight:bold',
-    );
     if (bcl::inside_iframe()) {
-      $attributes['target'] = '_blank';
+      $buttons['details'] = array(
+        '#markup' => l('#', "translations/$lng/$sguid",
+                   array('attributes' => array(
+                       'class' => 'btn form-submit',
+                       'style' => 'font-weight:bold',
+                       'target' => '_blank',
+                     ))),
+      );
     }
-    $buttons['details'] = array(
-      '#markup' => l('#', "translations/$lng/$sguid",
-                 array('attributes' => $attributes)),
-    );
+    if (!bcl::inside_iframe()) {
+      $buttons['login'] = array(
+        '#type' => 'submit',
+        '#value' => t('Login'),
+        '#access' => !bcl::user_is_authenticated(),
+      );
+    }
     $buttons['save'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
