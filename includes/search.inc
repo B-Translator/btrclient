@@ -83,48 +83,13 @@ function btrClient_search() {
  */
 function btrClient_search_form($form, &$form_state, $strings, $lng) {
   $form = bcl::translateform_build($strings, $lng);
-  $form['buttons'] = _btrClient_search_form_buttons($lng);
-  $form['langcode'] = array(
-    '#type' => 'value',
-    '#value' => $lng,
-  );
   return $form;
-}
-
-/**
- * Get the buttons of the form.
- */
-function _btrClient_search_form_buttons($lng) {
-  $buttons['login'] = array(
-    '#type' => 'submit',
-    '#value' => t('Login'),
-    '#access' => !bcl::user_is_authenticated(),
-  );
-
-  // The submit buttons will appear only when the user has
-  // permissions to submit votes and suggestions.
-  $translation_lng = variable_get('btrClient_translation_lng', 'all');
-  $enable_submit = ($translation_lng == 'all' or ($translation_lng == $lng));
-  $buttons['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-    '#access' => $enable_submit,
-  );
-
-  return $buttons;
 }
 
 /**
  * Submit callback for the form: btrClient_search_form
  */
 function btrClient_search_form_submit($form, &$form_state) {
-  $op = $form_state['values']['op'];
-  if ($op == t('Login')) {
-    bcl::user_authenticate($form, $form_state);
-  }
-  elseif ($op == t('Save')) {
-    bcl::user_is_authenticated() ?
-      bcl::translateform_save($form_state['values']) :
-      bcl::user_authenticate($form, $form_state);
-  }
+  module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
+  \BTranslator\Client\translateform_submit($form, $form_state);
 }

@@ -24,6 +24,10 @@ require_once __DIR__ . '/theme_functions.inc';
 function translateform_build($strings, $lng) {
   $pager = theme('pager', array('tags' => NULL, 'element' => 0));
   $form = array(
+    'langcode' => array(
+      '#type' => 'value',
+      '#value' => $lng,
+    ),
     'pager_top' => array(
       '#weight' => -10,
       '#markup' => $pager,
@@ -34,7 +38,7 @@ function translateform_build($strings, $lng) {
       '#lng' => $lng,
     ),
 
-    'buttons' => array(),
+    'buttons' => _buttons($lng),
 
     'pager_bottom' => array(
       '#weight' => 10,
@@ -68,4 +72,27 @@ function translateform_build($strings, $lng) {
   }
 
   return $form;
+}
+
+/**
+ * Get the buttons of the form.
+ */
+function _buttons($lng) {
+  $buttons['login'] = array(
+    '#type' => 'submit',
+    '#value' => t('Login'),
+    '#access' => !bcl::user_is_authenticated(),
+  );
+
+  // The submit buttons will appear only when the user has
+  // permissions to submit votes and suggestions.
+  $translation_lng = variable_get('btrClient_translation_lng', 'all');
+  $enable_submit = ($translation_lng == 'all' or ($translation_lng == $lng));
+  $buttons['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+    '#access' => $enable_submit,
+  );
+
+  return $buttons;
 }

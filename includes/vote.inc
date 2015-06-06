@@ -5,10 +5,6 @@
  */
 
 /**
- * Include utility and theme functions.
- */
-
-/**
  * Menu callback: translations/vote.
  *
  * Vote the best translation for a string, or suggest a better translation.
@@ -107,11 +103,7 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
  */
 function btrClient_vote_form($form, &$form_state, $sguid, $string, $lng) {
   $form = bcl::translateform_build([$sguid => $string], $lng);
-  $form['buttons'] = _btrClient_vote_form_buttons($lng);
-  $form['langcode'] = array(
-    '#type' => 'value',
-    '#value' => $lng,
-  );
+  $form['buttons'] += _btrClient_vote_form_buttons($lng);
   return $form;
 }
 
@@ -119,22 +111,6 @@ function btrClient_vote_form($form, &$form_state, $sguid, $string, $lng) {
  * Get the buttons of the form.
  */
 function _btrClient_vote_form_buttons($lng) {
-  $buttons['login'] = array(
-    '#type' => 'submit',
-    '#value' => t('Login'),
-    '#access' => !bcl::user_is_authenticated(),
-  );
-
-  // The submit buttons will appear only when the user has
-  // permissions to submit votes and suggestions.
-  $translation_lng = variable_get('btrClient_translation_lng', 'all');
-  $enable_submit = ($translation_lng == 'all' or ($translation_lng == $lng));
-  $buttons['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-    '#access' => $enable_submit,
-  );
-
   $attributes = array(
     'attributes' => array(
       'class' => 'btn form-submit',
@@ -161,13 +137,6 @@ function _btrClient_vote_form_buttons($lng) {
  * Submit callback for the form: btrClient_vote_form
  */
 function btrClient_vote_form_submit($form, &$form_state) {
-  $op = $form_state['values']['op'];
-  if ($op == t('Login')) {
-    bcl::user_authenticate($form, $form_state);
-  }
-  elseif ($op == t('Save')) {
-    bcl::user_is_authenticated() ?
-      bcl::translateform_save($form_state['values']) :
-      bcl::user_authenticate($form, $form_state);
-  }
+  module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
+  \BTranslator\Client\translateform_submit($form, $form_state);
 }
