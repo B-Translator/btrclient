@@ -22,6 +22,10 @@ require_once __DIR__ . '/theme_functions.inc';
  *   A render array of the given strings and translations.
  */
 function translateform_build($strings, $lng) {
+
+  // Include on the page the CSS/JS of the editor.
+  _include_editor();
+
   $pager = theme('pager', array('tags' => NULL, 'element' => 0));
   $form = array(
     'langcode' => array(
@@ -72,6 +76,23 @@ function translateform_build($strings, $lng) {
   }
 
   return $form;
+}
+
+/**
+ * Include the resources of the editor (CSS, JS, etc.)
+ */
+function _include_editor() {
+  // Add the CSS and JS files.
+  $path = drupal_get_path('module', 'btrClient') . '/editor/';
+  drupal_add_css($path . 'editor.css');
+  drupal_add_js($path . 'jquery.worddiff.js');
+  drupal_add_js($path . 'editor.js');
+
+  // Add RTL style if the current language's direction is RTL.
+  $languages = bcl::get_languages();
+  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
+    drupal_add_css($path . 'editor-rtl.css');
+  }
 }
 
 /**

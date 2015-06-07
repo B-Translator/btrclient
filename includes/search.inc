@@ -45,18 +45,6 @@ function btrClient_search() {
     exit;
   }
 
-  // Add the CSS and JS files.
-  drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = bcl::get_languages();
-  $lng = isset($_GET['lng']) ? $_GET['lng'] : bcl::get_translation_lng();
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
-  }
-
   // Set the title.
   drupal_set_title(t('Search Translations'));
 

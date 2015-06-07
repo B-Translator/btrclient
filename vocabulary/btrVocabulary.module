@@ -49,7 +49,7 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   if ($vocabulary == NULL) {
     $lng = bcl::get_translation_lng();
     $vocabulary = 'ICT_' . $lng;
-    drupal_goto("vocabulary/$vocabulary");
+    bcl::go_to("vocabulary/$vocabulary");
   }
 
   // Check whether this is a redirect after login,
@@ -61,23 +61,9 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
       array('!vocabulary' => $vocabulary),
       array('context' => 'set the page title')));
 
-  // Add the CSS and JS files.
-  drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = bcl::get_languages();
-  list($_, $lng) = explode('_', $vocabulary, 2);
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
-  }
-
   // Add the stylesheet of btrVocabulary.
   $css_file = drupal_get_path('module', 'btrVocabulary');
-  $css_file .= (bcl::inside_iframe() ?
-               '/style-iframe.css' :
-               '/style.css');
+  $css_file .= bcl::inside_iframe() ? '/style-iframe.css' : '/style.css';
   drupal_add_css($css_file);
 
   // Build and return the output.

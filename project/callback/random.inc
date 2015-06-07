@@ -81,22 +81,9 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
   drupal_set_title(t('Random String From Project: !project',
       array('!project' => "$origin/$project")));
 
-  // Add the CSS and JS files of the editor.
-  drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = bcl::get_languages();
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
-  }
-
   // Add the stylesheet of btrProject.
   $css_file = drupal_get_path('module', 'btrProject');
-  $css_file .= (bcl::inside_iframe() ?
-               '/style-iframe.css' :
-               '/style.css');
+  $css_file .= bcl::inside_iframe() ? '/style-iframe.css' : '/style.css';
   drupal_add_css($css_file);
 
   // Build and return the output.

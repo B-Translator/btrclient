@@ -13,12 +13,8 @@
  * the output will be in JSON, otherwise it will be an HTML page.
  */
 function btrClient_vote($lng = NULL, $sguid = NULL) {
-  if ($lng == NULL) {
-    $lng = bcl::get_translation_lng();
-  }
-  if ($sguid == NULL) {
-    $sguid = 'next';
-  }
+  if ($lng == NULL)  $lng = bcl::get_translation_lng();
+  if ($sguid == NULL)  $sguid = 'next';
 
   if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
     $btr = bcl::user_is_authenticated() ?
@@ -80,17 +76,6 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
 
   // Set the title.
   drupal_set_title(t('Vote Translations'));
-
-  // Add the CSS and JS files.
-  drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = bcl::get_languages();
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
-  }
 
   // Output the form of the strings and translations.
   $output = drupal_get_form('btrClient_vote_form', $sguid, $string, $lng);
