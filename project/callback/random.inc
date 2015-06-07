@@ -33,10 +33,10 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
-      drupal_goto('btr/projects/');
+      bcl::go_to('btr/projects/');
     }
     else {
-      drupal_goto("btr/project/$origin/$project/$lng/$sguid");
+      bcl::go_to("btr/project/$origin/$project/$lng/$sguid");
     }
     return;
   }
@@ -119,26 +119,29 @@ function btrProject_random_form($form, &$form_state, $origin, $project, $lng, $s
  * Get the buttons of the form.
  */
 function _btrProject_random_form_buttons($origin, $project, $lng) {
-  $attributes = array(
-    'attributes' => array(
-      'class' => 'btn form-submit',
-      'style' => 'margin-right:3px',
-    ),
+  $params['attributes'] = array(
+    'class' => 'btn form-submit',
+    'style' => 'margin-right:3px',
   );
+  if (bcl::inside_iframe()) {
+    $params['query'] = array(
+      'display' => 'iframe',
+    );
+  }
   $buttons['next'] = array(
     '#markup' => l(t('Next'),
                "btr/project/$origin/$project/$lng/",
-               $attributes),
+               $params),
   );
   $buttons['translated'] = array(
     '#markup' => l(t('Translated'),
                "btr/project/$origin/$project/$lng/translated",
-               $attributes),
+               $params),
   );
   $buttons['untranslated'] = array(
     '#markup' => l(t('Untranslated'),
                "btr/project/$origin/$project/$lng/untranslated",
-               $attributes),
+               $params),
   );
 
   return $buttons;
