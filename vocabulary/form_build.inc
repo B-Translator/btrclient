@@ -8,6 +8,10 @@
  * Form callback for: btrVocabulary_form
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
+  // Include the CSS and JS of the editor.
+  module_load_include('php', 'btrClient', 'lib/fn/translateform/build');
+  \Btranslator\Client\_include_editor();
+
   // Get a string to display on the form.
   $op = $form_state['input']['op'];
   if ($op == t('Save')) {
