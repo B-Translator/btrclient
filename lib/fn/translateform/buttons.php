@@ -15,7 +15,7 @@ function translateform_buttons($lng, $sguid = NULL) {
     $buttons['details'] = array(
       '#markup' => l('#', "translations/$lng/$sguid",
                  array('attributes' => array(
-                     'class' => 'btn form-submit',
+                     'class' => array('btn', 'form-submit'),
                      'style' => 'font-weight:bold',
                      'target' => '_blank',
                    ))),

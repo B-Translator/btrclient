@@ -43,7 +43,7 @@ function _theme_btrClient_translate_table_1col($element) {
         // row of the translations
         [
           [
-            'class' => array('translation'),
+            'class' => ['translation'],
             'data' => theme('btrClient_translate_translation_list', ['element' => $elem]),
           ],
         ],

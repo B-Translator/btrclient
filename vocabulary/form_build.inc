@@ -176,7 +176,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   }
 
   // List all items.
-  $attributes = array('class' => 'btn form-submit');
+  $attributes = array('class' => array('btn', 'form-submit'));
   if (bcl::inside_iframe()) {
     $attributes['target'] = '_blank';
   }
@@ -197,7 +197,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     $buttons['mobile'] = array(
       '#markup' => l(t('Go To The Mobile App'), "http://fjalori.fs.al/#$term",
                  array('attributes' => array(
-                     'class' => 'btn form-submit',
+                     'class' => array('btn', 'form-submit'),
                    ))),
     );
   }
@@ -229,7 +229,7 @@ function _btrVocabulary_form_download($vocabulary) {
     $download[$key] = array(
       '#markup' => l($label,
                  $url, array('attributes' => array(
-                     'class' => 'btn',
+                     'class' => array('btn'),
                    ))));
   }
   return $download;
