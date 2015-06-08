@@ -14,6 +14,9 @@ function btrVocabulary_form_submit($form, &$form_state) {
   if ($op == t('Go')) {
     btrVocabulary_form_go($form_state);
   }
+  elseif ($op == t('Login')) {
+    _btrVocabulary_form_login($form, $form_state);
+  }
   elseif ($op == t('Save')) {
     _btrVocabulary_form_save($form, $form_state);
   }
@@ -50,6 +53,14 @@ function btrVocabulary_form_go($form_state) {
 }
 
 /**
+ * The button 'Login' has been clicked.
+ */
+function _btrVocabulary_form_login($form, &$form_state) {
+  if (bcl::user_is_authenticated())  return;
+  bcl::user_authenticate($form, $form_state);
+}
+
+/**
  * The button 'Save' has been clicked.
  */
 function _btrVocabulary_form_save($form, &$form_state) {
@@ -60,7 +71,7 @@ function _btrVocabulary_form_save($form, &$form_state) {
   }
 
   // Save the values selected on the form.
-  _btrClient_translate_form_save($form_state['values']);
+  bcl::translateform_save($form_state['values']);
 
   // Redirect to the same term.
   btrVocabulary_form_go($form_state);

@@ -9,8 +9,7 @@
  */
 function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   // Include the CSS and JS of the editor.
-  module_load_include('php', 'btrClient', 'lib/fn/translateform/build');
-  \Btranslator\Client\_include_editor();
+  bcl::translateform_include_editor();
 
   // Get a string to display on the form.
   $op = $form_state['input']['op'];
@@ -141,41 +140,10 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   list($_, $lng) = explode('_', $vocabulary, 2);
   $btr_server = variable_get('btrClient_server');
 
-  $buttons = array();
+  $buttons = bcl::translateform_buttons($lng, $sguid);
 
-  if ($sguid) {
-    if (bcl::inside_iframe()) {
-      $buttons['details'] = array(
-        '#markup' => l('#', "translations/$lng/$sguid",
-                   array('attributes' => array(
-                       'class' => 'btn form-submit',
-                       'style' => 'font-weight:bold',
-                       'target' => '_blank',
-                     ))),
-      );
-    }
-    if (!bcl::inside_iframe()) {
-      $buttons['login'] = array(
-        '#type' => 'submit',
-        '#value' => t('Login'),
-        '#access' => !bcl::user_is_authenticated(),
-      );
-    }
-    $buttons['save'] = array(
-      '#type' => 'submit',
-      '#value' => t('Save'),
-      '#attributes' => array(
-        'onclick' => 'this.form.target="_self"',
-      ),
-    );
-    // When the user is not authenticated, clicking Save will redirect
-    // to login. When we are inside an iFrame, it is better to do the
-    // login on a popup window (or a new tab).
-    if (!bcl::user_is_authenticated() and bcl::inside_iframe()) {
-      $buttons['save']['#attributes']['onclick'] = 'this.form.target="_blank"';
-    }
-  }
-  else {
+  if (!$sguid) {
+    $buttons = array();
     $buttons['add_term'] = array(
       '#type' => 'submit',
       '#value' => t('Add Term'),

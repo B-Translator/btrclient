@@ -22,9 +22,8 @@ require_once __DIR__ . '/theme_functions.inc';
  *   A render array of the given strings and translations.
  */
 function translateform_build($strings, $lng) {
-
   // Include on the page the CSS/JS of the editor.
-  _include_editor();
+  bcl::translateform_include_editor();
 
   $pager = theme('pager', array('tags' => NULL, 'element' => 0));
   $form = array(
@@ -42,7 +41,9 @@ function translateform_build($strings, $lng) {
       '#lng' => $lng,
     ),
 
-    'buttons' => _buttons($lng),
+    'buttons' => (count($strings) == 1 ?
+               bcl::translateform_buttons($lng, key($strings)) :
+               bcl::translateform_buttons($lng)),
 
     'pager_bottom' => array(
       '#weight' => 10,
@@ -76,44 +77,4 @@ function translateform_build($strings, $lng) {
   }
 
   return $form;
-}
-
-/**
- * Include the resources of the editor (CSS, JS, etc.)
- */
-function _include_editor() {
-  // Add the CSS and JS files.
-  $path = drupal_get_path('module', 'btrClient') . '/editor/';
-  drupal_add_css($path . 'editor.css');
-  drupal_add_js($path . 'jquery.worddiff.js');
-  drupal_add_js($path . 'editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = bcl::get_languages();
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css($path . 'editor-rtl.css');
-  }
-}
-
-/**
- * Get the buttons of the form.
- */
-function _buttons($lng) {
-  $buttons['login'] = array(
-    '#type' => 'submit',
-    '#value' => t('Login'),
-    '#access' => !bcl::user_is_authenticated(),
-  );
-
-  // The submit buttons will appear only when the user has
-  // permissions to submit votes and suggestions.
-  $translation_lng = variable_get('btrClient_translation_lng', 'all');
-  $enable_submit = ($translation_lng == 'all' or ($translation_lng == $lng));
-  $buttons['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-    '#access' => $enable_submit,
-  );
-
-  return $buttons;
 }
