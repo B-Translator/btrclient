@@ -123,7 +123,7 @@ function btrClient_import_form_submit($form, &$form_state) {
       'lng' => variable_get('btrClient_translation_lng', 'fr'),
     )
   );
-  btrClient_display_messages($messages);
+  bcl::display_messages($messages);
 }
 
 /**
@@ -281,5 +281,5 @@ function btrClient_importproject_form_submit($form, &$form_state) {
       'project' => $form_state['values']['project'],
     )
   );
-  btrClient_display_messages($messages);
+  bcl::display_messages($messages);
 }

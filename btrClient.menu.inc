@@ -109,6 +109,20 @@ function btrClient_menu() {
 }
 
 /**
+ * Return true if there is an oauth2 access_token.
+ */
+function btr_user_is_authenticated() {
+  return bcl::user_is_authenticated();
+}
+
+/**
+ * Check whether the current user has the given permission (on the server).
+ */
+function btr_user_access($permission) {
+  return bcl::user_access($permission);
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function btrClient_menu_alter(&$items) {

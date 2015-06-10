@@ -18,7 +18,7 @@ function btrClient_config() {
   );
 
   // Get a list of available languages,
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
   $lang_options['all'] = t('All languages');
   foreach ($languages as $code => $lang) {
     $lang_options[$code] = $lang['name'];
@@ -63,5 +63,5 @@ function btrClient_config() {
  */
 function btrClient_config_get_languages() {
   cache_clear_all('btrClient_languages', 'cache_btrClient');
-  $languages = btrClient_get_languages();
+  $languages = bcl::get_languages();
 }

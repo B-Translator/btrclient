@@ -5,12 +5,6 @@
  */
 
 /**
- * Include utility and theme functions.
- */
-require_once dirname(__FILE__) . '/translation_list/translation_list.inc';
-require_once dirname(__FILE__) . '/utils.inc';
-
-/**
  * Menu callback: translations/vote.
  *
  * Vote the best translation for a string, or suggest a better translation.
@@ -19,59 +13,39 @@ require_once dirname(__FILE__) . '/utils.inc';
  * the output will be in JSON, otherwise it will be an HTML page.
  */
 function btrClient_vote($lng = NULL, $sguid = NULL) {
-  if ($lng == NULL) {
-    $lng = btrClient_get_translation_lng();
-  }
-  if ($sguid == NULL) {
-    $sguid = 'next';
-  }
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  bcl::form_resubmit();
 
-  if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
-    // If checkbox same_project is checked, constrain the list
-    // of projects by the projects of the last string.
-    $last_sguid = NULL;
-    if (isset($_SESSION['btrClient']['same_project'])
-      && $_SESSION['btrClient']['same_project']) {
-      $last_sguid = $_SESSION['btrClient']['last_sguid'];
-    }
-    $btr = btr_user_is_authenticated() ?
+  if ($sguid == NULL)  $sguid = 'next';
+  if ($lng == 'all')  bcl::go_to("translations/fr/$sguid");
+  if ($lng == NULL)  $lng = bcl::get_translation_lng();
+
+  if (in_array($sguid, ['next', 'translated', 'untranslated'])) {
+    $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid(
       array(
         'target' => $sguid,
         'lng' => $lng,
-        'last_sguid' => $last_sguid,
       ));
 
-    btrClient_display_messages($result['messages']);
+    bcl::display_messages($result['messages']);
 
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
-      drupal_goto('/');
+      bcl::go_to('/');
     }
     else {
-      drupal_goto("translations/$lng/$sguid");
+      bcl::go_to("translations/$lng/$sguid");
     }
     return;
   }
-  // last_sguid is also used in search, to get similar results.
-  $_SESSION['btrClient']['last_sguid'] = $sguid;
 
-  // If there is a $_SESSION['btrClient']['translate_form']['state'],
-  // then this is a redirect after login. Call the submit function again.
-  if (isset($_SESSION['btrClient']['translate_form']['state'])) {
-    $form_state = $_SESSION['btrClient']['translate_form']['state'];
-    unset($_SESSION['btrClient']['translate_form']['state']);
-    // drupal_form_submit('btrClient_translate_form', $form_state); // ?
-    btrClient_translate_form_submit(NULL, $form_state);
-  }
-  if ($lng == 'all') {
-    $lng = 'fr';
-    drupal_goto("translations/$lng/$sguid");
-    return;
-  }
+  // last_sguid is used in search, to get similar results.
+  $_SESSION['btrClient']['last_sguid'] = $sguid;
 
   // Get the string and its translations.
   $btr = wsclient_service_load('public_btr');
@@ -86,32 +60,66 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   }
 
   // Display any messages, warnings and errors.
-  btrClient_display_messages($result['messages']);
+  bcl::display_messages($result['messages']);
 
   // Go to home if there is no string.
   $string = $result['string'];
   if (empty($string)) {
     drupal_set_message(t('No string found!'), 'warning');
-    drupal_goto('/');
+    bcl::go_to('/');
     return;
   }
 
-  // Set the title.
-  drupal_set_title(t('Vote Translations'));
-
-  // Add the CSS and JS files.
-  drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor/editor.css');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/jquery.worddiff.js');
-  drupal_add_js(drupal_get_path('module', 'btrClient') . '/editor/editor.js');
-
-  // Add RTL style if the current language's direction is RTL.
-  $languages = btrClient_get_languages();
-  if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/editor-rtl.css');
-  }
-
-  // Output the string and its translations.
-  $output = drupal_get_form('btrClient_translate_form', array($sguid => $string), $lng);
+  // Output the form of the strings and translations.
+  $output = drupal_get_form('btrClient_vote_form', $sguid, $string, $lng);
 
   return $output;
+}
+
+/**
+ * Form callback for: btrClient_vote_form
+ */
+function btrClient_vote_form($form, &$form_state, $sguid, $string, $lng) {
+  $form = bcl::translateform_build([$sguid => $string], $lng);
+  $form['buttons'] += _btrClient_vote_form_buttons($lng);
+  return $form;
+}
+
+/**
+ * Get the buttons of the form.
+ */
+function _btrClient_vote_form_buttons($lng) {
+  $params = array(
+    'attributes' => array(
+      'class' => array('btn', 'form-submit'),
+      'style' => 'margin-right:3px',
+    ),
+  );
+  if (bcl::inside_iframe()) {
+    $params['query'] = array(
+      'display' => 'iframe',
+    );
+  }
+  $buttons['next'] = array(
+    '#markup' => l(t('Next'), "translations/$lng/",
+               $params),
+  );
+  $buttons['translated'] = array(
+    '#markup' => l(t('Translated'), "translations/$lng/translated",
+               $params),
+  );
+  $buttons['untranslated'] = array(
+    '#markup' => l(t('Untranslated'), "translations/$lng/untranslated",
+               $params),
+  );
+
+  return $buttons;
+}
+
+/**
+ * Submit callback for the form: btrClient_vote_form
+ */
+function btrClient_vote_form_submit($form, &$form_state) {
+  module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
+  \BTranslator\Client\translateform_submit($form, $form_state);
 }

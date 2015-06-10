@@ -79,7 +79,7 @@ function btrClient_rss_feed($origin = NULL, $project = NULL) {
   $base_url = url('translations', array('absolute' => TRUE));
   foreach ($translations as $translation) {
     extract($translation);
-    $title = btrClient_shorten($string, 60);
+    $title = bcl::shorten($string, 60);
     $link = $base_url . "/$lng/$sguid";
     $description = "<xmp>$string</xmp> -- <xmp>$translation</xmp>";
     $pub_date = date('r', strtotime($time));

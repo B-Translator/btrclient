@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- * Submit functions for the form btrVocabulary.
+ * Submit functions for btrVocabulary_form.
  */
 
 /**
- * Form submit callback for btrVocabulary_form().
+ * Submit callback for: btrVocabulary_form
  */
 function btrVocabulary_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
@@ -13,6 +13,9 @@ function btrVocabulary_form_submit($form, &$form_state) {
 
   if ($op == t('Go')) {
     btrVocabulary_form_go($form_state);
+  }
+  elseif ($op == t('Login')) {
+    _btrVocabulary_form_login($form, $form_state);
   }
   elseif ($op == t('Save')) {
     _btrVocabulary_form_save($form, $form_state);
@@ -50,41 +53,28 @@ function btrVocabulary_form_go($form_state) {
 }
 
 /**
+ * The button 'Login' has been clicked.
+ */
+function _btrVocabulary_form_login($form, &$form_state) {
+  if (bcl::user_is_authenticated())  return;
+  bcl::user_authenticate($form, $form_state);
+}
+
+/**
  * The button 'Save' has been clicked.
  */
 function _btrVocabulary_form_save($form, &$form_state) {
   // Make sure that user is authenticated.
-  if (!btr_user_is_authenticated()) {
-    btrVocabulary_authenticate($form, $form_state);
+  if (!bcl::user_is_authenticated()) {
+    bcl::user_authenticate($form, $form_state);
     return;
   }
 
   // Save the values selected on the form.
-  _btrClient_translate_form_save($form_state['values']);
+  bcl::translateform_save($form_state['values']);
 
   // Redirect to the same term.
   btrVocabulary_form_go($form_state);
-}
-
-/**
- * Authenticate the user (redirect to login).
- */
-function btrVocabulary_authenticate($form, $form_state) {
-  if ($form === NULL) {
-    // We are in a redirect-after-login, but login has failed
-    // or was cancelled. Clear the session variable so that
-    // it does not keep redirecting.
-    unset($_SESSION['btrVocabulary']['form_state']);
-    return;
-  }
-
-  if (_btrClient_installed_on_server()) {
-    drupal_goto('user/login', array('query' => drupal_get_destination()));
-  }
-  else {
-    $_SESSION['btrVocabulary']['form_state'] = $form_state;
-    oauth2_login();
-  }
 }
 
 /**
@@ -92,12 +82,12 @@ function btrVocabulary_authenticate($form, $form_state) {
  */
 function _btrVocabulary_form_add($form, &$form_state) {
   // Make sure that user is authenticated.
-  if (!btr_user_is_authenticated()) {
-    btrVocabulary_authenticate($form, $form_state);
+  if (!bcl::user_is_authenticated()) {
+    bcl::user_authenticate($form, $form_state);
   }
 
   // Check access rights.
-  if (!btr_user_access('btranslator-import')) {
+  if (!bcl::user_access('btranslator-import')) {
     drupal_set_message(t("You don't have enough rights for adding new terms."), 'error');
     return;
   }
@@ -130,12 +120,12 @@ function _btrVocabulary_form_add($form, &$form_state) {
  */
 function _btrVocabulary_form_delete($form, &$form_state) {
   // Make sure that user is authenticated.
-  if (!btr_user_is_authenticated()) {
-    btrVocabulary_authenticate($form, $form_state);
+  if (!bcl::user_is_authenticated()) {
+    bcl::user_authenticate($form, $form_state);
   }
 
   // Check access rights.
-  if (!btr_user_access('btranslator-admin')) {
+  if (!bcl::user_access('btranslator-admin')) {
     drupal_set_message(t('Only an admin can delete vocabulary terms.'), 'error');
     return;
   }

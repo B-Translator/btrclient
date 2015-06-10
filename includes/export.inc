@@ -112,9 +112,9 @@ function btrClient_export_form_submit($form, &$form_state) {
   $result = $btr->export_projects(array(
               'origin' => $origin,
               'project' => $project,
-              'lng' => btrClient_get_translation_lng(),
+              'lng' => bcl::get_translation_lng(),
               'export_mode' => $export_mode,
               'preferred_voters' => $friends,
             ));
-  btrClient_display_messages($result['messages']);
+  bcl::display_messages($result['messages']);
 }
