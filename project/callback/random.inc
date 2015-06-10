@@ -44,10 +44,6 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
   // last_sguid is used in search, to get similar results.
   $_SESSION['btrProject']['last_sguid'] = $sguid;
 
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  bcl::form_resubmit();
-
   if ($lng == 'all') {
     $lng = 'fr';
     drupal_goto("btr/project/$origin/$project/$lng/$sguid");

@@ -52,10 +52,6 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
     bcl::go_to("vocabulary/$vocabulary");
   }
 
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  bcl::form_resubmit();
-
   // Set the page title.
   drupal_set_title(t('Vocabulary: !vocabulary',
       array('!vocabulary' => $vocabulary),

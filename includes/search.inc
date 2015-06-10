@@ -21,10 +21,6 @@ require_once dirname(__FILE__) . '/search_form.inc';
  *        'https://dev.l10n.org.xx/translations/search?lng=sq&words=space'
  */
 function btrClient_search() {
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  bcl::form_resubmit();
-
   // Get the search parameters from the GET request.
   $params = btrClient_get_search_params();
 

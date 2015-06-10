@@ -13,9 +13,6 @@
  * the output will be in JSON, otherwise it will be an HTML page.
  */
 function btrClient_vote($lng = NULL, $sguid = NULL) {
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  bcl::form_resubmit();
 
   if ($sguid == NULL)  $sguid = 'next';
   if ($lng == 'all')  bcl::go_to("translations/fr/$sguid");

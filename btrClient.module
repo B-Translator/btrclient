@@ -58,6 +58,10 @@ function btrClient_flush_caches() {
  * Implements hook_init().
  */
 function btrClient_init() {
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  bcl::form_resubmit();
+
   if (arg(0) == 'translations') {
     drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient.css');
   }
