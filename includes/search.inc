@@ -62,8 +62,7 @@ function btrClient_search_form($form, &$form_state, $strings, $lng) {
  * Submit callback for the form: btrClient_search_form
  */
 function btrClient_search_form_submit($form, &$form_state) {
-  module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
-  \BTranslator\Client\translateform_submit($form, $form_state);
+  bcl::translateform_submit($form, $form_state);
 }
 
 /**

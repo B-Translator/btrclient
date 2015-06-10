@@ -126,6 +126,5 @@ function _btrProject_random_form_buttons($origin, $project, $lng) {
  * Submit callback for the form: btrProject_random_form
  */
 function btrProject_random_form_submit($form, &$form_state) {
-  module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
-  \BTranslator\Client\translateform_submit($form, $form_state);
+  bcl::translateform_submit($form, $form_state);
 }

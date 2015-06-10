@@ -9,9 +9,10 @@ use \bcl;
 
 /**
  * Authenticate the user (redirect to login).
+ * But first save the given form_state in session.
  */
-function user_authenticate($form, $form_state) {
-  if ($form === NULL) {
+function user_authenticate($form_state, $redirection = FALSE) {
+  if ($redirection) {
     // We are in a redirect-after-login, but login has failed or was cancelled.
     // In this case we clear the session variable so that it does not keep
     // redirecting.

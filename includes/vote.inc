@@ -113,6 +113,5 @@ function _btrClient_vote_form_buttons($lng) {
  * Submit callback for the form: btrClient_vote_form
  */
 function btrClient_vote_form_submit($form, &$form_state) {
-  module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
-  \BTranslator\Client\translateform_submit($form, $form_state);
+  bcl::translateform_submit($form, $form_state);
 }
