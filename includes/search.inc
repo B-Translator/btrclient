@@ -31,12 +31,8 @@ function btrClient_search() {
   $result = $btr->search($params);
 
   // If the request has the header 'Accept: application/json'
-  // return the output in JSON format and stop.
-  if ($_SERVER['HTTP_ACCEPT'] == 'application/json') {
-    drupal_add_http_header('Content-Type', 'application/json; utf-8');
-    print json_encode($result['strings']);
-    exit;
-  }
+  // or '?format=json' return the output in JSON format and stop.
+  bcl::return_json($result['strings']);
 
   // Set the title.
   drupal_set_title(t('Search Translations'));

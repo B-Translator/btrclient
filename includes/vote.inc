@@ -49,12 +49,8 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   $result = $btr->get_translations($sguid, $lng);
 
   // If the request has the header 'Accept: application/json'
-  // return the output in JSON format and stop.
-  if ($_SERVER['HTTP_ACCEPT'] == 'application/json') {
-    drupal_add_http_header('Content-Type', 'application/json; utf-8');
-    print json_encode($result);
-    exit;
-  }
+  // or '?format=json' return the output in JSON format and stop.
+  bcl::return_json($result);
 
   // Display any messages, warnings and errors.
   bcl::display_messages($result['messages']);
