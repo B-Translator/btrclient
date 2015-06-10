@@ -77,10 +77,6 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
     return;
   }
 
-  // Set the title.
-  drupal_set_title(t('Random String From Project: !project',
-      array('!project' => "$origin/$project")));
-
   // Add the stylesheet of btrProject.
   $css_file = drupal_get_path('module', 'btrProject');
   $css_file .= bcl::inside_iframe() ? '/style-iframe.css' : '/style.css';

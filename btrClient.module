@@ -119,7 +119,7 @@ function btrClient_hybridauth_user_login($account, $data) {
 /**
  * Implements hook_user_login().
  */
-function btrClient_user_login($account, $data) {
+function btrClient_user_login(&$edit, $account) {
   if (bcl::installed_on_server()) {
     bcl::user_get_profile();
   }
@@ -145,11 +145,3 @@ function btrClient_form_alter(&$form, &$form_state, $form_id) {
     );
   }
 }
-
-/*
-function btr_log($var, $comment ='') {
-  $file = '/tmp/btr.log';
-  $content = "\n==> $comment: " . print_r($var, true);
-  file_put_contents($file, $content, FILE_APPEND);
-}
-*/

@@ -33,15 +33,12 @@ function btrClient_search() {
     wsclient_service_load('btr') :
     wsclient_service_load('public_btr');
   $result = $btr->search($params);
-  $filter = $result['filter'];
-  $pager = $result['pager'];
-  $strings = $result['strings'];
 
   // If the request has the header 'Accept: application/json'
   // return the output in JSON format and stop.
   if ($_SERVER['HTTP_ACCEPT'] == 'application/json') {
     drupal_add_http_header('Content-Type', 'application/json; utf-8');
-    print json_encode($strings);
+    print json_encode($result['strings']);
     exit;
   }
 
@@ -49,11 +46,11 @@ function btrClient_search() {
   drupal_set_title(t('Search Translations'));
 
   // Add the filter form.
-  $output = array(
-    drupal_get_form('btrClient_filter_form', $filter),
-  );
+  $output[] = drupal_get_form('btrClient_filter_form', $result['filter']);
 
   // Output the strings.
+  $strings = $result['strings'];
+  $pager = $result['pager'];
   if (empty($strings)) {
     drupal_set_message(t('No strings found. Try adjusting the filter options.'));
   }

@@ -13,10 +13,15 @@
  * the output will be in JSON, otherwise it will be an HTML page.
  */
 function btrClient_vote($lng = NULL, $sguid = NULL) {
-  if ($lng == NULL)  $lng = bcl::get_translation_lng();
-  if ($sguid == NULL)  $sguid = 'next';
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  bcl::form_resubmit();
 
-  if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
+  if ($sguid == NULL)  $sguid = 'next';
+  if ($lng == 'all')  bcl::go_to("translations/fr/$sguid");
+  if ($lng == NULL)  $lng = bcl::get_translation_lng();
+
+  if (in_array($sguid, ['next', 'translated', 'untranslated'])) {
     $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
@@ -31,25 +36,16 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
-      drupal_goto('/');
+      bcl::go_to('/');
     }
     else {
-      drupal_goto("translations/$lng/$sguid");
+      bcl::go_to("translations/$lng/$sguid");
     }
     return;
   }
+
   // last_sguid is used in search, to get similar results.
   $_SESSION['btrClient']['last_sguid'] = $sguid;
-
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  bcl::form_resubmit();
-
-  if ($lng == 'all') {
-    $lng = 'fr';
-    drupal_goto("translations/$lng/$sguid");
-    return;
-  }
 
   // Get the string and its translations.
   $btr = wsclient_service_load('public_btr');
@@ -70,12 +66,9 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   $string = $result['string'];
   if (empty($string)) {
     drupal_set_message(t('No string found!'), 'warning');
-    drupal_goto('/');
+    bcl::go_to('/');
     return;
   }
-
-  // Set the title.
-  drupal_set_title(t('Vote Translations'));
 
   // Output the form of the strings and translations.
   $output = drupal_get_form('btrClient_vote_form', $sguid, $string, $lng);
@@ -96,23 +89,28 @@ function btrClient_vote_form($form, &$form_state, $sguid, $string, $lng) {
  * Get the buttons of the form.
  */
 function _btrClient_vote_form_buttons($lng) {
-  $attributes = array(
+  $params = array(
     'attributes' => array(
-      'class' => 'btn form-submit',
+      'class' => array('btn', 'form-submit'),
       'style' => 'margin-right:3px',
     ),
   );
+  if (bcl::inside_iframe()) {
+    $params['query'] = array(
+      'display' => 'iframe',
+    );
+  }
   $buttons['next'] = array(
     '#markup' => l(t('Next'), "translations/$lng/",
-               $attributes),
+               $params),
   );
   $buttons['translated'] = array(
     '#markup' => l(t('Translated'), "translations/$lng/translated",
-               $attributes),
+               $params),
   );
   $buttons['untranslated'] = array(
     '#markup' => l(t('Untranslated'), "translations/$lng/untranslated",
-               $attributes),
+               $params),
   );
 
   return $buttons;

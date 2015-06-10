@@ -12,9 +12,9 @@ use \bcl;
  */
 function user_authenticate($form, $form_state) {
   if ($form === NULL) {
-    // We are in a redirect-after-login, but login has failed
-    // or was cancelled. Clear the session variable so that
-    // it does not keep redirecting.
+    // We are in a redirect-after-login, but login has failed or was cancelled.
+    // In this case we clear the session variable so that it does not keep
+    // redirecting.
     unset($_SESSION['btrClient']['form_state']);
     return;
   }

@@ -16,8 +16,11 @@ function translateform_submit($form, &$form_state) {
     bcl::user_authenticate($form, $form_state);
   }
   elseif ($op == t('Save')) {
-    bcl::user_is_authenticated() ?
-      bcl::translateform_save($form_state['values']) :
+    if (bcl::user_is_authenticated()) {
+      bcl::translateform_save($form_state['values']);
+    }
+    else {
       bcl::user_authenticate($form, $form_state);
+    }
   }
 }
