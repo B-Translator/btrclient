@@ -21,8 +21,8 @@ require_once dirname(__FILE__) . '/search_form.inc';
  *        'https://dev.l10n.org.xx/translations/search?lng=sq&words=space'
  */
 function btrClient_search() {
-  // Get the search parameters from the GET request.
-  $params = btrClient_get_search_params();
+  // Get the filter parameters from the GET request.
+  $params = bcl::filter_get_params();
 
   // Get the strings that match the search params.
   $btr = bcl::user_is_authenticated() ?
