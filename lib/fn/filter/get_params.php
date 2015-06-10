@@ -32,7 +32,7 @@ function filter_get_params() {
   // Number of results to be displayed.
   if (isset($request['limit'])) {
     $limit = (int) trim($request['limit']);
-    list($limit_options, $default_limit) = _btrClient_get_filter_options('limit');
+    list($limit_options, $default_limit) = bcl::filter_get_options('limit');
     $params['limit'] = in_array($limit, $limit_options) ? $limit : $default_limit;
   }
   // Page of results to be displayed.
@@ -45,7 +45,7 @@ function filter_get_params() {
   // Search can be performed either on l10n strings or on the translations.
   if (isset($request['mode'])) {
     $mode = $request['mode'];
-    list($search_mode_options, $default_search_mode) = _btrClient_get_filter_options('mode');
+    list($search_mode_options, $default_search_mode) = bcl::filter_get_options('mode');
     $params['mode'] = in_array($mode, $search_mode_options) ? $mode : $default_search_mode;
   }
   if (isset($request['words'])) {
@@ -77,7 +77,7 @@ function filter_get_params() {
   // Limit by date of string, translation or voting (used by admins).
   if (isset($request['date_filter'])) {
     $date_filter = trim($request['date_filter']);
-    list($date_filter_options, $default_date_filter) = _btrClient_get_filter_options('date_filter');
+    list($date_filter_options, $default_date_filter) = bcl::filter_get_options('date_filter');
     $params['date_filter'] = in_array($date_filter, $date_filter_options) ? $date_filter : $default_date_filter;
   }
 

@@ -5,11 +5,6 @@
  */
 
 /**
- * Include utility and theme functions.
- */
-require_once dirname(__FILE__) . '/search_form.inc';
-
-/**
  * Menu callback: translations/search.
  *
  * Search strings and translations using various filters.
@@ -69,4 +64,26 @@ function btrClient_search_form($form, &$form_state, $strings, $lng) {
 function btrClient_search_form_submit($form, &$form_state) {
   module_load_include('php', 'btrClient', 'lib/fn/translateform/submit');
   \BTranslator\Client\translateform_submit($form, $form_state);
+}
+
+/**
+ * Form callback for: btrClient_filter_form
+ */
+function btrClient_filter_form($form, &$form_state, $filter) {
+  // If the form has no values yet (either it is the first time that
+  // the form is opened, or we have a get request), we set the values
+  // of the form according to the $filter values.
+  if (empty($form_state['values'])) {
+    $form_state['values'] = $filter;
+  }
+  $form = bcl::filter_form($form_state['values']);
+  return $form;
+}
+
+/**
+ * Submit callback for the form: btrClient_filter_form
+ */
+function btrClient_filter_form_submit($form, &$form_state) {
+  module_load_include('php', 'btrClient', 'lib/fn/filter/submit');
+  \BTranslator\Client\filter_submit($form, $form_state);
 }

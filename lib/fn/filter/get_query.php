@@ -49,7 +49,7 @@ function filter_get_query($form_values) {
     }
 
     // Get date_filter.
-    list($date_filter_options, $default_date_filter) = _btrClient_get_filter_options('date_filter');
+    list($date_filter_options, $default_date_filter) = bcl::filter_get_options('date_filter');
     if (in_array($form_values['date_filter'], $date_filter_options) && $form_values['date_filter'] != $default_date_filter) {
       $query['date_filter'] = $form_values['date_filter'];
     }
@@ -66,13 +66,13 @@ function filter_get_query($form_values) {
   }
 
   // Get limit.
-  list($limit_options, $default_limit) = _btrClient_get_filter_options('limit');
+  list($limit_options, $default_limit) = bcl::filter_get_options('limit');
   if (in_array($form_values['limit'], $limit_options) && $form_values['limit'] != $default_limit) {
     $query['limit'] = $form_values['limit'];
   }
 
   // Get search mode and words.
-  list($search_mode_options, $default_search_mode) = _btrClient_get_filter_options('mode');
+  list($search_mode_options, $default_search_mode) = bcl::filter_get_options('mode');
   if (in_array($form_values['mode'], $search_mode_options) && $form_values['mode'] != $default_search_mode) {
     $query['mode'] = $form_values['mode'];
   }

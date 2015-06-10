@@ -1,52 +1,16 @@
 <?php
-
 /**
  * @file
- * Functions related to the filter form
- * of the translations/search interface.
+ * Function: filter_form()
  */
 
+namespace BTranslator\Client;
+use \bcl;
 
 /**
- * Submission handler for filtering form.
+ * Build and return the filter form.
  */
-function btrClient_filter_form_submit($form, &$form_state) {
-  if ($form_state['values']['op'] == t('Reset')) {
-    // Just go with the redirection flow => removes URL params.
-    return;
-  }
-
-  if ($form_state['values']['op'] == t('Filter')) {
-    // Redirect (with a GET request) keeping the relevant filters intact
-    // in the URL.
-    $form_state['redirect'] = array(
-      $_GET['q'],
-      array('query' => bcl::filter_get_query($form_state['values'])),
-    );
-    return;
-  }
-}
-
-
-/**
- * Translation form filter.
- *
- * @param array $form
- *   The form values.
- * @param array $form_state
- *   The form_state values
- * @param array $filter
- *   Array of filter options.
- */
-function btrClient_filter_form($form, &$form_state, $filter) {
-
-  // If the form has no values yet (either it is the first time that
-  // the form is opened, or we have a get request), we set the values
-  // of the form according to the $filter values.
-  if (empty($form_state['values'])) {
-    $form_state['values'] = $filter;
-  }
-
+function filter_form($form_values) {
   $form = array(
     // '#prefix' => '<div class="bcl-ui-filter clear-block">',
     '#prefix' => '<div class="clear-block">',
@@ -54,22 +18,22 @@ function btrClient_filter_form($form, &$form_state, $filter) {
   );
 
   // Add form fields: lng, mode, words, limit.
-  _btrClient_filter_form_basic_search($form, $form_state);
+  _basic_search($form, $form_values);
 
   // Add form fieldset advanced_search/projects, with the fields:
   // project and origin.
-  _btrClient_filter_form_advanced_search($form, $form_state);
+  _advanced_search($form, $form_values);
 
   // Search by author and serach by date
   // are available only to logged in users.
   if (bcl::user_is_authenticated()) {
     // Add fieldset advanced_search/author,
     // with fields: only_mine, translated_by, voted_by.
-    _btrClient_filter_form_author($form, $form_state);
+    _author($form, $form_values);
 
     // Add fieldset advanced_search/date,
     // with fields: date_filter, from_date, to_date.
-    _btrClient_filter_form_date($form, $form_state);
+    _date($form, $form_values);
   }
 
   $form['buttons'] = array(
@@ -100,7 +64,7 @@ function btrClient_filter_form($form, &$form_state, $filter) {
 /**
  * Add form fields: lng, mode, words, limit.
  */
-function _btrClient_filter_form_basic_search(&$form, &$form_state) {
+function _basic_search(&$form, $form_values) {
 
   $languages = bcl::get_languages();
   foreach ($languages as $code => $lang) {
@@ -111,7 +75,7 @@ function _btrClient_filter_form_basic_search(&$form, &$form_state) {
     '#title' => t('Language of Translation'),
     '#description' => t('Select the language of the translations to be searched and displayed.'),
     '#options' => $lang_options,
-    '#default_value' => $form_state['values']['lng'],
+    '#default_value' => $form_values['lng'],
   );
 
   $form['basic_search'] = array(
@@ -121,12 +85,12 @@ function _btrClient_filter_form_basic_search(&$form, &$form_state) {
     '#collapsed' => FALSE,
   );
 
-  list($search_mode_options, $default) = _btrClient_get_filter_options('mode', 'assoc');
+  list($search_mode_options, $default) = bcl::filter_get_options('mode', 'assoc');
   $form['basic_search']['mode'] = array(
     '#type' => 'select',
     '#title' => t('Search Mode'),
     '#options' => $search_mode_options,
-    '#default_value' => $form_state['values']['mode'],
+    '#default_value' => $form_values['mode'],
   );
 
   $form['basic_search']['words'] = array(
@@ -137,24 +101,24 @@ function _btrClient_filter_form_basic_search(&$form, &$form_state) {
                       '!url1' => 'http://dev.mysql.com/doc/refman/5.1/en/fulltext-natural-language.html',
                       '!url2' => 'http://dev.mysql.com/doc/refman/5.1/en/fulltext-boolean.html',
                     )),
-    '#default_value' => $form_state['values']['words'],
+    '#default_value' => $form_values['words'],
     '#rows' => 2,
   );
 
-  list($limit_options, $default) = _btrClient_get_filter_options('limit', 'assoc');
+  list($limit_options, $default) = bcl::filter_get_options('limit', 'assoc');
   $form['limit'] = array(
     '#type' => 'select',
     '#title' => t('Limit'),
     '#description' => t('The number of the results (strings) that can be displayed on a page.'),
     '#options' => $limit_options,
-    '#default_value' => $form_state['values']['limit'],
+    '#default_value' => $form_values['limit'],
   );
 }
 
 /**
  * Add fieldset advanced_search/projects, with the fields: project and origin.
  */
-function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
+function _advanced_search(&$form, $form_values) {
 
   $form['advanced_search'] = array(
     '#type' => 'fieldset',
@@ -175,7 +139,7 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Project'),
     '#description' => t('Search only the strings belonging to the matching project.'),
-    '#default_value' => $form_state['values']['project'],
+    '#default_value' => $form_values['project'],
     '#autocomplete_path' => $btr_server . '/auto/project',
   );
 
@@ -183,7 +147,7 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Origin'),
     '#description' => t('Limit search only to the projects from a certain origin.'),
-    '#default_value' => $form_state['values']['origin'],
+    '#default_value' => $form_values['origin'],
     '#autocomplete_path' => $btr_server . '/auto/origin',
   );
 }
@@ -193,7 +157,7 @@ function _btrClient_filter_form_advanced_search(&$form, &$form_state) {
  *
  * With fields: only_mine, translated_by, voted_by.
  */
-function _btrClient_filter_form_author(&$form, &$form_state) {
+function _author(&$form, $form_values) {
 
   $form['advanced_search']['author'] = array(
     '#type' => 'fieldset',
@@ -206,7 +170,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Only Mine'),
     '#description' => t('Search only the strings with translations suggested or voted by me.'),
-    '#default_value' => $form_state['values']['only_mine'],
+    '#default_value' => $form_values['only_mine'],
   );
 
   $btr_server = variable_get('btrClient_server');
@@ -215,7 +179,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Translated By'),
     '#description' => t('Search only the strings with translations suggested by the selected user.'),
-    '#default_value' => $form_state['values']['translated_by'],
+    '#default_value' => $form_values['translated_by'],
     '#autocomplete_path' => $btr_server . '/auto/user/' . $lng,
     '#states' => array(
       'visible' => array(
@@ -228,7 +192,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Voted By'),
     '#description' => t('Search only the strings with translations voted by the selected user.'),
-    '#default_value' => $form_state['values']['voted_by'],
+    '#default_value' => $form_values['voted_by'],
     '#autocomplete_path' => $btr_server . '/auto/user/' . $lng,
     '#states' => array(
       'visible' => array(
@@ -243,7 +207,7 @@ function _btrClient_filter_form_author(&$form, &$form_state) {
  *
  * With fields: date_filter, from_date, to_date.
  */
-function _btrClient_filter_form_date(&$form, &$form_state) {
+function _date(&$form, $form_values) {
   $form['advanced_search']['date'] = array(
     '#type' => 'fieldset',
     '#title' => t('Date'),
@@ -251,77 +215,24 @@ function _btrClient_filter_form_date(&$form, &$form_state) {
     '#collapsed' => TRUE,
   );
 
-  list($date_filter_options, $default) = _btrClient_get_filter_options('date_filter', 'assoc');
+  list($date_filter_options, $default) = bcl::filter_get_options('date_filter', 'assoc');
   $form['advanced_search']['date']['date_filter'] = array(
     '#type' => 'select',
     '#title' => t('What to Filter'),
     '#description' => t('Select what to filter by date (strings, translations, or votes).'),
     '#options' => $date_filter_options,
-    '#default_value' => $form_state['values']['date_filter'],
+    '#default_value' => $form_values['date_filter'],
   );
 
   $form['advanced_search']['date']['from_date'] = array(
     '#type' => 'textfield',
     '#title' => t('From Date'),
-    '#default_value' => $form_state['values']['from_date'],
+    '#default_value' => $form_values['from_date'],
   );
 
   $form['advanced_search']['date']['to_date'] = array(
     '#type' => 'textfield',
     '#title' => t('To Date'),
-    '#default_value' => $form_state['values']['to_date'],
+    '#default_value' => $form_values['to_date'],
   );
-}
-
-
-// ----------------------- utility functions ----------------------------
-
-/**
- * Returns an array of options for the given field and the default value.
- *
- * If being associative ($assoc) is not required then only the keys are
- * returned.
- */
-function _btrClient_get_filter_options($field, $assoc = FALSE) {
-
-  switch ($field) {
-
-    case 'limit':
-      // Number of results to be displayed per page.
-      $options = array(
-        '5'  => '5',
-        '10' => '10',
-        '20' => '20',
-        '30' => '30',
-        '50' => '50',
-      );
-      $default = 5;
-      break;
-
-    case 'mode':
-      // Options for search mode.
-      $options = array(
-        'natural-strings' => t('Natural search on strings.'),
-        'natural-translations' => t('Natural search on translations.'),
-        'boolean-strings' => t('Boolean search on strings.'),
-        'boolean-translations' => t('Boolean search on translations.'),
-      );
-      $default = 'natural-strings';
-      break;
-
-    case 'date_filter':
-      // Which date to filter.
-      $options = array(
-        'strings' => t('Filter Strings By Date'),
-        'translations' => t('Filter Translations By Date'),
-        'votes' => t('Filter Votes By Date'),
-      );
-      $default = 'translations';
-      break;
-  }
-  if (!$assoc) {
-    $options = array_keys($options);
-  }
-
-  return array($options, $default);
 }
