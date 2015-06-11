@@ -20,7 +20,7 @@ function btrTranslations_menu() {
 
   $items['translations/random'] = array(
     'type'            => MENU_DEFAULT_LOCAL_TASK,
-    'title'           => 'Random Translation',
+    'title'           => 'Random',
     'weight'          => 1,
   );
 

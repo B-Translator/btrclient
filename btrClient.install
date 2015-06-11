@@ -44,8 +44,6 @@ function btrClient_uninstall() {
 
     'btrClient_topcontrib_size',
     'btrClient_topcontrib_period',
-
-    'btrClient_crontime',
   );
   foreach ($variables as $var) {
     variable_del($var);
