@@ -6,8 +6,6 @@
 
 module_load_include('php', 'btrClient', 'lib/bcl');
 
-require_once dirname(__FILE__) . '/btrClient.blocks.inc';
-
 /**
  * Implements hook_init().
  */

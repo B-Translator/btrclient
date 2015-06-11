@@ -4,6 +4,8 @@
  * Module file for btrTranslations.
  */
 
+module_load_include('inc', 'btrTranslations', 'blocks/blocks');
+
 /**
  * Implements hook_menu().
  */
