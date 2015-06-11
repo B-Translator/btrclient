@@ -8,14 +8,14 @@
 /**
  * Menu callback for 'translations/import'.
  */
-function btrClient_import() {
-  return drupal_get_form('btrClient_import_form');
+function btrTranslations_import() {
+  return drupal_get_form('btrTranslations_import_form');
 }
 
 /**
  * Import form.
  */
-function btrClient_import_form($form, &$form_state) {
+function btrTranslations_import_form($form, &$form_state) {
   $form = array(
     '#prefix' => '<div class="clear-block">',
     '#suffix' => '</div>',
@@ -60,9 +60,9 @@ import back to B-Translator the translated/corrected PO files.</p>
 }
 
 /**
- * Implements hook form_validate() for btrClient_import_form.
+ * Implements hook form_validate() for btrTranslations_import_form.
  */
-function btrClient_import_form_validate($form, &$form_state, $extensions =NULL) {
+function btrTranslations_import_form_validate($form, &$form_state, $extensions =NULL) {
   // Check that a file is uploaded.
   $file_tmp_name = $_FILES['files']['tmp_name']['file'];
   if ($file_tmp_name == '') {
@@ -114,10 +114,10 @@ function btrClient_import_form_validate($form, &$form_state, $extensions =NULL) 
 }
 
 /**
- * Implements hook form_submit() for btrClient_import_form.
+ * Implements hook form_submit() for btrTranslations_import_form.
  */
-function btrClient_import_form_submit($form, &$form_state) {
-  $messages = _btrClient_upload_file(
+function btrTranslations_import_form_submit($form, &$form_state) {
+  $messages = _btrTranslations_upload_file(
     'translations/import',
     array(
       'lng' => variable_get('btrClient_translation_lng', 'fr'),
@@ -134,7 +134,7 @@ function btrClient_import_form_submit($form, &$form_state) {
  * TODO: Replace this function and wsclient by Guzzle
  *       (requires PHP 5.4).
  */
-function _btrClient_upload_file($endpoint, $params = array()) {
+function _btrTranslations_upload_file($endpoint, $params = array()) {
   $btr = wsclient_service_load('btr');
 
   // Get an access_token.
@@ -195,14 +195,14 @@ function _btrClient_upload_file($endpoint, $params = array()) {
  * Import strings and translations from PO files.
  * It will create/update a project (both strings and translations).
  */
-function btrClient_importproject() {
-  return drupal_get_form('btrClient_importproject_form');
+function btrTranslations_importproject() {
+  return drupal_get_form('btrTranslations_importproject_form');
 }
 
 /**
  * ImportProject form.
  */
-function btrClient_importproject_form($form, &$form_state) {
+function btrTranslations_importproject_form($form, &$form_state) {
   $form = array(
     '#prefix' => '<div class="clear-block">',
     '#suffix' => '</div>',
@@ -263,18 +263,18 @@ strings to them) and certain assumptions are made about them.</p>
 }
 
 /**
- * Implements hook form_validate() for btrClient_importproject_form.
+ * Implements hook form_validate() for btrTranslations_importproject_form.
  */
-function btrClient_importproject_form_validate($form, &$form_state) {
+function btrTranslations_importproject_form_validate($form, &$form_state) {
   $extensions = 'pot po tar gz tgz bz2 xz 7z zip';
-  btrClient_import_form_validate($form, $form_state, $extensions);
+  btrTranslations_import_form_validate($form, $form_state, $extensions);
 }
 
 /**
- * Implements hook form_submit() for btrClient_importproject_form.
+ * Implements hook form_submit() for btrTranslations_importproject_form.
  */
-function btrClient_importproject_form_submit($form, &$form_state) {
-  $messages = _btrClient_upload_file(
+function btrTranslations_importproject_form_submit($form, &$form_state) {
+  $messages = _btrTranslations_upload_file(
     'project/import',
     array(
       'origin' => $form_state['values']['origin'],

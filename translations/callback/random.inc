@@ -1,18 +1,18 @@
 <?php
 /**
  * @file
- * Functions specific to the menu path: translations/vote .
+ * Functions specific to the menu path: translations/random
  */
 
 /**
- * Menu callback: translations/vote.
+ * Menu callback: translations/random
  *
  * Vote the best translation for a string, or suggest a better translation.
  *
  * If the request header 'Accept: application/json' is set, then
  * the output will be in JSON, otherwise it will be an HTML page.
  */
-function btrClient_vote($lng = NULL, $sguid = NULL) {
+function btrTranslations_random($lng = NULL, $sguid = NULL) {
 
   if ($sguid == NULL)  $sguid = 'next';
   if ($lng == 'all')  bcl::go_to("translations/fr/$sguid");
@@ -64,24 +64,24 @@ function btrClient_vote($lng = NULL, $sguid = NULL) {
   }
 
   // Output the form of the strings and translations.
-  $output = drupal_get_form('btrClient_vote_form', $sguid, $string, $lng);
+  $output = drupal_get_form('btrTranslations_random_form', $sguid, $string, $lng);
 
   return $output;
 }
 
 /**
- * Form callback for: btrClient_vote_form
+ * Form callback for: btrTranslations_random_form
  */
-function btrClient_vote_form($form, &$form_state, $sguid, $string, $lng) {
+function btrTranslations_random_form($form, &$form_state, $sguid, $string, $lng) {
   $form = bcl::translateform_build([$sguid => $string], $lng);
-  $form['buttons'] += _btrClient_vote_form_buttons($lng);
+  $form['buttons'] += _btrTranslations_random_form_buttons($lng);
   return $form;
 }
 
 /**
  * Get the buttons of the form.
  */
-function _btrClient_vote_form_buttons($lng) {
+function _btrTranslations_random_form_buttons($lng) {
   $params = array(
     'attributes' => array(
       'class' => array('btn', 'form-submit'),
@@ -110,8 +110,8 @@ function _btrClient_vote_form_buttons($lng) {
 }
 
 /**
- * Submit callback for the form: btrClient_vote_form
+ * Submit callback for the form: btrTranslations_random_form
  */
-function btrClient_vote_form_submit($form, &$form_state) {
+function btrTranslations_random_form_submit($form, &$form_state) {
   bcl::translateform_submit($form, $form_state);
 }

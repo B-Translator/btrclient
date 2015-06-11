@@ -9,15 +9,15 @@
  *
  * Export the best translations of a project into PO format.
  */
-function btrClient_export() {
-  return drupal_get_form('btrClient_export_form');
+function btrTranslations_export() {
+  return drupal_get_form('btrTranslations_export_form');
 }
 
 
 /**
  * Export form.
  */
-function btrClient_export_form() {
+function btrTranslations_export_form() {
   $form = array(
     '#prefix' => '<div class="bcl-ui-filter clear-block">',
     '#suffix' => '</div>',
@@ -90,7 +90,7 @@ function btrClient_export_form() {
  *
  * Send the export request to the B-Translator server.
  */
-function btrClient_export_form_submit($form, &$form_state) {
+function btrTranslations_export_form_submit($form, &$form_state) {
   $values = $form_state['values'];
   $values += array(
     'origin' => NULL,

@@ -15,7 +15,7 @@
  *   curl -k -i -H 'Accept: application/json' \
  *        'https://dev.l10n.org.xx/translations/search?lng=sq&words=space'
  */
-function btrClient_search() {
+function btrTranslations_search() {
   // Get the filter parameters from the GET request.
   $params = bcl::filter_get_params();
 
@@ -33,7 +33,7 @@ function btrClient_search() {
   drupal_set_title(t('Search Translations'));
 
   // Add the filter form.
-  $output[] = drupal_get_form('btrClient_filter_form', $result['filter']);
+  $output[] = drupal_get_form('btrTranslations_filter_form', $result['filter']);
 
   // Output the strings.
   $strings = $result['strings'];
@@ -43,7 +43,7 @@ function btrClient_search() {
   }
   else {
     pager_default_initialize($pager['number_of_items'], $pager['items_per_page']);
-    $output[] = drupal_get_form('btrClient_search_form', $strings, $lng);
+    $output[] = drupal_get_form('btrTranslations_search_form', $strings, $lng);
 
   }
 
@@ -51,9 +51,9 @@ function btrClient_search() {
 }
 
 /**
- * Form callback for: btrClient_filter_form
+ * Form callback for: btrTranslations_filter_form
  */
-function btrClient_filter_form($form, &$form_state, $filter) {
+function btrTranslations_filter_form($form, &$form_state, $filter) {
   // If the form has no values yet (either it is the first time that
   // the form is opened, or we have a get request), we set the values
   // of the form according to the $filter values.
@@ -65,24 +65,24 @@ function btrClient_filter_form($form, &$form_state, $filter) {
 }
 
 /**
- * Submit callback for the form: btrClient_filter_form
+ * Submit callback for the form: btrTranslations_filter_form
  */
-function btrClient_filter_form_submit($form, &$form_state) {
+function btrTranslations_filter_form_submit($form, &$form_state) {
   module_load_include('php', 'btrClient', 'lib/fn/filter/submit');
   \BTranslator\Client\filter_submit($form, $form_state);
 }
 
 /**
- * Form callback for: btrClient_search_form
+ * Form callback for: btrTranslations_search_form
  */
-function btrClient_search_form($form, &$form_state, $strings, $lng) {
+function btrTranslations_search_form($form, &$form_state, $strings, $lng) {
   $form = bcl::translateform_build($strings, $lng);
   return $form;
 }
 
 /**
- * Submit callback for the form: btrClient_search_form
+ * Submit callback for the form: btrTranslations_search_form
  */
-function btrClient_search_form_submit($form, &$form_state) {
+function btrTranslations_search_form_submit($form, &$form_state) {
   bcl::translateform_submit($form, $form_state);
 }
