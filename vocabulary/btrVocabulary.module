@@ -57,11 +57,6 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
       array('!vocabulary' => $vocabulary),
       array('context' => 'set the page title')));
 
-  // Add the stylesheet of btrVocabulary.
-  $css_file = drupal_get_path('module', 'btrVocabulary');
-  $css_file .= bcl::inside_iframe() ? '/style-iframe.css' : '/style.css';
-  drupal_add_css($css_file);
-
   // Build and return the output.
   $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
   return $output;

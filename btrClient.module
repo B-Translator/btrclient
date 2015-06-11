@@ -13,8 +13,14 @@ function btrClient_init() {
   // Check whether this is a redirect after login,
   // and if yes call the submit function again.
   bcl::form_resubmit();
-}
 
+  // If the page is displayed inside an iframe (?display=iframe)
+  // add another stylesheet.
+  if (bcl::inside_iframe()) {
+    $path = drupal_get_path('module', 'btrClient');
+    drupal_add_css($path . '/iframe.css');
+  }
+}
 
 /**
  * Implements hook_menu().

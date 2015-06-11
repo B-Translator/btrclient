@@ -69,11 +69,6 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
     return;
   }
 
-  // Add the stylesheet of btrProject.
-  $css_file = drupal_get_path('module', 'btrProject');
-  $css_file .= bcl::inside_iframe() ? '/style-iframe.css' : '/style.css';
-  drupal_add_css($css_file);
-
   // Build and return the output.
   $output = drupal_get_form('btrProject_random_form',
             $origin, $project, $lng, $sguid, $string);
