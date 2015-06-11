@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Define web services.
+ * Module file for btrClientWS.
  */
 
 /**
@@ -13,19 +13,19 @@
  *     $btr = wsclient_service_load('dev.l10n.org.xx');
  *     $result = $btr->statistics('sq');
  */
-function btrClient_default_wsclient_service() {
-  module_load_include('inc', 'btrClient', 'services/public');
-  module_load_include('inc', 'btrClient', 'services/authenticated');
+function btrClientWS_default_wsclient_service() {
+  module_load_include('inc', 'btrClientWS', 'public');
+  module_load_include('inc', 'btrClientWS', 'authenticated');
 
-  $services['public_btr'] = _btrClient_services_public_service('public_btr');
-  $services['btr'] = _btrClient_services_authenticated_service('btr');
+  $services['public_btr'] = _btrClientWS_public('public_btr');
+  $services['btr'] = _btrClientWS_authenticated('btr');
   return $services;
 }
 
 /**
  * Set curl options for development, testing and debug.
  */
-function _btrClient_services_dev_settings() {
+function _btrClientWS_dev() {
   $skipssl = variable_get('oauth2_login_skipssl', TRUE);
   $proxy = variable_get('oauth2_login_proxy', '');
 
