@@ -42,7 +42,7 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
   }
 
   // last_sguid is used in search, to get similar results.
-  $_SESSION['btrProject']['last_sguid'] = $sguid;
+  $_SESSION['btrClient']['last_sguid'] = $sguid;
 
   if ($lng == 'all') {
     $lng = 'fr';

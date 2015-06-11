@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Translation view and editing pages for localization community.
+ * Menu callback for translations/search
  */
 
 /**
@@ -51,21 +51,6 @@ function btrClient_search() {
 }
 
 /**
- * Form callback for: btrClient_search_form
- */
-function btrClient_search_form($form, &$form_state, $strings, $lng) {
-  $form = bcl::translateform_build($strings, $lng);
-  return $form;
-}
-
-/**
- * Submit callback for the form: btrClient_search_form
- */
-function btrClient_search_form_submit($form, &$form_state) {
-  bcl::translateform_submit($form, $form_state);
-}
-
-/**
  * Form callback for: btrClient_filter_form
  */
 function btrClient_filter_form($form, &$form_state, $filter) {
@@ -85,4 +70,19 @@ function btrClient_filter_form($form, &$form_state, $filter) {
 function btrClient_filter_form_submit($form, &$form_state) {
   module_load_include('php', 'btrClient', 'lib/fn/filter/submit');
   \BTranslator\Client\filter_submit($form, $form_state);
+}
+
+/**
+ * Form callback for: btrClient_search_form
+ */
+function btrClient_search_form($form, &$form_state, $strings, $lng) {
+  $form = bcl::translateform_build($strings, $lng);
+  return $form;
+}
+
+/**
+ * Submit callback for the form: btrClient_search_form
+ */
+function btrClient_search_form_submit($form, &$form_state) {
+  bcl::translateform_submit($form, $form_state);
 }
