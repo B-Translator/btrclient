@@ -11,16 +11,23 @@ use \bcl;
  * Build and return the filter form.
  */
 function filter_form($form_values) {
+  $form_values['options'] = isset($_GET['options']) ? '1' : '0';
+
   $form = [
     '#prefix' => '<div id="filter-form">',
     '#suffix' => '</div>',
+
+    /* css attachment does not work
     '#attached' => [
       'css' => [
         drupal_get_path('module', 'btrClient') . '/lib/fn/filter/style.css',
       ],
     ],
+    */
 
     'basic' => [
+      '#type' => 'fieldset',
+
       // words to be searched
       'words' => [
         '#type' => 'textfield',
@@ -41,10 +48,10 @@ function filter_form($form_values) {
       */
 
       // advanced search checkbox
-      'advanced_checkbox' => [
+      'options' => [
         '#type' => 'checkbox',
-        '#title' => t('Advanced'),
-        '#value' => FALSE,
+        '#title' => t('Options'),
+        '#default_value' => $form_values['options'],
       ],
     ],
 
@@ -53,7 +60,7 @@ function filter_form($form_values) {
       '#type' => 'fieldset',
       '#states' => [
         'visible' => [
-          ':input[name="advanced_checkbox"]' => ['checked' => TRUE],
+          ':input[name="options"]' => ['checked' => TRUE],
         ]],
     ],
   ];

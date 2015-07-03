@@ -61,8 +61,8 @@ function btrProject_filter_form($form, &$form_state, $filter) {
     $form_state['values'] = $filter;
   }
   $form = bcl::filter_form($form_state['values']);
-  unset($form['search_container']['lng']);
-  unset($form['search_container']['advanced_search']['projects']);
+  unset($form['advanced']['lng']);
+  unset($form['advanced']['projects']);
   return $form;
 }
 

@@ -80,5 +80,10 @@ function filter_get_query($form_values) {
     $query['words'] = $form_values['words'];
   }
 
+  // Get options.
+  if (trim($form_values['options']) != '0') {
+    $query['options'] = NULL;
+  }
+
   return $query;
 }

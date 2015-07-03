@@ -16,7 +16,7 @@ function filter_submit($form, &$form_state) {
     return;
   }
 
-  if ($form_state['values']['op'] == t('Filter')) {
+  if ($form_state['values']['op'] == t('Go')) {
     // Redirect (with a GET request) keeping the relevant filters intact
     // in the URL.
     $form_state['redirect'] = array(
