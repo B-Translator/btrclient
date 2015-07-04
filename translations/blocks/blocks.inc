@@ -5,6 +5,8 @@
  */
 
 require_once __DIR__ . '/topcontrib.inc';
+require_once __DIR__ . '/statistics.inc';
+require_once __DIR__ . '/latest.inc';
 
 /**
  * Implements hook_block_info().
