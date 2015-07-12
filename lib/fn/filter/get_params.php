@@ -104,5 +104,11 @@ function filter_get_params() {
     $params['to_date'] = $to_date;
   }
 
+  // List all the strings of a project, or only the translated/untranslated strings.
+  if (isset($request['list_mode'])) {
+    $list_mode = $request['list_mode'];
+    list($list_mode_options, $default_list_mode) = bcl::filter_get_options('list_mode');
+    $params['list_mode'] = in_array($list_mode, $list_mode_options) ? $list_mode : $default_list_mode;
+  }
   return $params;
 }

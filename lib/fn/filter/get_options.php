@@ -48,6 +48,16 @@ function filter_get_options($field, $assoc = FALSE) {
       );
       $default = 'translations';
       break;
+
+    case 'list_mode':
+      // What to list.
+      $options = array(
+        'all' => '',
+        'translated' => t('Translated'),
+        'untranslated' => t('Untranslated'),
+      );
+      $default = 'all';
+      break;
   }
   if (!$assoc) {
     $options = array_keys($options);
