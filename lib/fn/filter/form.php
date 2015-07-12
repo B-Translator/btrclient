@@ -11,8 +11,6 @@ use \bcl;
  * Build and return the filter form.
  */
 function filter_form($form_values) {
-  $form_values['options'] = isset($_GET['options']) ? '1' : '0';
-
   $form = [
     '#prefix' => '<div id="filter-form">',
     '#suffix' => '</div>',
@@ -36,22 +34,22 @@ function filter_form($form_values) {
 
       // buttons
       'submit' => [
-        '#value' => t('Go'),
+        '#value' => '<i class="fa fa-refresh"></i>', //t('Go'),
         '#type' => 'submit',
-        '#attributes' => ['class' => ['btn-primary']]
+        '#attributes' => ['class' => ['btn-primary']],
       ],
-      /*
-        'reset' => [
-        '#type' => 'submit',
-        '#value' => t('Reset'),
-        ],
-      */
 
       // advanced search checkbox
       'options' => [
-        '#type' => 'checkbox',
-        '#title' => t('Options'),
-        '#default_value' => $form_values['options'],
+        '#markup' => '
+            <div id="form-item-options">
+              <label>
+                <input type="checkbox" id="edit-options" name="options">
+                <i class="btn fa fa-fw fa-ellipsis-v unchecked"></i>
+                <i class="btn fa fa-fw fa-ellipsis-v checked active"></i>
+              </label>
+            </div>
+            ',
       ],
     ],
 

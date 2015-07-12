@@ -11,12 +11,14 @@ use \bcl;
  * Handle the submit of the filter form.
  */
 function filter_submit($form, &$form_state) {
+  /*
   if ($form_state['values']['op'] == t('Reset')) {
     // Just go with the redirection flow => removes URL params.
     return;
   }
+  */
 
-  if ($form_state['values']['op'] == t('Go')) {
+  if ($form_state['values']['op'] == '<i class="fa fa-refresh"></i>') {
     // Redirect (with a GET request) keeping the relevant filters intact
     // in the URL.
     $form_state['redirect'] = array(

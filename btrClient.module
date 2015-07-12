@@ -14,6 +14,9 @@ function btrClient_init() {
   // and if yes call the submit function again.
   bcl::form_resubmit();
 
+  // Add font-awsome css.
+  drupal_add_css('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array('type' => 'external'));
+
   // If the page is displayed inside an iframe (?display=iframe)
   // add another stylesheet.
   if (bcl::inside_iframe()) {
