@@ -43,6 +43,7 @@ function btrTranslations_search() {
   }
   else {
     pager_default_initialize($pager['number_of_items'], $pager['items_per_page']);
+    $lng = variable_get('btrClient_translation_lng', 'fr');
     $output[] = drupal_get_form('btrTranslations_search_form', $strings, $lng);
 
   }
