@@ -86,5 +86,11 @@ function filter_get_query($form_values) {
     $query['list_mode'] = $form_values['list_mode'];
   }
 
+  // Get the page.
+  $page = (int)$form_values['page'] - 1;
+  if ($page > 0) {
+    $query['page'] = $page;
+  }
+
   return $query;
 }

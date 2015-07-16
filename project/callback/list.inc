@@ -112,6 +112,15 @@ function btrProject_listfilter_form($form, &$form_state, $filter) {
       '#attributes' => ['title' => t('Number of results that can be displayed on a page.')],
     ],
 
+    // The page to be displayed.
+    'page' => [
+      '#type' => 'textfield',
+      '#title' => t('Page:'),
+      '#description' => t('The page to be displayed.'),
+      '#default_value' => (int)$_GET['page'] + 1,
+      '#attributes' => ['title' => t('The page to be displayed.'), 'size' => '3'],
+    ],
+
     // buttons
     'submit' => [
       '#value' => '<i class="fa fa-refresh"></i>', //t('Go'),
