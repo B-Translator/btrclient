@@ -194,13 +194,15 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
 
   // Link to the mobile app.
   if ($vocabulary=='ICT_sq') {
-    $buttons['mobile'] = array(
-      '#markup' => l(t('Go To The Mobile App'), "http://fjalori.fs.al/#$term",
-                 array('attributes' => array(
-                     'class' => array('btn', 'form-submit'),
-                   ))),
-    );
+    $url = "http://fjalori.fs.al/#$term";
   }
+  else {
+    $url = "http://v.btranslator.org/?proj=$vocabulary&lng=$lng#$term";
+  }
+  $buttons['mobile'] = array(
+    '#markup' => l(t('Go To The Mobile App'), $url,
+               ['attributes' => ['class' => ['btn', 'form-submit']]]),
+  );
 
   return $buttons;
 }
