@@ -105,11 +105,11 @@ function btrProject_listfilter_form($form, &$form_state, $filter) {
     // Number of results that can be displayed on a page.
     'limit' => [
       '#type' => 'select',
-      '#title' => t('Limit:'),
-      '#description' => t('Number of results that can be displayed on a page.'),
+      '#title' => t('Step:'),
+      '#description' => t('Number of strings that can be displayed on a page.'),
       '#options' => $limit_options,
       '#default_value' => $form_values['limit'],
-      '#attributes' => ['title' => t('Number of results that can be displayed on a page.')],
+      '#attributes' => ['title' => t('Number of strings that can be displayed on a page.')],
     ],
 
     // The page to be displayed.

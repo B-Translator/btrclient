@@ -19,11 +19,13 @@ function filter_get_options($field, $assoc = FALSE) {
     case 'limit':
       // Number of results to be displayed per page.
       $options = array(
+        '1'  => '1',
         '5'  => '5',
         '10' => '10',
         '20' => '20',
         '30' => '30',
         '50' => '50',
+        '100' => '100',
       );
       $default = 5;
       break;
