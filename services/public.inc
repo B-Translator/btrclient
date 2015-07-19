@@ -33,6 +33,8 @@ function _btrClientWS_public_report() {
     'url' => 'report/statistics',
     'parameter' => array(
       'lng' => array('type' => 'text'),
+      'origin' => array('type' => 'text'),
+      'project' => array('type' => 'text'),
     ),
   );
 
@@ -40,9 +42,11 @@ function _btrClientWS_public_report() {
     'label' => 'report_topcontrib',
     'url' => 'report/topcontrib',
     'parameter' => array(
-      'lng' => array('type' => 'text'),
       'period' => array('type' => 'text'),
       'size' => array('type' => 'integer'),
+      'lng' => array('type' => 'text'),
+      'origin' => array('type' => 'text'),
+      'project' => array('type' => 'text'),
     ),
   );
 
