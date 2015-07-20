@@ -18,9 +18,7 @@ function filter_get_params() {
 
   // If the search filter is empty, try to search for strings
   // similar to the last one that was reviewed.
-  if (!isset($request['lng'])
-    and !isset($request['words'])
-    and isset($_SESSION['btrClient']['last_sguid']))
+  if (count($request)==1 and isset($_SESSION['btrClient']['last_sguid']))
     {
       $request['lng'] = bcl::get_translation_lng();
       $params['sguid'] = $_SESSION['btrClient']['last_sguid'];
