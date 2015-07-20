@@ -67,10 +67,10 @@ function render_statistics($lng = 'fr', $origin = NULL, $project = NULL) {
 
     $list_item = t("Last !period:", ['!period' => $period])
       . "<br/>
-      + <a href='@url_votes'>"
+      + <a href='$url_votes'>"
       . format_plural($nr_votes, '1 vote', '@count votes')
       . "</a><br/>
-      + <a href='@url_translations'>"
+      + <a href='$url_translations'>"
       . format_plural($nr_translations, '1 translation', '@count translations')
       . "</a>";
 
