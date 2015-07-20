@@ -4,6 +4,8 @@
  * Module file for btrProject.
  */
 
+module_load_include('inc', 'btrProject', 'blocks/blocks');
+
 /**
  * Implements hook_menu().
  */
