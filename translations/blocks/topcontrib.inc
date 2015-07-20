@@ -44,23 +44,24 @@ function btrTranslations_topcontrib_save($edit) {
  * Called from hook_block_view for topcontrib.
  */
 function btrTranslations_topcontrib_view() {
-  // Return cache if possible.
-  $cache = cache_get('btrTranslations_block_topcontrib', 'cache_btrClient');
-  if (!empty($cache) && isset($cache->data) && !empty($cache->data)) {
-    return $cache->data;
-  }
-
   // Get parameters.
   $period = variable_get('btrTranslations_topcontrib_period', 'week');
   $size = variable_get('btrTranslations_topcontrib_size', 5);
   $lng = variable_get('btrClient_translation_lng', 'fr');
+
+  // Return cache if possible.
+  $cid = "btrTranslations_block_topcontrib:$period:$size:$lng";
+  $cache = cache_get($cid, 'cache_btrClient');
+  if (!empty($cache) && isset($cache->data) && !empty($cache->data)) {
+    return $cache->data;
+  }
 
   // Build the block view.
   $block['subject'] = t('Top @nr contributors', array('@nr' => $size));
   $block['content'] = bcl::render_topcontrib($period, $size, $lng);
 
   // Cache for 12 hours.
-  cache_set('btrTranslations_block_topcontrib', $block, 'cache_btrClient', time() + 12 * 60 * 60);
+  cache_set($cid, $block, 'cache_btrClient', time() + 12 * 60 * 60);
 
   return $block;
 }
