@@ -73,8 +73,6 @@ function translateform_string($string, $lng) {
  * Build mock object for new textarea.
  */
 function _new_translation($string, $lng) {
-  global $user;
-
   // Fill in with as many items as required. If the source was plural, we
   // need to fill in with a number adequate for this language.
   $languages = bcl::get_languages();
@@ -87,8 +85,6 @@ function _new_translation($string, $lng) {
     'tguid' => 'new',
     'lng' => $lng,
     'translation' => $translation,
-    'author' => NULL,
-    'uid' => $user->uid,
     'count' => '0',
     'votes' => array(),
   );
@@ -99,12 +95,11 @@ function _new_translation($string, $lng) {
  */
 function _translation($translation, $string_sguid, $lng) {
 
-  global $user;
-
   $translation['translation'] = bcl::string_unpack($translation['translation']);
 
-  $is_own = ($user->uid && ($user->name == $translation['author']));
-  $is_approved = ($user->uid && in_array($user->name, array_keys($translation['votes'])));
+  $btr_user = bcl::btr_user_get();
+  $is_own = ($btr_user['name'] == $translation['author']);
+  $is_approved = in_array($btr_user['name'], array_keys($translation['votes']));
   $is_new = ($translation['tguid'] == 'new');
   $may_moderate = ($is_own or bcl::user_access('btranslator-resolve'));
 

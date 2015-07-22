@@ -12,8 +12,8 @@ use \bcl;
  */
 function get_translation_lng() {
   if (bcl::user_is_authenticated()) {
-    $btr_profile = bcl::user_get_profile();
-    $lng = $btr_profile['translation_lng'];
+    $btr_user = bcl::btr_user_get();
+    $lng = $btr_user['translation_lng'];
   }
   else {
     $lng = variable_get('btrClient_translation_lng', 'fr');

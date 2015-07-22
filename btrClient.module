@@ -12,7 +12,9 @@ module_load_include('php', 'btrClient', 'lib/bcl');
 function btrClient_init() {
   // Check whether this is a redirect after login,
   // and if yes call the submit function again.
-  bcl::form_resubmit();
+  if (bcl::user_is_authenticated() and isset($_SESSION['btrClient']['form_state'])) {
+    bcl::form_resubmit();
+  }
 
   // Add font-awsome css.
   drupal_add_css('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array('type' => 'external'));
@@ -82,20 +84,22 @@ function btrClient_menu_alter(&$items) {
 }
 
 /**
- * Implements hook_hybridauth_user_login().
- */
-function btrClient_hybridauth_user_login($account, $data) {
-  $btr_profile = bcl::user_get_remote_profile($data);
-  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
-}
-
-/**
  * Implements hook_user_login().
  */
 function btrClient_user_login(&$edit, $account) {
   if (bcl::installed_on_server()) {
-    bcl::user_get_profile();
+    $data = (array)oauth2_loginprovider_user_profile_callback();
+    $data['displayName'] = $data['name'];
+    $data['identifier'] = $data['uid'];
+    bcl::btr_user_set($data);
   }
+}
+
+/**
+ * Implements hook_hybridauth_user_login().
+ */
+function btrClient_hybridauth_user_login($account, $data) {
+  bcl::btr_user_set($data);
 }
 
 /**

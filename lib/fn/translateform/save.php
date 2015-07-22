@@ -87,8 +87,8 @@ function _submit_single($sguid, $lng, $string) {
     // If this is not an existing vote,
     // then add a new vote for this translation.
     $previous_votes = $string[$tguid]['original']['votes'];
-    global $user;
-    if (!in_array($user->name, array_keys($previous_votes))) {
+    $btr_user = bcl::btr_user_get();
+    if (!in_array($btr_user['name'], array_keys($previous_votes))) {
       _add_action('vote', array('tguid' => $tguid));
     }
   }
@@ -99,7 +99,7 @@ function _submit_single($sguid, $lng, $string) {
  */
 function _submit_multiple($sguid, $tguid, $lng, $translation) {
 
-  global $user;
+  $btr_user = bcl::btr_user_get();
 
   $approved = $translation['approved'];
   if ($tguid == 'new' and _not_empty_translation($translation['value'])) {
@@ -113,14 +113,14 @@ function _submit_multiple($sguid, $tguid, $lng, $translation) {
     // Add a new vote for this translation
     // if such a vote does not exist.
     $previous_votes = $translation['original']['votes'];
-    if (!in_array($user->name, array_keys($previous_votes))) {
+    if (!in_array($btr_user['name'], array_keys($previous_votes))) {
       _add_action('vote', array('tguid' => $tguid));
     }
   }
   elseif ($approved == '') {
     // Remove this vote, if it exists.
     $previous_votes = $translation['original']['votes'];
-    if (in_array($user->name, array_keys($previous_votes))) {
+    if (in_array($btr_user['name'], array_keys($previous_votes))) {
       _add_action('del_vote', array('tguid' => $tguid));
     }
   }

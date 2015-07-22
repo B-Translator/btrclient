@@ -8,7 +8,7 @@ namespace BTranslator\Client;
 use \bcl;
 
 /**
- * Submit callback for the form: btrClient_vote_form
+ * Submit the translate form.
  */
 function translateform_submit($form, $form_state) {
   $op = $form_state['values']['op'];
