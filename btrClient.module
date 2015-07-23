@@ -84,6 +84,28 @@ function btrClient_menu_alter(&$items) {
 }
 
 /**
+ * Implements hook_url_outbound_alter().
+ * Append to url '?display=iframe' if the page is inside an iframe.
+ */
+function btrClient_url_outbound_alter(&$path, &$options, $original_path) {
+  if (bcl::inside_iframe()) {
+    if (!$options['query'])  $options['query'] = array();
+    $options['query']['display'] = 'iframe';
+  }
+}
+
+/**
+ * Implements hook_drupal_goto_alter().
+ * Append to url '?display=iframe' if the page is inside an iframe.
+ */
+function btrClient_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  if (bcl::inside_iframe()) {
+    if (!$options['query'])  $options['query'] = array();
+    $options['query']['display'] = 'iframe';
+  }
+}
+
+/**
  * Implements hook_user_login().
  */
 function btrClient_user_login(&$edit, $account) {

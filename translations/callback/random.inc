@@ -15,7 +15,7 @@
 function btrTranslations_random($lng = NULL, $sguid = NULL) {
 
   if ($sguid == NULL)  $sguid = 'next';
-  if ($lng == 'all')  bcl::go_to("translations/fr/$sguid");
+  if ($lng == 'all')  drupal_goto("translations/fr/$sguid");
   if ($lng == NULL)  $lng = bcl::get_translation_lng();
 
   if (in_array($sguid, ['next', 'translated', 'untranslated'])) {
@@ -33,10 +33,10 @@ function btrTranslations_random($lng = NULL, $sguid = NULL) {
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
-      bcl::go_to('/');
+      drupal_goto('/');
     }
     else {
-      bcl::go_to("translations/$lng/$sguid");
+      drupal_goto("translations/$lng/$sguid");
     }
     return;
   }
@@ -59,7 +59,7 @@ function btrTranslations_random($lng = NULL, $sguid = NULL) {
   $string = $result['string'];
   if (empty($string)) {
     drupal_set_message(t('No string found!'), 'warning');
-    bcl::go_to('/');
+    drupal_goto('/');
     return;
   }
 
@@ -88,11 +88,6 @@ function _btrTranslations_random_form_buttons($lng) {
       'style' => 'margin-right:3px',
     ),
   );
-  if (bcl::inside_iframe()) {
-    $params['query'] = array(
-      'display' => 'iframe',
-    );
-  }
   $buttons['next'] = array(
     '#markup' => l(t('Next'), "translations/$lng/",
                $params),
