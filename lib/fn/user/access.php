@@ -17,11 +17,6 @@ use \bcl;
  *   TRUE or FALSE
  */
 function user_access($permission) {
-  // If the user is not logged in, he doesn't have any permissions.
-  if (!user_is_logged_in()) {
-    return FALSE;
-  }
-
   // If the user has not been authenticated yet by oauth2,
   // he doesn't have any permissions.
   if (!bcl::user_is_authenticated()) {
