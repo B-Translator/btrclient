@@ -19,11 +19,14 @@ function btrClient_init() {
   // Add font-awsome css.
   drupal_add_css('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array('type' => 'external'));
 
+  // Include the stylesheets.
+  $path = drupal_get_path('module', 'btrClient');
+  drupal_add_css($path . '/css/styles.css');
+
   // If the page is displayed inside an iframe (?display=iframe)
   // add another stylesheet.
   if (bcl::inside_iframe()) {
-    $path = drupal_get_path('module', 'btrClient');
-    drupal_add_css($path . '/iframe.css');
+    drupal_add_css($path . '/css/iframe.css');
   }
 }
 
