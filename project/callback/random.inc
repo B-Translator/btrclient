@@ -33,10 +33,10 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
-      bcl::go_to('btr/projects/');
+      drupal_goto('btr/projects/');
     }
     else {
-      bcl::go_to("btr/project/$origin/$project/$lng/$sguid");
+      drupal_goto("btr/project/$origin/$project/$lng/$sguid");
     }
     return;
   }

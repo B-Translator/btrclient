@@ -49,7 +49,7 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   if ($vocabulary == NULL) {
     $lng = bcl::get_translation_lng();
     $vocabulary = 'ICT_' . $lng;
-    bcl::go_to("vocabulary/$vocabulary");
+    drupal_goto("vocabulary/$vocabulary");
   }
 
   // Set the page title.
