@@ -21,10 +21,11 @@ function translateform_buttons($lng, $sguid = NULL) {
                    ]]),
     ];
   }
+  $enable_login = (bcl::installed_on_server() and !bcl::user_is_authenticated());
   $buttons['login'] = [
     '#type' => 'submit',
     '#value' => t('Login'),
-    '#access' => !bcl::user_is_authenticated(),
+    '#access' => $enable_login,
     '#attributes' => ['onclick' => 'this.form.target="_self"'],
   ];
   // When we are inside an iFrame, it is better to do the login
@@ -36,7 +37,8 @@ function translateform_buttons($lng, $sguid = NULL) {
   // The save button will appear only when the user has
   // permissions to submit votes and suggestions.
   $translation_lng = variable_get('btrClient_translation_lng', 'all');
-  $enable_save = ($translation_lng == 'all' or ($translation_lng == $lng));
+  $enable_save = (($translation_lng == 'all' or ($translation_lng == $lng))
+                 and (!bcl::installed_on_server() or bcl::user_is_authenticated()));
   $buttons['save'] = [
     '#type' => 'submit',
     '#value' => t('Save'),
