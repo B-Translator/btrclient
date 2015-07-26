@@ -25,5 +25,6 @@ function user_access($permission) {
 
   // Check the given permission on the list of permissions.
   $btr_user = bcl::btr_user_get();
+  if (!isset($btr_user['permissions']))  return FALSE;
   return in_array($permission, $btr_user['permissions']);
 }
