@@ -58,9 +58,7 @@
       #+END_EXAMPLE
 
    6. Optionally, install also the feature *bcl_disqus* (to add
-      support for disqus comments) and one of the features
-      *bcl_service_links* or *bcl_sharethis* (for sharing to social
-      networks).
+      support for disqus comments).
 
 ** Configuration
 
