@@ -28,6 +28,10 @@ function btrClient_init() {
   if (bcl::inside_iframe()) {
     drupal_add_css($path . '/css/iframe.css');
   }
+
+  // Add the css and js for Ridiculously Responsive Social Share Buttons.
+  drupal_add_css($path . '/lib/fn/rrssb/rrssb.css');
+  drupal_add_js($path . '/lib/fn/rrssb/rrssb.min.js');
 }
 
 /**

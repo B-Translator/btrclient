@@ -22,25 +22,12 @@ td.sguid a {
     text-decoration: none;
 }
 
-/**
- * Improve the spacing and alignment of the ShareThis buttons.
- */
-.sharethis-buttons {
-    margin: none;
-    margin-top: 15px;
-    margin-bottom: 15px;
+.rrssb-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 600px;
 }
 
-.sharethis-wrapper span {
-    height: 28px;
-    vertical-align: middle;
-}
-.st_plusone_button {
-    margin-left: 20px;
-}
-.st_plusone_button > div {
-    bottom: 4px !important;
-}
 
 /**
  * Fix the styles of the search filter.
@@ -105,8 +92,6 @@ td.sguid a {
     border: 1px solid #dddddd;
     border-radius: 3px;
 }
-
-
 
 
 /**

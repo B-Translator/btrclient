@@ -1,8 +1,0 @@
-<?php
-/**
- * @file
- * Code for the bcl_sharethis feature.
- */
-
-include_once 'bcl_sharethis.admin.inc';
-include_once 'bcl_sharethis.features.inc';
