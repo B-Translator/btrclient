@@ -23,11 +23,10 @@ function single_string(&$form, $lng, $sguid, $string) {
   _add_metatags($properties);
 
   // Add RRSSB share buttons.
-  $buttons = ['googleplus', 'linkedin', 'facebook', 'twitter', 'github'];
   $form['rrssb'] = array(
     '#markup' => bcl::rrssb_get_buttons(
       array(
-        'buttons' => $buttons,
+        'buttons' => ['googleplus', 'linkedin', 'facebook', 'twitter', 'email'],
         'url' => $properties['url'],
         'title' => $properties['title'],
         'summary' => $properties['description'],
@@ -65,10 +64,10 @@ function _get_string_properties($string) {
   // Get the page title.
   $str = strip_tags(check_plain($string['string']));
   if ($context['vocabulary']) {
-    $title = t('Vocabulary') . ' ' . $context['vocabulary'] . ': ' . $str;
+    $title = $context['vocabulary'] . ': ' . $str;
   }
   elseif ($context['project']) {
-    $title = t('Project') . ' ' . $context['project'] . ': ' . $str;
+    $title = $context['project'] . ': ' . $str;
   }
   else {
     $title = t('String') . ': ' . $str;

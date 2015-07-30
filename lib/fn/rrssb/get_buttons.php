@@ -9,6 +9,7 @@
  */
 
 namespace BTranslator\Client;
+use \bcl;
 
 /**
  * Returns an html list of the themed links with urls.
@@ -34,8 +35,8 @@ function rrssb_get_buttons($options = array()) {
     'buttons' => ['googleplus', 'linkedin', 'facebook', 'twitter', 'github'],
     'url' => url(request_uri(), ['absolute' => TRUE]),
     'title' => drupal_get_title(),
-    'summary' => NULL,
-    'hashtags' => NULL,
+    'summary' => '',
+    'hashtags' => '',
     'lng' => variable_get('btrClient_translation_lng', 'fr'),
     'pinterest_media' => NULL,
     'youtube_username' => NULL,
@@ -43,6 +44,8 @@ function rrssb_get_buttons($options = array()) {
   ];
   $options['url'] = rawurlencode($options['url']);
   $options['title'] = rawurlencode($options['title']);
+  $options['summary'] = rawurlencode($options['summary']);
+  $options['hashtags'] = rawurlencode($options['hashtags']);
   $options['pinterest_media'] = rawurlencode($options['pinterest_media']);
 
   $output = '<div class="rrssb-container">
@@ -70,8 +73,9 @@ function _get_button_code($button, $options) {
 
     // email
     case 'email':
+      $body = $options['url'] . rawurlencode("\n\n") . $options['summary'];
       $html = '<li class="rrssb-email">';
-      $html .= '<a href="mailto:?subject=' . $options['title'] . '&amp;body=' . $options['url'] . '">';
+      $html .= '<a href="mailto:?subject=' . $options['title'] . '&amp;body=' . $body . '">';
       $html .= '
             <span class="rrssb-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
@@ -107,7 +111,7 @@ function _get_button_code($button, $options) {
       // linkedin
     case 'linkedin':
       $html = '<li class="rrssb-linkedin">';
-      $html .= '<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $options['url'] .'&amp;title=' . $options['title'] . '" class="popup">';
+      $html .= '<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $options['url'] .'&amp;title=' . $options['title'] . '&amp;summary=' . $options['summary'] . '" class="popup">';
       $html .= '
             <span class="rrssb-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
@@ -124,8 +128,9 @@ function _get_button_code($button, $options) {
 
       // twitter
     case 'twitter':
+      $status = bcl::shorten($options['summary'], 100) . '%20' . $options['url'] . '%20' . $options['hashtags'];
       $html = '<li class="rrssb-twitter">';
-      $html .= '<a href="http://twitter.com/home?status=' . $options['title'] . '%20' .  $options['url'] . '" class="popup">';
+      $html .= '<a href="http://twitter.com/home?status=' . $status . '" class="popup">';
       $html .= '
             <span class="rrssb-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
