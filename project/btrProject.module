@@ -1,0 +1,95 @@
+<?php
+/**
+ * @file
+ * Module file for btrProject.
+ */
+
+module_load_include('inc', 'btrProject', 'blocks/blocks');
+
+/**
+ * Implements hook_menu().
+ */
+function btrProject_menu() {
+  $items['btr/project/list'] = array(
+    'type'            => MENU_NORMAL_ITEM,
+    'title'           => 'Project List',
+    'description'     => 'List of all the imported projects.',
+    'page callback'   => 'btrProject_projlist',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/projlist.inc',
+    'access callback' => TRUE,
+  );
+
+  $items['btr/project/%/%/%'] = array(
+    'type'            => MENU_NORMAL_ITEM,
+    'title'           => 'Project',
+    'description'     => 'Review a random string from the project.',
+    'page callback'   => 'btrProject_random',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/random.inc',
+    'access callback' => TRUE,
+  );
+
+  $items['btr/project/%/%/%/dashboard'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Dashboard',
+    'description'     => 'Details of the project, statistics, latest activity, etc..',
+    'page callback'   => 'btrProject_dashboard',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/dashboard.inc',
+    'access callback' => TRUE,
+    'weight'          => 1,
+  );
+
+  $items['btr/project/%/%/%/random'] = array(
+    'type'            => MENU_DEFAULT_LOCAL_TASK,
+    'title'           => 'Random',
+    'weight'          => 2,
+  );
+
+  $items['btr/project/%/%/%/list'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'List',
+    'description'     => 'List strings and translations of the project.',
+    'page callback'   => 'btrProject_list',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/list.inc',
+    'access callback' => TRUE,
+    'weight'          => 3,
+  );
+
+  $items['btr/project/%/%/%/search'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Search',
+    'description'     => 'Search strings and translations of the project.',
+    'page callback'   => 'btrProject_search',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/search.inc',
+    'access callback' => TRUE,
+    'weight'          => 4,
+  );
+
+  $items['btr/project/%/%/%/edit'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Edit',
+    'description'     => 'Edit details of the project.',
+    'page callback'   => 'btrProject_edit',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/edit.inc',
+    'access callback' => TRUE,
+    'weight'          => 5,
+  );
+
+  $items['btr/project/%/%/%/admin'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Admin',
+    'description'     => 'Administrative tasks of the project.',
+    'page callback'   => 'btrProject_admin',
+    'page arguments'  => array(2, 3, 4),
+    'file'            => 'callback/admin.inc',
+    'access callback' => TRUE,
+    'weight'          => 6,
+  );
+
+  return $items;
+}

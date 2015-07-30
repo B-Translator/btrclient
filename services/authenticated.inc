@@ -7,7 +7,7 @@
 /**
  * Create and return the authenticated service.
  */
-function _btrClient_services_authenticated_service($service_name) {
+function _btrClientWS_authenticated($service_name) {
   $server_url = variable_get('oauth2_login_oauth2_server', '');
 
   $service = new WSClientServiceDescription();
@@ -16,12 +16,12 @@ function _btrClient_services_authenticated_service($service_name) {
   $service->type = 'rest';
   $service->url = $server_url . '/btr/';
 
-  $service->settings += _btrClient_services_dev_settings();
-  $service->settings += _btrClient_services_authentication();
+  $service->settings += _btrClientWS_dev();
+  $service->settings += _btrClientWS_authentication();
 
-  $service->operations += _btrClient_services_authenticated_translations();
-  $service->operations += _btrClient_services_authenticated_projects();
-  $service->operations += _btrClient_services_authenticated_users();
+  $service->operations += _btrClientWS_authenticated_translations();
+  $service->operations += _btrClientWS_authenticated_projects();
+  $service->operations += _btrClientWS_authenticated_users();
 
   return $service;
 }
@@ -29,7 +29,7 @@ function _btrClient_services_authenticated_service($service_name) {
 /**
  * Return authentication settings.
  */
-function _btrClient_services_authentication() {
+function _btrClientWS_authentication() {
   $server_url = variable_get('oauth2_login_oauth2_server', '');
   $client_id = variable_get('oauth2_login_client_id', '');
   $client_secret = variable_get('oauth2_login_client_secret', '');
@@ -54,7 +54,7 @@ function _btrClient_services_authentication() {
 /**
  * Return definitions for operations about translations.
  */
-function _btrClient_services_authenticated_translations() {
+function _btrClientWS_authenticated_translations() {
   $operations['get_translations'] = array(
     'label' => 'get_translations',
     'url' => 'translations/@sguid',
@@ -92,7 +92,7 @@ function _btrClient_services_authenticated_translations() {
 /**
  * Return definitions for operations about projects.
  */
-function _btrClient_services_authenticated_projects() {
+function _btrClientWS_authenticated_projects() {
   $post_operations = array(
     'export_projects' => 'project/export',
     'add_string' => 'project/add_string',
@@ -116,7 +116,7 @@ function _btrClient_services_authenticated_projects() {
 /**
  * Return definitions for operations about users.
  */
-function _btrClient_services_authenticated_users() {
+function _btrClientWS_authenticated_users() {
   $post_operations = array(
     'user_profile' => 'user/profile',
   );

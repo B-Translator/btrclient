@@ -7,7 +7,7 @@
 /**
  * Create and return the public service.
  */
-function _btrClient_services_public_service($service_name) {
+function _btrClientWS_public($service_name) {
   $server_url = variable_get('oauth2_login_oauth2_server', '');
 
   $service = new WSClientServiceDescription();
@@ -16,10 +16,10 @@ function _btrClient_services_public_service($service_name) {
   $service->type = 'rest';
   $service->url = $server_url . '/public/btr/';
 
-  $service->settings += _btrClient_services_dev_settings();
+  $service->settings += _btrClientWS_dev();
 
-  $service->operations += _btrClient_services_public_report();
-  $service->operations += _btrClient_services_public_translations();
+  $service->operations += _btrClientWS_public_report();
+  $service->operations += _btrClientWS_public_translations();
 
   return $service;
 }
@@ -27,12 +27,14 @@ function _btrClient_services_public_service($service_name) {
 /**
  * Return definitions for operations about reports.
  */
-function _btrClient_services_public_report() {
+function _btrClientWS_public_report() {
   $operations['report_statistics'] = array(
     'label' => 'report_statistics',
     'url' => 'report/statistics',
     'parameter' => array(
       'lng' => array('type' => 'text'),
+      'origin' => array('type' => 'text'),
+      'project' => array('type' => 'text'),
     ),
   );
 
@@ -40,9 +42,11 @@ function _btrClient_services_public_report() {
     'label' => 'report_topcontrib',
     'url' => 'report/topcontrib',
     'parameter' => array(
-      'lng' => array('type' => 'text'),
       'period' => array('type' => 'text'),
       'size' => array('type' => 'integer'),
+      'lng' => array('type' => 'text'),
+      'origin' => array('type' => 'text'),
+      'project' => array('type' => 'text'),
     ),
   );
 
@@ -72,7 +76,7 @@ function _btrClient_services_public_report() {
 /**
  * Return definitions for operations about translations.
  */
-function _btrClient_services_public_translations() {
+function _btrClientWS_public_translations() {
   $operations['get_translations'] = array(
     'label' => 'get_translations',
     'url' => 'translations/@sguid',

@@ -1,0 +1,6 @@
+name = B-Translator Client WebServices
+description = WebServices for B-Translator Client.
+package = B-Translator
+core = 7.x
+
+dependencies[] = btrClient

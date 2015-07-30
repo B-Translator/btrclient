@@ -4,6 +4,9 @@
  * Module file for btrVocabulary.
  */
 
+module_load_include('inc', 'btrVocabulary', 'form_build');
+module_load_include('inc', 'btrVocabulary', 'form_submit');
+
 /**
  * Implements hook_menu().
  */
@@ -12,7 +15,7 @@ function btrVocabulary_menu() {
     'title'           => 'Vocabulary',
     'description'     => 'Lookup vocabulary items.',
     'page callback'   => 'btrVocabulary_page',
-    'file'            => 'btrVocabulary.page.inc',
+    //'file'            => 'form.inc',
     'access callback' => TRUE,
   );
   return $items;
@@ -37,4 +40,24 @@ function btrVocabulary_theme($existing, $type, $theme, $path) {
       'render element' => 'element',
     ),
   );
+}
+
+/**
+ * Menu callback: vocabulary.
+ */
+function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
+  if ($vocabulary == NULL) {
+    $lng = bcl::get_translation_lng();
+    $vocabulary = 'ICT_' . $lng;
+    drupal_goto("vocabulary/$vocabulary");
+  }
+
+  // Set the page title.
+  drupal_set_title(t('Vocabulary: !vocabulary',
+      array('!vocabulary' => $vocabulary),
+      array('context' => 'set the page title')));
+
+  // Build and return the output.
+  $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
+  return $output;
 }

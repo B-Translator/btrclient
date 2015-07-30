@@ -1,0 +1,86 @@
+<?php
+/**
+ * @file
+ * Module file for btrTranslations.
+ */
+
+module_load_include('inc', 'btrTranslations', 'blocks/blocks');
+
+/**
+ * Implements hook_menu().
+ */
+function btrTranslations_menu() {
+
+  $items['translations'] = array(
+    'type'            => MENU_NORMAL_ITEM,
+    'title'           => 'Translations',
+    'description'     => 'Get a random string and its translations.',
+    'page callback'   => 'btrTranslations_random',
+    'file'            => 'callback/random.inc',
+    'access callback' => TRUE,
+  );
+
+  $items['translations/random'] = array(
+    'type'            => MENU_DEFAULT_LOCAL_TASK,
+    'title'           => 'Random',
+    'weight'          => 1,
+  );
+
+  $items['translations/search'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Search',
+    'description'     => 'Search strings and translations using various filters.',
+    'page callback'   => 'btrTranslations_search',
+    'file'            => 'callback/search.inc',
+    'access callback' => TRUE,
+    'weight'          => 2,
+  );
+
+  $items['translations/export'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Export',
+    'description'     => 'Export the most voted translations of a project into a PO file.',
+    'page callback'   => 'btrTranslations_export',
+    'file'            => 'callback/export.inc',
+    'access callback' => 'btr_user_is_authenticated',
+    'weight'          => 3,
+  );
+
+  $items['translations/import'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Import Translations',
+    'description'     => 'Import translations from PO files.',
+    'page callback'   => 'btrTranslations_import',
+    'file'            => 'callback/import.inc',
+    'access callback' => 'btr_user_access',
+    'access arguments' => array('btranslator-import'),
+    'weight'          => 4,
+  );
+
+  $items['translations/import_project'] = array(
+    'type'            => MENU_LOCAL_TASK,
+    'title'           => 'Import Project',
+    'description'     => 'Import project from PO/POT file(s).',
+    'page callback'   => 'btrTranslations_importproject',
+    'file'            => 'callback/import.inc',
+    'access callback' => 'btr_user_access',
+    'access arguments' => array('btranslator-import'),
+    'weight'          => 5,
+  );
+
+  return $items;
+}
+
+/**
+ * Return true if there is an oauth2 access_token.
+ */
+function btr_user_is_authenticated() {
+  return bcl::user_is_authenticated();
+}
+
+/**
+ * Check whether the current user has the given permission (on the server).
+ */
+function btr_user_access($permission) {
+  return bcl::user_access($permission);
+}

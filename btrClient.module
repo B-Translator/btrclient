@@ -4,10 +4,185 @@
  * Module file for btrClient.
  */
 
-require_once dirname(__FILE__) . '/includes/utils.inc';
-require_once dirname(__FILE__) . '/btrClient.menu.inc';
-require_once dirname(__FILE__) . '/btrClient.blocks.inc';
-require_once dirname(__FILE__) . '/btrClient.services.inc';
+module_load_include('php', 'btrClient', 'lib/bcl');
+
+/**
+ * Implements hook_init().
+ */
+function btrClient_init() {
+  // Check whether this is a redirect after login,
+  // and if yes call the submit function again.
+  if (bcl::user_is_authenticated() and isset($_SESSION['btrClient']['form_state'])) {
+    bcl::form_resubmit();
+  }
+
+  // Add font-awsome css.
+  drupal_add_css('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', array('type' => 'external'));
+
+  // Include the stylesheets.
+  $path = drupal_get_path('module', 'btrClient');
+  drupal_add_css($path . '/css/styles.css');
+
+  // If the page is displayed inside an iframe (?display=iframe)
+  // add another stylesheet.
+  if (bcl::inside_iframe()) {
+    drupal_add_css($path . '/css/iframe.css');
+  }
+
+  // Add the css and js for Ridiculously Responsive Social Share Buttons.
+  drupal_add_css($path . '/lib/fn/rrssb/rrssb.css');
+  drupal_add_js($path . '/lib/fn/rrssb/rrssb.min.js');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function btrClient_menu() {
+
+  $items = array();
+
+  $items['admin/config/bcl'] = array(
+    'title' => 'B-Translator Client',
+    'description' => 'B-Translator Client Profile',
+    'weight' => -100,
+    'page callback' => 'system_admin_menu_block_page',
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+    'access callback' => TRUE,
+  );
+
+  $items['admin/config/bcl/client'] = array(
+    'title'            => 'BTR Client',
+    'description'      => 'B-Translator Client configuration settings.',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('btrClient_config'),
+    'access callback'  => TRUE,
+    'file'             => 'callback/admin.inc',
+  );
+
+  // Return a RSS feed.
+  $items['btr/rss-feed'] = array(
+    'type'            => MENU_CALLBACK,
+    'title'           => 'Latest Translation Feedback',
+    'page callback'   => 'btrClient_rss_feed',
+    'file'            => 'callback/rss_feed.inc',
+    'access callback' => TRUE,
+  );
+
+  // Return a random tweet from B-Translator.
+  $items['btr/tweet'] = array(
+    'type'            => MENU_CALLBACK,
+    'title'           => 'Return a random string (and translations) in a form suitable for twitter.',
+    'page callback'   => 'btrCore_tweet',
+    'file'            => 'callback/tweet.inc',
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function btrClient_menu_alter(&$items) {
+  // Move the configuration of oauth2_login to the section of B-Translator.
+  $items['admin/config/bcl/oauth2_login'] = $items['admin/config/people/oauth2_login'];
+  unset($items['admin/config/people/oauth2_login']);
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ * Append to url '?display=iframe' if the page is inside an iframe.
+ */
+function btrClient_url_outbound_alter(&$path, &$options, $original_path) {
+  if (bcl::inside_iframe()) {
+    if (!$options['query'])  $options['query'] = array();
+    $options['query']['display'] = 'iframe';
+  }
+}
+
+/**
+ * Implements hook_drupal_goto_alter().
+ * Append to url '?display=iframe' if the page is inside an iframe.
+ */
+function btrClient_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  if (bcl::inside_iframe()) {
+    if (!$options['query'])  $options['query'] = array();
+    $options['query']['display'] = 'iframe';
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function btrClient_user_login(&$edit, $account) {
+  if (bcl::installed_on_server()) {
+    $data = (array)oauth2_loginprovider_user_profile_callback();
+    $data['displayName'] = $data['name'];
+    $data['identifier'] = $data['uid'];
+    bcl::btr_user_set($data);
+  }
+}
+
+/**
+ * Implements hook_hybridauth_user_login().
+ */
+function btrClient_hybridauth_user_login($account, $data) {
+  bcl::btr_user_set($data);
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function btrClient_form_alter(&$form, &$form_state, $form_id) {
+  if (bcl::installed_on_server())  return;
+
+  if ($form_id == 'user_profile_form') {
+    $form['remote_account'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Edit the profile on B-Translator Server'),
+      '#weight' => -500,
+      '#suffix' => '<hr/>',
+    );
+    $url = variable_get('btrClient_server') . '/user/';
+    $form['remote_account']['link_to_btranslator_profile'] = array(
+      '#markup' => '<a href="' . $url . '" target="_blank" class="btn">'
+      . t('Edit B-Translator Profile') . '</a>',
+    );
+  }
+}
+
+/**
+ * Implements hook_hybridauth_provider_config_alter().
+ */
+function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
+  if ($provider_id != 'DrupalOAuth2') {
+    return;
+  }
+
+  // Get some extra fields from the remote user profile.
+  // These fields can be defined by the oauth2 server
+  // on hook_oauth2_loginprovider_userprofile_alter().
+  $config['profile_fields'] = array(
+    /*
+    // These are the default profile field mappings.
+    'identifier' => 'uid',
+    'displayName' => 'name',
+    'photoURL' => 'picture.url',
+    'email' => 'mail',
+    'emailVerified' => 'mail',
+    'language' => 'language',
+    */
+    // Get these extra fields as well.
+    'translation_lng' => 'translation_lng',
+    'string_order' => 'string_order',
+    'preferred_projects' => 'preferred_projects',
+    'auxiliary_languages' => 'auxiliary_languages',
+    'translations_per_day' => 'translations_per_day',
+    'feedback_channels' => 'feedback_channels',
+    'permissions' => 'permissions',
+  );
+}
 
 /**
  * Implements hook_theme().
@@ -52,104 +227,3 @@ function btrClient_theme($existing, $type, $theme, $path) {
 function btrClient_flush_caches() {
   return array('cache_btrClient');
 }
-
-/**
- * Implements hook_init().
- */
-function btrClient_init() {
-  if (arg(0) == 'translations') {
-    drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient.css');
-  }
-
-  // Check if language is RTL.
-  $languages = btrClient_get_languages();
-  $lng = arg(1);
-  if (array_key_exists($lng, $languages)) {
-    // Add RTL style if the current language's direction is RTL.
-    if ($languages[$lng]['direction'] == LANGUAGE_RTL) {
-      drupal_add_css(drupal_get_path('module', 'btrClient') . '/btrClient-rtl.css');
-    }
-  }
-
-  // Disable breadcrumb.
-  drupal_set_breadcrumb(array());
-}
-
-/**
- * Implements hook_hybridauth_provider_config_alter().
- */
-function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
-  if ($provider_id != 'DrupalOAuth2') {
-    return;
-  }
-
-  // Get some extra fields from the remote user profile.
-  // These fields can be defined by the oauth2 server
-  // on hook_oauth2_loginprovider_userprofile_alter().
-  $config['profile_fields'] = array(
-    /*
-    // These are the default profile field mappings.
-    'identifier' => 'uid',
-    'displayName' => 'name',
-    'photoURL' => 'picture.url',
-    'email' => 'mail',
-    'emailVerified' => 'mail',
-    'language' => 'language',
-    */
-    // Get these extra fields as well.
-    'translation_lng' => 'translation_lng',
-    'string_order' => 'string_order',
-    'preferred_projects' => 'preferred_projects',
-    'auxiliary_languages' => 'auxiliary_languages',
-    'translations_per_day' => 'translations_per_day',
-    'feedback_channels' => 'feedback_channels',
-    'permissions' => 'permissions',
-  );
-}
-
-/**
- * Implements hook_hybridauth_user_login().
- */
-function btrClient_hybridauth_user_login($account, $data) {
-  $btr_profile = _btrClient_get_user_profile($data);
-  $_SESSION['btrClient']['btr_profile'] = $btr_profile;
-}
-
-/**
- * Implements hook_user_login().
- */
-function btrClient_user_login($account, $data) {
-  if (_btrClient_installed_on_server()) {
-    btr_get_user_profile();
-  }
-}
-
-/**
- * Implementation of hook_form_alter().
- */
-function btrClient_form_alter(&$form, &$form_state, $form_id) {
-  if (_btrClient_installed_on_server())  return;
-
-  if ($form_id == 'user_profile_form') {
-    $form['remote_account'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Edit the profile on B-Translator Server'),
-      '#weight' => -500,
-      '#suffix' => '<hr/>',
-    );
-    $url = variable_get('btrClient_server') . '/user/';
-    $form['remote_account']['link_to_btranslator_profile'] = array(
-      '#markup' => '<a href="' . $url . '" target="_blank" class="btn">'
-      . t('Edit B-Translator Profile') . '</a>',
-    );
-  }
-}
-
-/*
-function btr_log($var, $comment ='') {
-  $file = '/tmp/btr.log';
-  $content = "\n==> $comment: " . print_r($var, true);
-  file_put_contents($file, $content, FILE_APPEND);
-}
-*/
-

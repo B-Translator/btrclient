@@ -1,0 +1,40 @@
+
+a.btn {
+    margin-right: 4px;
+}
+
+body {
+    padding: 0 !important;
+}
+
+#navbar {
+    display: none;
+}
+
+.alert {
+    margin-bottom: 5px !important;
+    padding: 5px !important;
+}
+
+.container {
+    width: 100% !important;
+}
+
+#edit-search-term {
+    margin-bottom: 5px;
+}
+
+.control-group {
+    margin-bottom: 0px !important;
+}
+
+.l10n-table {
+    margin-top: 0 !important;
+    margin-bottom: 5px !important;
+}
+
+#edit-download legend {
+    font-size: 1.2em;
+    line-height: 1.5em;
+    margin-bottom: 5px;
+}
