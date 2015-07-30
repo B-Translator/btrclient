@@ -4,8 +4,13 @@
  * Append the social share buttons and comments to the form.
  */
 function _share_and_comment(&$form, $path, $title) {
-  $url = url($path, array('absolute' => TRUE));
+  // Add RRSSB share buttons.
+  $form['rrssb'] = array(
+    '#markup' => bcl::rrssb_get_buttons(),
+  );
 
+  /*
+  $url = url($path, array('absolute' => TRUE));
   if (module_exists('service_links')) {
     // Define the service_links form element.
     $style = SERVICE_LINKS_STYLE_IMAGE;
@@ -35,6 +40,7 @@ function _share_and_comment(&$form, $path, $title) {
       '#suffix' => '</div>',
     );
   }
+  */
 
   if (module_exists('disqus')) {
     // Define the disqus form element.
