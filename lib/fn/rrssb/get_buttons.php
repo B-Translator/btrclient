@@ -65,7 +65,6 @@ function rrssb_get_buttons($options = array()) {
  * faster to updating with new versions.
  */
 function _get_button_code($button, $options) {
-  extract($options);
 
   switch ($button) {
 

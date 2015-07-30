@@ -58,22 +58,10 @@ function translateform_build($strings, $lng) {
     // TODO: Display the number of comments for each string.
   }
 
-  // If there is only one string.
+  // If there is only one string, append social and discussions, etc.
   if (count($strings) == 1) {
-    // Set the page title (no longer than 20 chars).
-    $title = bcl::shorten($string['string'], 20);
-    drupal_set_title(t('String: !string', array('!string' => $title),
-        array('context' => 'set the page title')));
-
-    // Add metatags (og:title, og:description, og:image).
-    include_once __DIR__ . '/_metatags.inc';
-    _metatags($string);
-
-    // Append the social share buttons and comments to the form.
-    $path = "translations/$lng/$sguid";
-    $title = bcl::shorten($string['string'], 50);
-    include_once __DIR__ . '/_share_and_comment.inc';
-    _share_and_comment($form, $path, $title);
+    include_once __DIR__ . '/single_string.inc';
+    single_string($form, $lng, $sguid, $string);
   }
 
   return $form;
