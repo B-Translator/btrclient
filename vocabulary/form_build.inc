@@ -38,22 +38,29 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
     ),
   );
 
-  $form['search_term'] = array(
-    '#type' => 'textfield',
-    '#autocomplete_path' => $btr_server . '/auto/string/vocabulary/' . $vocabulary,
-    '#default_value' => $term,
-    '#attributes' => array(
-      'onblur' => 'this.form.submit()',
-    ),
-  );
-  $form['go'] = array(
-    '#type' => 'submit',
-    '#value' => t('Go'),
-    '#attributes' => array(
-      'style' => array('display:none'),
-      'onclick' => 'this.form.target="_self"',
-    ),
-  );
+  $form['search'] = [
+    '#type' => 'fieldset',
+
+    // search term
+    'search_term' => [
+      '#type' => 'textfield',
+      '#autocomplete_path' => $btr_server . '/auto/string/vocabulary/' . $vocabulary,
+      '#default_value' => $term,
+      '#attributes' => [
+        'onblur' => 'this.form.submit()',
+      ],
+    ],
+
+    // submit button
+    'submit' => [
+      '#value' => '<i class="fa fa-refresh"></i>',
+      '#type' => 'submit',
+      '#attributes' => [
+        'class' => ['btn-primary'],
+        'onclick' => 'this.form.target="_self"',
+      ],
+    ],
+  ];
 
   if ($sguid) {
     $form['strings'] = array(

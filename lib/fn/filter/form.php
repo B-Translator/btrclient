@@ -34,7 +34,7 @@ function filter_form($form_values) {
 
       // buttons
       'submit' => [
-        '#value' => '<i class="fa fa-refresh"></i>', //t('Go'),
+        '#value' => '<i class="fa fa-refresh"></i>',
         '#type' => 'submit',
         '#attributes' => ['class' => ['btn-primary']],
       ],

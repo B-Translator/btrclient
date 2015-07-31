@@ -11,7 +11,7 @@ function btrVocabulary_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
   $op = $form_values['op'];
 
-  if ($op == t('Go')) {
+  if ($op == '<i class="fa fa-refresh"></i>') {
     btrVocabulary_form_go($form_state);
   }
   elseif ($op == t('Login')) {

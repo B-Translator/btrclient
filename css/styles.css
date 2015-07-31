@@ -40,6 +40,18 @@ td.sguid a {
     border-radius: 4px !important;
 }
 
+/**
+ * Fix the styles of the search at vocabulary.
+ */
+#edit-search .form-item-search-term,
+#edit-search .form-submit {
+    display: inline-block;
+    margin: 5px;
+    margin-left: 0px;
+}
+#edit-search-term {
+    margin: 0px;
+}
 
 /**
  * Fix the styles of the search filter.
