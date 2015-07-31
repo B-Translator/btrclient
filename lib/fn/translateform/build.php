@@ -60,8 +60,7 @@ function translateform_build($strings, $lng) {
 
   // If there is only one string, append social and discussions, etc.
   if (count($strings) == 1) {
-    include_once __DIR__ . '/single_string.inc';
-    single_string($form, $lng, $sguid, $string);
+    $form += bcl::translateform_meta($lng, $sguid, $string);
   }
 
   return $form;

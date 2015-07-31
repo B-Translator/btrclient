@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Function single_string()
+ * Function translateform_meta()
  */
 
 namespace BTranslator\Client;
@@ -11,7 +11,9 @@ use \bcl;
  * When there is only a single string displayed, we can add metatags
  * about the string, social share buttons, discussions/comments, etc.
  */
-function single_string(&$form, $lng, $sguid, $string) {
+function translateform_meta($lng, $sguid, $string) {
+  $form = array();
+
   // Get string properties: title, url, description, hashtags
   $properties = _get_string_properties($string);
   $properties['lng'] = $lng;
@@ -50,6 +52,8 @@ function single_string(&$form, $lng, $sguid, $string) {
       '#weight' => 101,
     );
   }
+
+  return $form;
 }
 
 /**

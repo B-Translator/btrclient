@@ -66,6 +66,10 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   $form['buttons']  = _btrVocabulary_form_buttons($vocabulary, $sguid, $term);
   $form['download'] = _btrVocabulary_form_download($vocabulary);
 
+  if ($sguid) {
+    $form += bcl::translateform_meta($lng, $sguid, $string);
+  }
+
   return $form;
 }
 
