@@ -88,7 +88,7 @@ function _get_string_properties($string) {
     $description .= ' <==> ' . implode(' / ', $arr_translations);
   }
   if (isset($_GET['url'])) {
-    $description .= ' (see: ' . check_url($_GET['url']) . ')';
+    $description .= ' See: ' . check_url($_GET['url']);
   }
 
   // Get the url.
