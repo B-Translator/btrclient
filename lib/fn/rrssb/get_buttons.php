@@ -49,7 +49,7 @@ function rrssb_get_buttons($options = array()) {
   $options['pinterest_media'] = rawurlencode($options['pinterest_media']);
 
   $output = '<div class="rrssb-container">
-    <ul class="rrssb-item-list rrssb-buttons clearfix">
+    <ul class="rrssb-buttons">
   ';
   $buttons = $options['buttons'];
   for ($i = 0; $i < sizeof($buttons); $i++) {
@@ -128,7 +128,12 @@ function _get_button_code($button, $options) {
 
       // twitter
     case 'twitter':
-      $status = bcl::shorten($options['summary'], 100) . '%20' . $options['url'] . '%20' . $options['hashtags'];
+      $url = rawurldecode($options['url']);
+      $hashtags = rawurldecode($options['hashtags']);
+      $summary = rawurldecode($options['summary']);
+      $summary = bcl::shorten($summary, 115 - strlen($hashtags));
+      $status = rawurlencode($summary . ' ' . $url . ' ' . $hashtags);
+
       $html = '<li class="rrssb-twitter">';
       $html .= '<a href="http://twitter.com/home?status=' . $status . '" class="popup">';
       $html .= '

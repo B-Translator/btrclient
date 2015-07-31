@@ -66,8 +66,8 @@ function _get_string_properties($string) {
   if ($context['vocabulary']) {
     $title = $context['vocabulary'] . ': ' . $str;
   }
-  elseif ($context['project']) {
-    $title = $context['project'] . ': ' . $str;
+  elseif ($context['origin'] and $context['project']) {
+    $title = $context['origin'] . '/' . $context['project'] . ': ' . $str;
   }
   else {
     $title = t('String') . ': ' . $str;
