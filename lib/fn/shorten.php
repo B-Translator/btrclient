@@ -13,12 +13,13 @@ namespace BTranslator\Client;
  * of the given length that can be suitable for title, subject, etc.
  */
 function shorten($string, $length) {
-  $str = strip_tags(str_replace("\n", ' ', $string));
+  $str = str_replace("\n", ' ', $string);
+  $str = str_replace(' <==> ', ' (==) ', $str);
+  $str = strip_tags($str);
   if (strlen($str) > $length) {
     $str = substr($str, 0, strrpos(substr($str, 0, $length - 3), ' '));
     $str .= '...';
   }
-  $str = utf8_decode($str);
-  $str = htmlentities($str);
+  $str = str_replace(' (==) ', ' <==> ', $str);
   return $str;
 }
