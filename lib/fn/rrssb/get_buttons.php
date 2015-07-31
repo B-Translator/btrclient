@@ -48,7 +48,7 @@ function rrssb_get_buttons($options = array()) {
   $options['hashtags'] = rawurlencode($options['hashtags']);
   $options['pinterest_media'] = rawurlencode($options['pinterest_media']);
 
-  $output = '<div class="rrssb-container">
+  $output = '<div class="rrssb-container clearfix">
     <ul class="rrssb-buttons">
   ';
   $buttons = $options['buttons'];

@@ -29,6 +29,7 @@ td.sguid a {
     margin-top: 10px;
     margin-bottom: 10px;
     max-width: 600px;
+    clear: both;
 }
 
 .rrssb-buttons li {
@@ -51,6 +52,26 @@ td.sguid a {
 }
 #edit-search-term {
     margin: 0px;
+}
+
+/**
+ * Styles of the download button.
+ */
+#form-item-download {
+    display: inline-block;
+}
+#form-item-download input[type="checkbox"] {
+    display: none;
+    width: 1px;
+}
+#form-item-download .checked {
+    display: none;
+}
+#form-item-download input[type="checkbox"]:checked ~ .checked {
+    display: inline-block;
+}
+#form-item-download input[type="checkbox"]:checked ~ .unchecked {
+    display: none;
 }
 
 /**

@@ -71,7 +71,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
     );
   }
   $form['buttons']  = _btrVocabulary_form_buttons($vocabulary, $sguid, $term);
-  $form['download'] = _btrVocabulary_form_download($vocabulary);
+  $form['download-buttons'] = _btrVocabulary_form_download($vocabulary);
 
   if ($sguid) {
     $form += bcl::translateform_meta($lng, $sguid, $string);
@@ -187,13 +187,17 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   }
 
   // List all items.
-  $attributes = array('class' => array('btn', 'form-submit'));
+  $attributes = array(
+    'class' => array('btn', 'form-submit'),
+    'style' => 'margin-left: 10px;',
+  );
   if (bcl::inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['list_all'] = array(
-    '#markup' => l(t('List'), 'translations/search',
+    '#markup' => l('<i class="fa fa-fw fa-list"></i>', 'translations/search',
                array(
+                 'html' => TRUE,
                  'query' => array(
                    'lng' => $lng,
                    'origin' => 'vocabulary',
@@ -210,9 +214,32 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   else {
     $url = "http://v.btranslator.org/?proj=$vocabulary&lng=$lng#$term";
   }
+  $attributes = array(
+    'class' => ['btn', 'form-submit'],
+    'style' => 'margin-left: 4px;',
+  );
+  if (!bcl::inside_iframe()) {
+    $attributes['target'] = '_blank';
+  }
   $buttons['mobile'] = array(
-    '#markup' => l(t('Go To The Mobile App'), $url,
-               ['attributes' => ['class' => ['btn', 'form-submit']]]),
+    '#markup' => l('<i class="fa fa-fw fa-mobile"></i>', $url,
+               array(
+                 'html' => TRUE,
+                 'attributes' => $attributes,
+               )),
+  );
+
+  // Display/hide download buttons.
+  $buttons['download'] = array(
+    '#markup' => '
+        <div id="form-item-download">
+          <label>
+            <input type="checkbox" id="edit-download" name="download">
+            <i class="btn fa fa-fw fa-download unchecked"></i>
+            <i class="btn fa fa-fw fa-download checked active"></i>
+          </label>
+        </div>
+        ',
   );
 
   return $buttons;
@@ -233,17 +260,24 @@ function _btrVocabulary_form_download($vocabulary) {
   );
   $download = array(
     '#type' => 'fieldset',
-    '#title' => t('Download'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="download"]' => ['checked' => TRUE],
+      )),
+    '#attributes' => array(
+      'style' => 'float: right; margin: 5px;',
+    ),
   );
   foreach ($download_formats as $key => $label) {
     $url = $btr_server . "/translations/vocabulary/export/$vocabulary/$key";
     $download[$key] = array(
-      '#markup' => l($label,
-                 $url, array('attributes' => array(
-                     'class' => array('btn'),
-                   ))));
+      '#markup' => l('<i class="fa fa-fw fa-arrow-down"></i>' . $label,
+                 $url, array(
+                   'html' => TRUE,
+                   'attributes' => [
+                     'class' => ['btn'],
+                     'style' => 'margin-right: 3px;',
+                   ])));
   }
   return $download;
 }
