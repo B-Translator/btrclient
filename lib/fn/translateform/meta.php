@@ -92,7 +92,15 @@ function _get_string_properties($string) {
   }
 
   // Get the url.
-  $url = url(substr(request_uri(), 1), ['absolute' => TRUE]);
+  $uri = substr(request_uri(), 1);
+  if ($context['vocabulary']) {
+    $arr_parts = explode('/', $uri);
+    if (!$arr_parts[2]) {
+      $arr_parts[2] = $str;
+      $uri = implode('/', $arr_parts);
+    }
+  }
+  $url = url($uri, ['absolute' => TRUE]);
 
   // Get hashtags.
   $arr_tags = array();
