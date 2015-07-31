@@ -203,7 +203,7 @@ function _add_metatags($properties) {
     '#tag' => 'meta',
     '#attributes' => array(
       "property" => "og:image",
-      "content" => $GLOBALS['base_url'] . '/logo.png',
+      "content" => url('logo.png', ['absolute' => TRUE]),
     ),
   );
   drupal_add_html_head($element, 'og_image');
@@ -213,7 +213,7 @@ function _add_metatags($properties) {
     '#tag' => 'meta',
     '#attributes' => array(
       "property" => "og:image:width",
-      "content" => '24',
+      "content" => '64',
     ),
   );
   drupal_add_html_head($element, 'og_image_width');
