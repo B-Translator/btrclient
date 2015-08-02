@@ -162,7 +162,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
         'onclick' => 'this.form.target="_self"',
       ),
     );
-    if (!bcl::user_is_authenticated() and bcl::inside_iframe()) {
+    if (!bcl::user_is_authenticated() and inside_iframe()) {
       $buttons['add_term']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }
@@ -191,20 +191,13 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     'class' => array('btn', 'form-submit'),
     'style' => 'margin-left: 10px;',
   );
-  if (bcl::inside_iframe()) {
+  if (inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['list_all'] = array(
-    '#markup' => l('<i class="fa fa-fw fa-list"></i>', 'translations/search',
-               array(
-                 'html' => TRUE,
-                 'query' => array(
-                   'lng' => $lng,
-                   'origin' => 'vocabulary',
-                   'project' => $vocabulary,
-                 ),
-                 'attributes' => $attributes,
-               )),
+    '#markup' => l('<i class="fa fa-fw fa-list"></i>',
+               "btr/project/vocabulary/$vocabulary/$lng/list",
+               ['html' => TRUE, 'attributes' => $attributes]),
   );
 
   // Link to the mobile app.
@@ -218,7 +211,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     'class' => ['btn', 'form-submit'],
     'style' => 'margin-left: 4px;',
   );
-  if (!bcl::inside_iframe()) {
+  if (!inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['mobile'] = array(

@@ -1,0 +1,3 @@
+name = Inside IFrame
+description = Customize the layout by using extra CSS styles, when the application is inside an iFrame.
+core = 7.x

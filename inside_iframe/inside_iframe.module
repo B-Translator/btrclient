@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * Return true if the page is being displayed inside an iframe (?display=iframe).
+ */
+function inside_iframe() {
+  return (isset($_GET['display']) and $_GET['display'] == 'iframe');
+}
+
+/**
+ * Implements hook_init().
+ */
+function inside_iframe_init() {
+  // If the page is being displayed inside an iframe (?display=iframe)
+  // call hook_inside_iframe() functions.
+  if (inside_iframe()) {
+    module_invoke_all('inside_iframe');
+  }
+}
+
+/**
+ * Implements hook_inside_iframe().
+ */
+function inside_iframe_inside_iframe() {
+  $path = drupal_get_path('module', 'inside_iframe');
+  drupal_add_css($path . '/inside_iframe.css');
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ * Append to url '?display=iframe' if the page is inside an iframe.
+ */
+function inside_iframe_url_outbound_alter(&$path, &$options, $original_path) {
+  if (inside_iframe()) {
+    if (!$options['query'])  $options['query'] = array();
+    $options['query']['display'] = 'iframe';
+  }
+}
+
+/**
+ * Implements hook_drupal_goto_alter().
+ * Append to url '?display=iframe' if the page is inside an iframe.
+ */
+function inside_iframe_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  if (inside_iframe()) {
+    if (!$options['query'])  $options['query'] = array();
+    $options['query']['display'] = 'iframe';
+  }
+}

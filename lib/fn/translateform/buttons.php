@@ -11,7 +11,7 @@ use \bcl;
  * Get the buttons of the form as a render array.
  */
 function translateform_buttons($lng, $sguid = NULL) {
-  if ($sguid and bcl::inside_iframe()) {
+  if ($sguid and inside_iframe()) {
     $buttons['details'] = [
       '#markup' => l('#', "translations/$lng/$sguid", [
                    'attributes' => [
@@ -30,7 +30,7 @@ function translateform_buttons($lng, $sguid = NULL) {
   ];
   // When we are inside an iFrame, it is better to do the login
   // on a popup window (or a new tab).
-  if (bcl::inside_iframe()) {
+  if (inside_iframe()) {
     $buttons['login']['#attributes']['onclick'] = 'this.form.target="_blank"';
   }
 
@@ -48,7 +48,7 @@ function translateform_buttons($lng, $sguid = NULL) {
   // When the user is not authenticated, clicking Save will redirect
   // to login. When we are inside an iFrame, it is better to do the
   // login on a popup window (or a new tab).
-  if (!bcl::user_is_authenticated() and bcl::inside_iframe()) {
+  if (!bcl::user_is_authenticated() and inside_iframe()) {
     $buttons['save']['#attributes']['onclick'] = 'this.form.target="_blank"';
   }
 

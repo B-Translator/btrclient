@@ -1,0 +1,12 @@
+/**
+ * Example CSS that will be used when the application
+ * is displayed inside an iframe.
+ */
+
+body {
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+}
