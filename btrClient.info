@@ -12,6 +12,7 @@ dependencies[] = oauth2_client
 dependencies[] = oauth2_login
 dependencies[] = btrClientWS
 dependencies[] = inside_iframe
+dependencies[] = srrssb
 
 files[] = tests/btrClient.test
 configure = admin/config/bcl

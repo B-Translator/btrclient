@@ -19,5 +19,5 @@ projects[features] = 2.2
 projects[strongarm] = 2.0
 
 projects[disqus] = 1.10
-
+projects[srrssb] = 1.0
 projects[inside_iframe] = 1.0
