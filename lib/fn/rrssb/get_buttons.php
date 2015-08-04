@@ -48,13 +48,18 @@ function rrssb_get_buttons($options = array()) {
   $options['hashtags'] = rawurlencode($options['hashtags']);
   $options['pinterest_media'] = rawurlencode($options['pinterest_media']);
 
+  // Get the url for each button.
+  $buttons = array();
+  for ($i = 0; $i < sizeof($options['buttons']); $i++) {
+    $button = $options['buttons'][$i];
+    $buttons[$button] =_get_button_url($button, $options);
+  }
+
+  // Build the HTML code of the list.
   $output = '<div class="rrssb-container clearfix">
     <ul class="rrssb-buttons">
   ';
-  $buttons = $options['buttons'];
-  for ($i = 0; $i < sizeof($buttons); $i++) {
-    $button = $buttons[$i];
-    $url =_get_button_url($button, $options);
+  foreach ($buttons as $button => $url) {
     $output .= _get_button_code($button, $url);
   }
   $output .= '</ul></div>';
