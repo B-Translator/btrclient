@@ -22,10 +22,6 @@ function btrClient_init() {
   // Include the stylesheets.
   $path = drupal_get_path('module', 'btrClient');
   drupal_add_css($path . '/css/styles.css');
-
-  // Add the css and js for Ridiculously Responsive Social Share Buttons.
-  drupal_add_css($path . '/lib/fn/rrssb/rrssb.css');
-  drupal_add_js($path . '/lib/fn/rrssb/rrssb.min.js');
 }
 
 /**

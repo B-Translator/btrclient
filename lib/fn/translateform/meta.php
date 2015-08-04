@@ -26,15 +26,15 @@ function translateform_meta($lng, $sguid, $string) {
 
   // Add RRSSB share buttons.
   $form['rrssb'] = array(
-    '#markup' => bcl::rrssb_get_buttons(
-      array(
+    '#markup' => srrssb(
+      [
         'buttons' => ['googleplus', 'linkedin', 'facebook', 'twitter', 'email'],
         'url' => $properties['url'],
         'title' => $properties['title'],
         'summary' => $properties['description'],
         'hashtags' => $properties['hashtags'],
         'lng' => $properties['lng'],
-      )),
+      ]),
   );
 
   if (module_exists('disqus')) {
