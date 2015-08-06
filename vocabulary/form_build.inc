@@ -41,6 +41,16 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
   $form['search'] = [
     '#type' => 'fieldset',
 
+    // submit button
+    'submit' => [
+      '#value' => '<i class="fa fa-refresh"></i>',
+      '#type' => 'submit',
+      '#attributes' => [
+        'class' => ['btn-primary'],
+        'onclick' => 'this.form.target="_self"',
+      ],
+    ],
+
     // search term
     'search_term' => [
       '#type' => 'textfield',
@@ -51,15 +61,6 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
       ],
     ],
 
-    // submit button
-    'submit' => [
-      '#value' => '<i class="fa fa-refresh"></i>',
-      '#type' => 'submit',
-      '#attributes' => [
-        'class' => ['btn-primary'],
-        'onclick' => 'this.form.target="_self"',
-      ],
-    ],
   ];
 
   if ($sguid) {

@@ -26,12 +26,6 @@ function filter_form($form_values) {
     'basic' => [
       '#type' => 'fieldset',
 
-      // words to be searched
-      'words' => [
-        '#type' => 'textfield',
-        '#default_value' => $form_values['words'],
-      ],
-
       // buttons
       'submit' => [
         '#value' => '<i class="fa fa-refresh"></i>',
@@ -50,6 +44,12 @@ function filter_form($form_values) {
               </label>
             </div>
             ',
+      ],
+
+      // words to be searched
+      'words' => [
+        '#type' => 'textfield',
+        '#default_value' => $form_values['words'],
       ],
     ],
 

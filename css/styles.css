@@ -44,14 +44,22 @@ td.sguid a {
 /**
  * Fix the styles of the search at vocabulary.
  */
-#edit-search .form-item-search-term,
-#edit-search .form-submit {
+#edit-submit {
     display: inline-block;
-    margin: 5px;
-    margin-left: 0px;
+    float: right;
+    margin: 0px;
+}
+#edit-search .form-item-search-term {
+    margin: 0px;
+    margin-right: 40px;
+}
+#edit-search .controls {
+    width: 100%;
 }
 #edit-search-term {
     margin: 0px;
+    width: 100%;
+    overflow: hidden;
 }
 
 /**
@@ -77,23 +85,33 @@ td.sguid a {
 /**
  * Fix the styles of the search filter.
  */
-#edit-basic .fieldset-wrapper {
+#edit-basic {
     width: 100%;
 }
-
-#edit-basic .form-item-words,
-#edit-basic .form-submit,
-#edit-basic .form-item-options {
+#edit-submit {
     display: inline-block;
-    margin: 5px;
-    margin-left: 0px;
+    margin: 0px;
+}
+#edit-basic .form-item-words {
+    margin: 0px;
+}
+#edit-basic .controls {
+    margin-right: 80px;
 }
 #edit-words {
     margin: 0px;
+    width: 100%;
+    overflow: hidden;
 }
 
 #form-item-options {
     display: inline-block;
+    margin: 0px;
+    float: right;
+    margin-right: 3px;
+}
+#form-item-options .btn {
+    padding: 4px 8px;
 }
 #form-item-options input[type="checkbox"] {
     display: none;
