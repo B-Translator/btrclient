@@ -164,7 +164,7 @@ td.sguid a {
 #listfilter-form {
     border: 1px solid #dddddd;
     border-radius: 3px;
-    padding: 10px;
+    padding: 5px;
 }
 
 #btrproject-listfilter-form {
@@ -173,7 +173,8 @@ td.sguid a {
 
 #listfilter-form .control-group {
     display: inline-block;
-    margin-bottom: 0px;
+    margin-top: 3px;
+    margin-bottom: 3px;
     margin-right: 10px;
 }
 
@@ -195,4 +196,8 @@ td.sguid a {
 
 #listfilter-form p.help-block {
     display: none;
+}
+
+#listfilter-form .form-submit {
+    margin: 3px;
 }
