@@ -17,9 +17,8 @@ function btrProject_admin($origin, $project, $lng) {
  */
 function btrProject_admin_form($form, &$form_state, $origin, $project, $lng) {
   $btr_server = variable_get('btrClient_server', 'https://btr.example.org');
-  // $url = "$btr_server/project/synch";
-  $form['synch'] = array(
-    '#markup' => l(t('Synchronize'), "$btr_server/project/synch",
+  $form['sync'] = array(
+    '#markup' => l(t('Synchronize'), "$btr_server/project/sync",
                [
                  'external' => TRUE,
                  'attributes' => [
