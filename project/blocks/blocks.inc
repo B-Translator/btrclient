@@ -6,6 +6,7 @@
 
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
+require_once __DIR__ . '/project_stats.inc';
 require_once __DIR__ . '/latest.inc';
 
 /**
@@ -31,6 +32,12 @@ function btrProject_block_info() {
   // Suggestion and voting statistics for the last week, month and year.
   $blocks['statistics'] = array(
     'info' => t('B-Translator Project: Contribution statistics (for the last week, month and year)'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Project details and statistics.
+  $blocks['project_stats'] = array(
+    'info' => t('B-Translator Project: Project details and statistics'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 

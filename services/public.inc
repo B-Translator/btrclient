@@ -38,6 +38,16 @@ function _btrClientWS_public_report() {
     ),
   );
 
+  $operations['report_project_stats'] = array(
+    'label' => 'report_project_stats',
+    'url' => 'report/project_stats',
+    'parameter' => array(
+      'origin' => array('type' => 'text'),
+      'project' => array('type' => 'text'),
+      'lng' => array('type' => 'text'),
+    ),
+  );
+
   $operations['report_topcontrib'] = array(
     'label' => 'report_topcontrib',
     'url' => 'report/topcontrib',
@@ -53,6 +63,16 @@ function _btrClientWS_public_report() {
   $operations['report_statistics_1'] = array(
     'label' => 'report_statistics_1',
     'url' => 'report/statistics',
+    'type' => 'POST',
+    'data' => 'params',
+    'parameter' => array(
+      'params' => array('type' => 'array'),
+    ),
+  );
+
+  $operations['report_project_stats_1'] = array(
+    'label' => 'report_project_stats_1',
+    'url' => 'report/project_stats',
     'type' => 'POST',
     'data' => 'params',
     'parameter' => array(

@@ -10,5 +10,6 @@
 function btrProject_dashboard($origin, $project, $lng) {
   $output[] = bcl::get_block('btrProject', 'statistics');
   $output[] = bcl::get_block('btrProject', 'topcontrib');
+  $output[] = bcl::get_block('btrProject', 'project_stats');
   return $output;
 }
