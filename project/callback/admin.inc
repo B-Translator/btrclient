@@ -17,10 +17,17 @@ function btrProject_admin($origin, $project, $lng) {
  */
 function btrProject_admin_form($form, &$form_state, $origin, $project, $lng) {
   $btr_server = variable_get('btrClient_server', 'https://btr.example.org');
+
+  // The admin interface works well only on the B-Translator server.
+  if (!bcl::installed_on_server()) {
+    drupal_goto("$btr_server/btr/project/$origin/$project/$lng/admin");
+    return;
+  }
+
   $form['sync'] = array(
-    '#markup' => l(t('Synchronize'), "$btr_server/project/sync",
+    '#access' =>  btr::user_is_project_admin($origin, $project, $lng),
+    '#markup' => l(t('Synchronize'), "project/sync",
                [
-                 'external' => TRUE,
                  'attributes' => [
                    'class' => ['btn', 'form-submit'],
                    'target' => '_blank',
