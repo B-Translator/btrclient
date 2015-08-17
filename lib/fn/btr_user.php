@@ -52,3 +52,10 @@ function btr_user_set($data) {
 
   $_SESSION['btrClient']['btr_user'] = $btr_user;
 }
+
+/**
+ * Remove btr_user from the session.
+ */
+function btr_user_expire() {
+  unset($_SESSION['btrClient']['btr_user']);
+}
