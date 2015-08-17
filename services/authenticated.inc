@@ -94,6 +94,9 @@ function _btrClientWS_authenticated_translations() {
  */
 function _btrClientWS_authenticated_projects() {
   $post_operations = array(
+    'subscribe' => 'project/subscribe',
+    'unsubscribe' => 'project/unsubscribe',
+    'subscriptions' => 'project/subscriptions',
     'export_projects' => 'project/export',
     'add_string' => 'project/add_string',
     'del_string' => 'project/del_string',
