@@ -41,7 +41,7 @@ function btr_user_set($data) {
   $btr_user = array(
     'translation_lng' => $data['translation_lng'],
     'string_order' => $data['string_order'],
-    'preferred_projects' => $data['preferred_projects'],
+    'projects' => $data['projects'],
     'auxiliary_languages' => $data['auxiliary_languages'],
     'translations_per_day' => $data['translations_per_day'],
     'feedback_channels' => $data['feedback_channels'],

@@ -152,7 +152,7 @@ function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
     // Get these extra fields as well.
     'translation_lng' => 'translation_lng',
     'string_order' => 'string_order',
-    'preferred_projects' => 'preferred_projects',
+    'projects' => 'projects',
     'auxiliary_languages' => 'auxiliary_languages',
     'translations_per_day' => 'translations_per_day',
     'feedback_channels' => 'feedback_channels',

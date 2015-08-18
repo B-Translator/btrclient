@@ -68,10 +68,10 @@ function btrProject_subscribe_form($form, &$form_state, $origin, $project) {
 function _btrProject_user_subscribed($origin, $project) {
   if (!bcl::user_is_authenticated()) return FALSE;
 
-  // Check the given project on the list of preferred_projects.
+  // Check the given project on the list of projects.
   $btr_user = bcl::btr_user_get();
-  if (!isset($btr_user['preferred_projects']))  return FALSE;
-  return in_array("$origin/$project", $btr_user['preferred_projects']);
+  if (!isset($btr_user['projects']))  return FALSE;
+  return in_array("$origin/$project", $btr_user['projects']);
 }
 
 /**
