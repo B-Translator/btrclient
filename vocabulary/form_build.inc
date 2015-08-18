@@ -120,13 +120,11 @@ function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
     $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
-    $result = $btr->get_random_sguid(
-      array(
-        'target' => 'next',
-        'lng' => $lng,
-        'scope' => "vocabulary/$vocabulary",
-      ));
-    bcl::display_messages($result['messages']);
+    $result = $btr->get_random_sguid([
+                'target' => 'next',
+                'lng' => $lng,
+                'scope' => "vocabulary/$vocabulary",
+              ]);
     $sguid = $result['sguid'];
     if (!$sguid) {
       return NULL;
@@ -136,7 +134,6 @@ function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
   // Get the string details and its translations.
   $btr = wsclient_service_load('public_btr');
   $result = $btr->get_translations($sguid, $lng);
-  bcl::display_messages($result['messages']);
   $string = $result['string'];
   if (empty($string)) {
     return NULL;

@@ -22,14 +22,10 @@ function btrTranslations_random($lng = NULL, $sguid = NULL) {
     $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
-    $result = $btr->get_random_sguid(
-      array(
-        'target' => $sguid,
-        'lng' => $lng,
-      ));
-
-    bcl::display_messages($result['messages']);
-
+    $result = $btr->get_random_sguid([
+                'target' => $sguid,
+                'lng' => $lng,
+              ]);
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
@@ -51,9 +47,6 @@ function btrTranslations_random($lng = NULL, $sguid = NULL) {
   // If the request has the header 'Accept: application/json'
   // or '?format=json' return the output in JSON format and stop.
   bcl::return_json($result);
-
-  // Display any messages, warnings and errors.
-  bcl::display_messages($result['messages']);
 
   // Go to home if there is no string.
   $string = $result['string'];
