@@ -121,7 +121,7 @@ function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid([
-                'target' => 'next',
+                'target' => 'random',
                 'lng' => $lng,
                 'scope' => "vocabulary/$vocabulary",
               ]);
@@ -165,9 +165,9 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     }
   }
 
-  $buttons['next'] = array(
+  $buttons['random'] = array(
     '#type' => 'submit',
-    '#value' => t('Next'),
+    '#value' => t('Random'),
     '#attributes' => array(
       'onclick' => 'this.form.target="_self"',
     ),

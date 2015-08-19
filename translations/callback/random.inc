@@ -14,11 +14,11 @@
  */
 function btrTranslations_random($lng = NULL, $sguid = NULL) {
 
-  if ($sguid == NULL)  $sguid = 'next';
+  if ($sguid == NULL)  $sguid = 'random';
   if ($lng == 'all')  drupal_goto("translations/fr/$sguid");
   if ($lng == NULL)  $lng = bcl::get_translation_lng();
 
-  if (in_array($sguid, ['next', 'translated', 'untranslated'])) {
+  if (in_array($sguid, ['random', 'translated', 'untranslated'])) {
     $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
@@ -81,8 +81,8 @@ function _btrTranslations_random_form_buttons($lng) {
       'style' => 'margin-right:3px',
     ),
   );
-  $buttons['next'] = array(
-    '#markup' => l(t('Next'), "translations/$lng/",
+  $buttons['random'] = array(
+    '#markup' => l(t('Random'), "translations/$lng/",
                $params),
   );
   $buttons['translated'] = array(

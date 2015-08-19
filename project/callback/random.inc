@@ -15,9 +15,9 @@
  */
 function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
   if ($lng == NULL)  $lng = bcl::get_translation_lng();
-  if ($sguid == NULL)  $sguid = 'next';
+  if ($sguid == NULL)  $sguid = 'random';
 
-  if (in_array($sguid, array('next', 'translated', 'untranslated'))) {
+  if (in_array($sguid, array('random', 'translated', 'untranslated'))) {
     $btr = bcl::user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
@@ -86,8 +86,8 @@ function _btrProject_random_form_buttons($origin, $project, $lng) {
     'class' => array('btn', 'form-submit'),
     'style' => 'margin-right:3px',
   );
-  $buttons['next'] = array(
-    '#markup' => l(t('Next'),
+  $buttons['random'] = array(
+    '#markup' => l(t('Random'),
                "btr/project/$origin/$project/$lng/",
                $params),
   );
