@@ -14,7 +14,7 @@ function _btrClientWS_authenticated($service_name) {
   $service->name = $service_name;
   $service->label = 'Authenticated B-Translator Services';
   $service->type = 'rest';
-  $service->url = $server_url . '/btr/';
+  $service->url = $server_url . '/api/';
 
   $service->settings += _btrClientWS_dev();
   $service->settings += _btrClientWS_authentication();
