@@ -4,7 +4,7 @@
  * Defining blocks of btrProject.
  */
 
-require_once __DIR__ . '/select1.inc';
+require_once __DIR__ . '/select.inc';
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
@@ -25,8 +25,8 @@ function btrProject_block_info() {
   // provide initial settings for block weight, status, etc.
 
   // Select a project.
-  $blocks['select1'] = array(
-    'info' => t('B-Translator Project: Select a project (with chained listboxes)'),
+  $blocks['select'] = array(
+    'info' => t('B-Translator Project: Select a project'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 
