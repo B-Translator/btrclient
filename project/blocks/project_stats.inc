@@ -5,7 +5,7 @@
  */
 
 /**
- * Called from hook_block_view for topcontrib.
+ * Called from hook_block_view for project_stats.
  */
 function btrProject_project_stats_view() {
   // Get the arguments from the path.

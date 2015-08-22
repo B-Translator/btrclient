@@ -4,6 +4,7 @@
  * Defining blocks of btrProject.
  */
 
+require_once __DIR__ . '/select1.inc';
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
@@ -22,6 +23,12 @@ function btrProject_block_info() {
   // The required block information is a block description, which is shown
   // to the site administrator in the list of possible blocks. You can also
   // provide initial settings for block weight, status, etc.
+
+  // Select a project.
+  $blocks['select1'] = array(
+    'info' => t('B-Translator Project: Select a project (with chained listboxes)'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
 
   // Displays top 5 (or 10) contributors, over the last week (or month).
   $blocks['topcontrib'] = array(

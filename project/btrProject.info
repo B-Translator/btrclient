@@ -4,3 +4,4 @@ package = B-Translator
 core = 7.x
 
 dependencies[] = btrClient
+dependencies[] = ajax_chain_select
