@@ -8,8 +8,8 @@
  * Menu callback for 'btr/project/%/%/%/dashboard'
  */
 function btrProject_dashboard($origin, $project, $lng) {
+  $output[] = bcl::get_block('btrProject', 'select');
   $output[] = drupal_get_form('btrProject_subscribe_form', $origin, $project);
-
   $output[] = [
     'statistics' => [
       '#prefix' => '<div class="col-sm-4">',
