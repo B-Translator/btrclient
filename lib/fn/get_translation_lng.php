@@ -15,9 +15,12 @@ function get_translation_lng() {
     $btr_user = bcl::btr_user_get();
     $lng = $btr_user['translation_lng'];
   }
-  else {
+
+  if (!$lng) {
     $lng = variable_get('btrClient_translation_lng', 'fr');
-    if ($lng == 'all')  $lng = 'fr';
   }
+
+  if ($lng == 'all')  $lng = 'fr';
+
   return $lng;
 }

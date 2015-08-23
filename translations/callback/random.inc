@@ -15,8 +15,7 @@
 function btrTranslations_random($lng = NULL, $sguid = NULL) {
 
   if ($sguid == NULL)  $sguid = 'random';
-  if ($lng == 'all')  drupal_goto("translations/fr/$sguid");
-  if ($lng == NULL)  $lng = bcl::get_translation_lng();
+  if ($lng == NULL or $lng == 'all')  $lng = bcl::get_translation_lng();
 
   if (in_array($sguid, ['random', 'translated', 'untranslated'])) {
     $btr = bcl::user_is_authenticated() ?
