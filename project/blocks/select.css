@@ -1,0 +1,46 @@
+
+#block-btrproject-select .block-title,
+#edit-select-project legend,
+#edit-select-project label {
+    display: none;
+}
+
+#btrproject-select-form,
+#btrproject-select-form > div,
+#edit-select-project,
+#edit-select-project .form-item,
+#edit-select-project select {
+    display: inline-block;
+}
+
+#btrproject-select-form {
+    float: right;
+}
+/*
+#btrproject-select-form > div {
+    float: right;
+}
+*/
+
+#edit-select-project .form-item,
+#edit-select-project {
+    border: none;
+    margin: 0px;
+}
+
+#edit-select-project .form-item {
+    margin-bottom: 3px;
+}
+
+#edit-select-project .panel-body {
+    padding: 0px;
+}
+
+#edit-submit {
+    margin-left: 5px;
+    float: right;
+}
+
+#block-btrproject-select {
+    margin-bottom: 10px;
+}

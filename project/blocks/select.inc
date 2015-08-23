@@ -49,7 +49,7 @@ function btrProject_select_form($form, &$form_state, $origin, $project, $lng) {
       ],
     ],
     '#required_levels' => 3,
-    '#show_throbber' => TRUE,
+    '#show_throbber' => FALSE,
     '#progress_message' => t('Please wait..'),
     '#data_callback' => 'btrProject_select_fetchdata',
   );

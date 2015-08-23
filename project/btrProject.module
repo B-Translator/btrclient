@@ -7,6 +7,15 @@
 module_load_include('inc', 'btrProject', 'blocks/blocks');
 
 /**
+ * Implements hook_init().
+ */
+function btrProject_init() {
+  // Include the stylesheets.
+  $path = drupal_get_path('module', 'btrProject');
+  drupal_add_css($path . '/blocks/select.css');
+}
+
+/**
  * Implements hook_menu().
  */
 function btrProject_menu() {
