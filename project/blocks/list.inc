@@ -10,7 +10,7 @@
 function btrProject_list_view() {
   $block['subject'] = t('List of Projects');
   $block['content'] = array('#markup' => btrProject_list_view_html());
-  //$block['content'] = drupal_get_form('btrProject_list_form');
+  //$block['content'] = drupal_get_form('btrProject_list_block_form');
   return $block;
 }
 
@@ -59,9 +59,9 @@ function btrProject_list_view_html() {
 }
 
 /**
- * Form callback for: btrProject_list_form
+ * Form callback for: btrProject_list_block_form
  */
-function btrProject_list_form($form, &$form_state) {
+function btrProject_list_block_form($form, &$form_state) {
   $form = [
     'project_list' => [
       '#type' => 'fieldset',
