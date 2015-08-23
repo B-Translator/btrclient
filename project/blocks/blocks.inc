@@ -5,6 +5,7 @@
  */
 
 require_once __DIR__ . '/select.inc';
+require_once __DIR__ . '/list.inc';
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
