@@ -29,7 +29,7 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
     $sguid = $result['sguid'];
     if (!$sguid) {
       drupal_set_message(t('No string found!'), 'warning');
-      drupal_goto('btr/projects/');
+      drupal_goto('btr/project/list');
     }
     else {
       drupal_goto("btr/project/$origin/$project/$lng/$sguid");
