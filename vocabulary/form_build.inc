@@ -260,7 +260,7 @@ function _btrVocabulary_form_download($vocabulary) {
     ),
   );
   foreach ($download_formats as $key => $label) {
-    $url = $btr_server . "/translations/vocabulary/export/$vocabulary/$key";
+    $url = $btr_server . "/vocabulary/export/$vocabulary/$key";
     $download[$key] = array(
       '#markup' => l('<i class="fa fa-fw fa-arrow-down"></i>' . $label,
                  $url, array(
