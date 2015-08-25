@@ -8,9 +8,20 @@
  * Called from hook_block_view for list.
  */
 function btrProject_list_view() {
+  // Return cache if possible.
+  $cache = cache_get('btrProject_block_list', 'cache_btrClient');
+  if (!empty($cache) && isset($cache->data) && !empty($cache->data)) {
+    return $cache->data;
+  }
+
+  // Build the block.
   $block['subject'] = t('List of Projects');
   $block['content'] = array('#markup' => btrProject_list_view_html());
   //$block['content'] = drupal_get_form('btrProject_list_block_form');
+
+  // Cache for 12 hours.
+  cache_set('btrProject_block_list', $block, 'cache_btrClient', time() + 12 * 60 * 60);
+
   return $block;
 }
 
