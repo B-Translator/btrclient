@@ -79,6 +79,7 @@ function btrProject_menu() {
     'weight'          => 4,
   );
 
+  /*
   $items['btr/project/%/%/%/edit'] = array(
     'type'            => MENU_LOCAL_TASK,
     'title'           => 'Edit',
@@ -89,6 +90,7 @@ function btrProject_menu() {
     'access callback' => TRUE,
     'weight'          => 5,
   );
+  */
 
   $items['btr/project/%/%/%/admin'] = array(
     'type'            => MENU_LOCAL_TASK,
