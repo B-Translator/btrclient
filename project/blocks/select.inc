@@ -9,15 +9,7 @@
  */
 function btrProject_select_view() {
   // Get the arguments from the path.
-  $args = explode('/', current_path());
-  if ($args[0]=='btr' and $args[1]=='project') {
-    $origin = $args[2];
-    $project = $args[3];
-    $lng = $args[4];
-  }
-  else {
-    $origin = $project = $lng = NULL;
-  }
+  list($origin, $project, $lng) = bcl::get_project_from_path();
 
   $block['subject'] = t('Select a project');
   $block['content'] = drupal_get_form('btrProject_select_form', $origin, $project, $lng);

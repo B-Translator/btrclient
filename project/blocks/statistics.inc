@@ -9,10 +9,7 @@
  */
 function btrProject_statistics_view() {
   // Get the arguments from the path.
-  $args = explode('/', current_path());
-  $origin = $args[2];
-  $project = $args[3];
-  $lng = $args[4];
+  list($origin, $project, $lng) = bcl::get_project_from_path();
 
   // Return cache if possible.
   $cid = "btrProject_block_statistics:$lng:$origin:$project";

@@ -47,10 +47,9 @@ function btrProject_topcontrib_view() {
   // Get parameters.
   $period = variable_get('btrProject_topcontrib_period', 'week');
   $size = variable_get('btrProject_topcontrib_size', 5);
-  $args = explode('/', current_path());
-  $origin = $args[2];
-  $project = $args[3];
-  $lng = $args[4];
+
+  // Get the arguments from the path.
+  list($origin, $project, $lng) = bcl::get_project_from_path();
 
   // Return cache if possible.
   $cid = "btrProject_block_topcontrib:$period:$size:$lng:$origin:$project";
