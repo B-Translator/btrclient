@@ -9,6 +9,7 @@ require_once __DIR__ . '/list.inc';
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
+require_once __DIR__ . '/export.inc';
 require_once __DIR__ . '/latest.inc';
 
 /**
@@ -46,6 +47,12 @@ function btrProject_block_info() {
   // Project details and statistics.
   $blocks['project_stats'] = array(
     'info' => t('B-Translator Project: Project details and statistics'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Export the project.
+  $blocks['export'] = array(
+    'info' => t('B-Translator Project: Export'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 
