@@ -9,14 +9,29 @@
  */
 function btrProject_dashboard($origin, $project, $lng) {
   $output[] = bcl::get_block('btrProject', 'select');
+
   $output[] = drupal_get_form('btrProject_subscribe_form', $origin, $project);
-  $output[] = bcl::get_block('btrProject', 'export');
+
+  $export = bcl::get_block('btrProject', 'export');
+  $export['btrProject_export']['export']['#collapsible'] = TRUE;
+  $export['btrProject_export']['export']['#collapsed'] = TRUE;
+  $output[] = $export;
 
   $import = bcl::get_block('btrProject', 'import_translations');
-  unset($import['btrProject_import_translations']['import_translations']['#description']);
+  $import['btrProject_import_translations']['import_translations']['#collapsible'] = TRUE;
+  $import['btrProject_import_translations']['import_translations']['#collapsed'] = TRUE;
   $output[] = $import;
 
-  $output[] = [
+  $output[] = _btrProject_dashboard_stats();
+
+  return $output;
+}
+
+/**
+ * Reender array for stats.
+ */
+function _btrProject_dashboard_stats() {
+  return [
     'statistics' => [
       '#prefix' => '<div class="col-sm-4">',
       bcl::get_block('btrProject', 'statistics'),
@@ -33,8 +48,6 @@ function btrProject_dashboard($origin, $project, $lng) {
       '#suffix' => '</div>',
     ],
   ];
-
-  return $output;
 }
 
 /**
