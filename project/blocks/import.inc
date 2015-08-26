@@ -11,7 +11,7 @@ function btrProject_import_view() {
   // Get the arguments from the path.
   list($origin, $project, $lng) = bcl::get_project_from_path();
 
-  $block['subject'] = t('Import Translations');
+  $block['subject'] = t('Import Project');
   $block['content'] = drupal_get_form('btrProject_import_form', $origin, $project, $lng);
   return $block;
 }
@@ -87,6 +87,11 @@ function btrProject_import_form_validate($form, &$form_state) {
  * Implement hook form_submit() for the form btrProject_import_form
  */
 function btrProject_import_form_submit($form, &$form_state) {
+  if (!bcl::user_is_authenticated()) {
+    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+    return;
+  }
+
   $messages = bcl::upload_file_to_server('project/import', [
                 'origin' => $form_state['values']['origin'],
                 'project' => $form_state['values']['project'],

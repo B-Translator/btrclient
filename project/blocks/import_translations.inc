@@ -49,7 +49,7 @@ import back to B-Translator the translated/corrected PO files.</p>
       ],
 
       'submit' => [
-        '#value' => t('Upload'),
+        '#value' => t('Import'),
         '#type' => 'submit',
       ],
     ],
@@ -69,6 +69,11 @@ function btrProject_import_translations_form_validate($form, &$form_state) {
  * Implement hook form_submit() for the form btrProject_import_translations_form
  */
 function btrProject_import_translations_form_submit($form, &$form_state) {
+  if (!bcl::user_is_authenticated()) {
+    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+    return;
+  }
+
   $messages = bcl::upload_file_to_server('translations/import', [
                 'lng' => bcl::get_translation_lng(),
               ]);
