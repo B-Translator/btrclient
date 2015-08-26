@@ -69,7 +69,7 @@ function btrProject_import_translations_form_validate($form, &$form_state, $exte
  * Implement hook form_submit() for the form btrProject_import_translations_form
  */
 function btrProject_import_translations_form_submit($form, &$form_state) {
-  $messages = bcl::upload_file('translations/import', [
+  $messages = bcl::upload_file_to_server('translations/import', [
                 'lng' => bcl::get_translation_lng(),
               ]);
   bcl::display_messages($messages);

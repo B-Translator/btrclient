@@ -99,7 +99,7 @@ function btrTranslations_importproject_form_validate($form, &$form_state) {
  * Implements hook form_submit() for btrTranslations_importproject_form.
  */
 function btrTranslations_importproject_form_submit($form, &$form_state) {
-  $messages = bcl::upload_file('project/import', [
+  $messages = bcl::upload_file_to_server('project/import', [
                 'origin' => $form_state['values']['origin'],
                 'project' => $form_state['values']['project'],
               ]);

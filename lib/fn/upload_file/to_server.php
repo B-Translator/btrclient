@@ -1,20 +1,20 @@
 <?php
 /**
  * @file
- * Function upload_file().
+ * Function upload_file_to_server().
  */
 
 namespace BTranslator\Client;
 use \bcl;
 
 /**
- * Make an http request for uploading a file.
+ * Make an http request for uploading a file to the B-Translator server.
  *
  * This is done with curl because wsclient cannot handle it.
  *
  * TODO: Replace this function and wsclient by Guzzle.
  */
-function upload_file($endpoint, $params = array()) {
+function upload_file_to_server($endpoint, $params = array()) {
   $btr = wsclient_service_load('btr');
 
   // Get an access_token.
