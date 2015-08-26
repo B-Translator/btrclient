@@ -25,8 +25,7 @@ function upload_file($endpoint, $params = array()) {
     $access_token = $oauth2_client->getAccessToken();
   }
   catch (\Exception $e) {
-    drupal_set_message($e->getMessage(), 'error');
-    return;
+    return [[$e->getMessage(), 'error']];
   }
 
   // Get the details of the uploaded file.
@@ -54,13 +53,16 @@ function upload_file($endpoint, $params = array()) {
 
   // Check for any errors and get the result.
   if (curl_errno($ch)) {
-    $messages = array(
-      array(curl_error($ch), 'error'),
-    );
+    $messages = [[curl_error($ch), 'error']];
   }
   else {
     $result = json_decode($result, TRUE);
-    $messages = $result['messages'];
+    if (isset($result['messages'])) {
+      $messages = $result['messages'];
+    }
+    else {
+      $messages = [[serialize($result), 'error']];
+    }
   }
   curl_close($ch);
 
