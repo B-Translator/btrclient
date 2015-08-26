@@ -10,6 +10,7 @@ require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
 require_once __DIR__ . '/export.inc';
+require_once __DIR__ . '/import.inc';
 require_once __DIR__ . '/import_translations.inc';
 require_once __DIR__ . '/latest.inc';
 
@@ -54,6 +55,12 @@ function btrProject_block_info() {
   // Export the project.
   $blocks['export'] = array(
     'info' => t('B-Translator Project: Export'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Import.
+  $blocks['import'] = array(
+    'info' => t('B-Translator Project: Import'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 

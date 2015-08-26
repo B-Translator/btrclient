@@ -60,7 +60,7 @@ import back to B-Translator the translated/corrected PO files.</p>
 /**
  * Implements hook form_validate() for btrProject_import_translations_form.
  */
-function btrProject_import_translations_form_validate($form, &$form_state, $extensions =NULL) {
+function btrProject_import_translations_form_validate($form, &$form_state) {
   bcl::upload_file_validate();
 }
 
