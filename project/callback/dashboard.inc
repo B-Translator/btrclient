@@ -11,6 +11,11 @@ function btrProject_dashboard($origin, $project, $lng) {
   $output[] = bcl::get_block('btrProject', 'select');
   $output[] = drupal_get_form('btrProject_subscribe_form', $origin, $project);
   $output[] = bcl::get_block('btrProject', 'export');
+
+  $import = bcl::get_block('btrProject', 'import_translations');
+  unset($import['btrProject_import_translations']['import_translations']['#description']);
+  $output[] = $import;
+
   $output[] = [
     'statistics' => [
       '#prefix' => '<div class="col-sm-4">',
