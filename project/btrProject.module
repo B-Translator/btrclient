@@ -20,12 +20,20 @@ function btrProject_init() {
  * Implements hook_menu().
  */
 function btrProject_menu() {
+  $items['btr/project'] = array(
+    'type'            => MENU_NORMAL_ITEM,
+    'title'           => 'Project List',
+    'description'     => 'List of all the imported projects.',
+    'page callback'   => 'btrProject_projlist',
+    'file'            => 'callback/projlist.inc',
+    'access callback' => TRUE,
+  );
+
   $items['btr/project/list'] = array(
     'type'            => MENU_NORMAL_ITEM,
     'title'           => 'Project List',
     'description'     => 'List of all the imported projects.',
     'page callback'   => 'btrProject_projlist',
-    'page arguments'  => array(2, 3, 4),
     'file'            => 'callback/projlist.inc',
     'access callback' => TRUE,
   );
