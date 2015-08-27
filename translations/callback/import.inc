@@ -9,14 +9,17 @@
  * Menu callback for 'translations/import'.
  */
 function btrTranslations_import() {
-  return bcl::get_block('btrProject', 'import_translations');
-}
+  $import = bcl::get_block('btrProject', 'import_translations');
+  $import['btrProject_import_translations']['import_translations']['#collapsible'] = TRUE;
+  $import['btrProject_import_translations']['import_translations']['#collapsed'] = TRUE;
+  $output[] = $import;
 
-/**
- * Menu callback for 'translations/import_project'.
- * Import strings and translations from PO files.
- * It will create/update a project (both strings and translations).
- */
-function btrTranslations_importproject() {
-  return bcl::get_block('btrProject', 'import');
+  if (bcl::user_access('btranslator-import')) {
+    $import = bcl::get_block('btrProject', 'import');
+    $import['btrProject_import']['import']['#collapsible'] = TRUE;
+    $import['btrProject_import']['import']['#collapsed'] = TRUE;
+    $output[] = $import;
+  }
+
+  return $output;
 }
