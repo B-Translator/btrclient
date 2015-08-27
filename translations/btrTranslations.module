@@ -48,24 +48,12 @@ function btrTranslations_menu() {
 
   $items['translations/import'] = array(
     'type'            => MENU_LOCAL_TASK,
-    'title'           => 'Import Translations',
+    'title'           => 'Import',
     'description'     => 'Import translations from PO files.',
     'page callback'   => 'btrTranslations_import',
     'file'            => 'callback/import.inc',
-    'access callback' => 'btr_user_access',
-    'access arguments' => array('btranslator-import'),
+    'access callback' => 'btr_user_is_authenticated',
     'weight'          => 4,
-  );
-
-  $items['translations/import_project'] = array(
-    'type'            => MENU_LOCAL_TASK,
-    'title'           => 'Import Project',
-    'description'     => 'Import project from PO/POT file(s).',
-    'page callback'   => 'btrTranslations_importproject',
-    'file'            => 'callback/import.inc',
-    'access callback' => 'btr_user_access',
-    'access arguments' => array('btranslator-import'),
-    'weight'          => 5,
   );
 
   return $items;
@@ -76,11 +64,4 @@ function btrTranslations_menu() {
  */
 function btr_user_is_authenticated() {
   return bcl::user_is_authenticated();
-}
-
-/**
- * Check whether the current user has the given permission (on the server).
- */
-function btr_user_access($permission) {
-  return bcl::user_access($permission);
 }

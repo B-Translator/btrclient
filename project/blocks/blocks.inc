@@ -5,11 +5,14 @@
  */
 
 require_once __DIR__ . '/select.inc';
+require_once __DIR__ . '/subscribe.inc';
 require_once __DIR__ . '/list.inc';
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
 require_once __DIR__ . '/export.inc';
+require_once __DIR__ . '/import.inc';
+require_once __DIR__ . '/import_translations.inc';
 require_once __DIR__ . '/latest.inc';
 
 /**
@@ -29,6 +32,12 @@ function btrProject_block_info() {
   // Select a project.
   $blocks['select'] = array(
     'info' => t('B-Translator Project: Select a project'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Subscribe to a project.
+  $blocks['subscribe'] = array(
+    'info' => t('B-Translator Project: Subscribe to a project'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 
@@ -53,6 +62,18 @@ function btrProject_block_info() {
   // Export the project.
   $blocks['export'] = array(
     'info' => t('B-Translator Project: Export'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Import.
+  $blocks['import'] = array(
+    'info' => t('B-Translator Project: Import'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Import translations.
+  $blocks['import_translations'] = array(
+    'info' => t('B-Translator Project: Import translations'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 

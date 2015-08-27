@@ -8,22 +8,22 @@
  * Menu callback for 'btr/project/%/%/%/admin'
  */
 function btrProject_admin($origin, $project, $lng) {
-  $output[] = drupal_get_form('btrProject_admin_form', $origin, $project, $lng);
-  return $output;
-}
-
-/**
- * Form callback for: btrProject_admin_form
- */
-function btrProject_admin_form($form, &$form_state, $origin, $project, $lng) {
-  $btr_server = variable_get('btrClient_server', 'https://btr.example.org');
-
   // The admin interface works well only on the B-Translator server.
   if (!bcl::installed_on_server()) {
+    $btr_server = variable_get('btrClient_server', 'https://btr.example.org');
     drupal_goto("$btr_server/btr/project/$origin/$project/$lng/admin");
     return;
   }
 
+  $output[] = drupal_get_form('btrProject_admin_sync', $origin, $project, $lng);
+
+  return $output;
+}
+
+/**
+ * Form callback for: btrProject_admin_sync
+ */
+function btrProject_admin_sync($form, &$form_state, $origin, $project, $lng) {
   $form['sync'] = array(
     '#access' =>  btr::user_is_project_admin($origin, $project, $lng),
     '#markup' => l(t('Synchronize'), "project/sync",
