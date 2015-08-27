@@ -5,6 +5,7 @@
  */
 
 require_once __DIR__ . '/select.inc';
+require_once __DIR__ . '/subscribe.inc';
 require_once __DIR__ . '/list.inc';
 require_once __DIR__ . '/topcontrib.inc';
 require_once __DIR__ . '/statistics.inc';
@@ -31,6 +32,12 @@ function btrProject_block_info() {
   // Select a project.
   $blocks['select'] = array(
     'info' => t('B-Translator Project: Select a project'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Subscribe to a project.
+  $blocks['subscribe'] = array(
+    'info' => t('B-Translator Project: Subscribe to a project'),
     'cache' => DRUPAL_CACHE_CUSTOM,
   );
 
