@@ -14,6 +14,7 @@ require_once __DIR__ . '/export.inc';
 require_once __DIR__ . '/import.inc';
 require_once __DIR__ . '/import_translations.inc';
 require_once __DIR__ . '/latest.inc';
+require_once __DIR__ . '/diffs.inc';
 
 /**
  * Implements hook_block_info().
@@ -81,6 +82,12 @@ function btrProject_block_info() {
   $blocks['latest'] = array(
     'info' => t('B-Translator Project: Latest contributions'),
     'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Project Diffs.
+  $blocks['diffs'] = array(
+    'info' => t('B-Translator Project: Project diffs'),
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   return $blocks;
