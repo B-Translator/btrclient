@@ -3,7 +3,7 @@ core = 7.x
 
 defaults[projects][subdir] = contrib
 
-projects[ctools] = 1.4
+projects[ctools] = 1.9
 projects[libraries] = 2.2
 projects[entity] = 1.5
 
@@ -13,9 +13,9 @@ projects[wsclient][version] = 1.0
 projects[wsclient][patch][] = https://drupal.org/files/wsclient-1285310-http_basic_authentication-14.patch
 projects[wsclient][patch][] = https://drupal.org/files/issues/wsclient-2138617-oauth2_support.patch
 
-projects[oauth2_login] = 1.x-dev
+projects[oauth2_login] = 1.5
 
-projects[features] = 2.2
+projects[features] = 2.6
 projects[strongarm] = 2.0
 
 projects[disqus] = 1.10
