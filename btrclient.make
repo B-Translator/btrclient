@@ -22,10 +22,13 @@ projects[disqus] = 1.10
 projects[srrssb] = 1.0
 projects[inside_iframe] = 1.0
 
-projects[ajax_chain_select][download][type] = git
-projects[ajax_chain_select][download][url] = https://github.com/B-Translator/ajax_chain_select
-projects[ajax_chain_select][download][branch] = 7.x-1.x
+projects[ajax_chain_select][download][type] = get
+projects[ajax_chain_select][download][url] = https://github.com/B-Translator/ajax_chain_select/archive/ajax-chain-select-7.x-1.0.tar.gz
+projects[ajax_chain_select][directory_name] = ajax_chain_select
+
+;projects[ajax_chain_select][download][type] = git
 ;projects[ajax_chain_select][download][url] = http://git.drupal.org/sandbox/SajjadZaheer/2407675.git
+;projects[ajax_chain_select][download][branch] = 7.x-1.x
 ;projects[ajax_chain_select][patch][] = https://www.drupal.org/files/issues/string-id-2555501-1.patch
 ;projects[ajax_chain_select][patch][] = https://www.drupal.org/files/issues/variable-rename-2555521-1.patch
 ;projects[ajax_chain_select][patch][] = https://www.drupal.org/files/issues/fix-hidden-input-fields-2555595-1.patch
