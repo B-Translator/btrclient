@@ -25,10 +25,10 @@ Drupal.behaviors.btrClient_editor = {
   // Add behaviors to placeholders so that they highlight the corrsponding
   // placeholder(s) with the same name on the same table row.
   $('em.l10n-placeholder')
-    .live('mouseover', function() {
+    .on('mouseover', function() {
       $(this).closest('tr').find('.l10n-placeholder:contains("' + $(this).text() + '")').addClass('highlight');
     })
-    .live('mouseout', function() {
+    .on('mouseout', function() {
       $('.l10n-placeholder.highlight').removeClass('highlight');
     });
 
