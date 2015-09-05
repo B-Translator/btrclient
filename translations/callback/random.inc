@@ -76,7 +76,7 @@ function btrTranslations_random_form($form, &$form_state, $sguid, $string, $lng)
 function _btrTranslations_random_form_buttons($lng) {
   $params = array(
     'attributes' => array(
-      'class' => array('btn', 'form-submit'),
+      'class' => array('btn', 'btn-default', 'form-submit'),
       'style' => 'margin-right:3px',
     ),
   );

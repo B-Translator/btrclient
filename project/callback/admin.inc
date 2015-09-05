@@ -29,7 +29,7 @@ function btrProject_admin_sync($form, &$form_state, $origin, $project, $lng) {
     '#markup' => l(t('Synchronize'), "project/sync",
                [
                  'attributes' => [
-                   'class' => ['btn', 'form-submit'],
+                   'class' => ['btn', 'btn-default', 'form-submit'],
                    'target' => '_blank',
                  ],
                  'query' => [

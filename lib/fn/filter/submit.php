@@ -18,7 +18,7 @@ function filter_submit($form, &$form_state) {
   }
   */
 
-  if ($form_state['values']['op'] == '<i class="fa fa-refresh"></i>') {
+  if ($form_state['values']['op'] == '<span class="glyphicon glyphicon-repeat"></span>') {
     // Redirect (with a GET request) keeping the relevant filters intact
     // in the URL.
     $form_state['redirect'] = array(

@@ -63,26 +63,6 @@ td.sguid a {
 }
 
 /**
- * Styles of the download button.
- */
-#form-item-download {
-    display: inline-block;
-}
-#form-item-download input[type="checkbox"] {
-    display: none;
-    width: 1px;
-}
-#form-item-download .checked {
-    display: none;
-}
-#form-item-download input[type="checkbox"]:checked ~ .checked {
-    display: inline-block;
-}
-#form-item-download input[type="checkbox"]:checked ~ .unchecked {
-    display: none;
-}
-
-/**
  * Fix the styles of the search filter.
  */
 #edit-basic {
@@ -102,29 +82,6 @@ td.sguid a {
     margin: 0px;
     width: 100%;
     overflow: hidden;
-}
-
-#form-item-options {
-    display: inline-block;
-    margin: 0px;
-    float: right;
-    margin-right: 3px;
-}
-#form-item-options .btn {
-    padding: 4px 8px;
-}
-#form-item-options input[type="checkbox"] {
-    display: none;
-    width: 1px;
-}
-#form-item-options .checked {
-    display: none;
-}
-#form-item-options input[type="checkbox"]:checked ~ .checked {
-    display: inline-block;
-}
-#form-item-options input[type="checkbox"]:checked ~ .unchecked {
-    display: none;
 }
 
 #edit-advanced legend {

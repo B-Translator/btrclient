@@ -43,7 +43,7 @@ function btrVocabulary_form($form, &$form_state, $vocabulary, $term) {
 
     // submit button
     'submit' => [
-      '#value' => '<i class="fa fa-refresh"></i>',
+      '#value' => '<span class="glyphicon glyphicon-repeat"></span>',
       '#type' => 'submit',
       '#attributes' => [
         'class' => ['btn-primary'],
@@ -91,7 +91,7 @@ function theme_btrVocabulary_table($variables) {
   foreach (element_children($element) as $key) {
     $rows[] =  array(
       array(
-        'class' => array('translation'),
+        'class' => ['translation'],
         'data' => theme('btrClient_translate_translation_list', array('element' => $element[$key])),
       ));
   }
@@ -99,7 +99,7 @@ function theme_btrVocabulary_table($variables) {
   return theme('table', array(
       'rows' => $rows,
       'attributes' => array(
-        'class' => array('l10n-table'),
+        'class' => ['l10n-table'],
       )));
 }
 
@@ -186,14 +186,14 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
 
   // List all items.
   $attributes = array(
-    'class' => array('btn', 'form-submit'),
+    'class' => ['btn', 'btn-default', 'form-submit'],
     'style' => 'margin-left: 10px;',
   );
   if (inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['list_all'] = array(
-    '#markup' => l('<i class="fa fa-fw fa-list"></i>',
+    '#markup' => l('<span class="glyphicon glyphicon-list"></span>',
                "btr/project/vocabulary/$vocabulary/$lng/list",
                ['html' => TRUE, 'attributes' => $attributes]),
   );
@@ -206,14 +206,14 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
     $url = "http://v.btranslator.org/?proj=$vocabulary&lng=$lng#$term";
   }
   $attributes = array(
-    'class' => ['btn', 'form-submit'],
+    'class' => ['btn', 'btn-default', 'form-submit'],
     'style' => 'margin-left: 4px;',
   );
   if (!inside_iframe()) {
     $attributes['target'] = '_blank';
   }
   $buttons['mobile'] = array(
-    '#markup' => l('<i class="fa fa-fw fa-mobile"></i>', $url,
+    '#markup' => l('<span class="glyphicon glyphicon-phone"></span>', $url,
                array(
                  'html' => TRUE,
                  'attributes' => $attributes,
@@ -221,17 +221,16 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
   );
 
   // Display/hide download buttons.
-  $buttons['download'] = array(
+  $buttons['download'] = [
     '#markup' => '
-        <div id="form-item-download">
-          <label>
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-default">
             <input type="checkbox" id="edit-download" name="download">
-            <i class="btn fa fa-fw fa-download unchecked"></i>
-            <i class="btn fa fa-fw fa-download checked active"></i>
+            <span class="glyphicon glyphicon-download-alt"></span>
           </label>
         </div>
-        ',
-  );
+    ',
+  ];
 
   return $buttons;
 }
@@ -243,32 +242,26 @@ function _btrVocabulary_form_download($vocabulary) {
   $btr_server = variable_get('btrClient_server');
 
   // Downloading the whole vocabulary in different formats.
-  $download_formats = array(
+  $download_formats = [
     'txt1' => 'TXT-1',
     'txt2' => 'TXT-2',
     'org' => 'ORG',
     //'json' => 'JSON',
-  );
-  $download = array(
+  ];
+  $download = [
     '#type' => 'fieldset',
-    '#states' => array(
-      'visible' => array(
-        ':input[name="download"]' => ['checked' => TRUE],
-      )),
-    '#attributes' => array(
-      'style' => 'float: right; margin: 5px;',
-    ),
-  );
+    '#states' => ['visible' => [':input[name="download"]' => ['checked' => TRUE],]],
+    '#attributes' => ['style' => 'float: right; border: none; margin: 0px;'],
+  ];
   foreach ($download_formats as $key => $label) {
     $url = $btr_server . "/vocabulary/export/$vocabulary/$key";
-    $download[$key] = array(
-      '#markup' => l('<i class="fa fa-fw fa-arrow-down"></i>' . $label,
-                 $url, array(
-                   'html' => TRUE,
-                   'attributes' => [
-                     'class' => ['btn'],
-                     'style' => 'margin-right: 3px;',
-                   ])));
+    $download[$key] = [
+      '#markup' => "
+          <a href='$url' class='btn btn-default'>
+            <span class='glyphicon glyphicon-download'></span> $label
+          </a>
+      ",
+    ];
   }
   return $download;
 }

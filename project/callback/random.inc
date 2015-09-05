@@ -83,7 +83,7 @@ function btrProject_random_form($form, &$form_state, $origin, $project, $lng, $s
  */
 function _btrProject_random_form_buttons($origin, $project, $lng) {
   $params['attributes'] = array(
-    'class' => array('btn', 'form-submit'),
+    'class' => array('btn', 'btn-default', 'form-submit'),
     'style' => 'margin-right:3px',
   );
   $buttons['random'] = array(
