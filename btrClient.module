@@ -18,7 +18,7 @@ function btrClient_init() {
 
   // Include the stylesheets.
   $path = drupal_get_path('module', 'btrClient');
-  drupal_add_css($path . '/css/styles.css');
+  drupal_add_css($path . '/css/styles.css.less');
 }
 
 /**
@@ -26,7 +26,7 @@ function btrClient_init() {
  */
 function btrClient_inside_iframe() {
   $path = drupal_get_path('module', 'btrClient');
-  drupal_add_css($path . '/css/iframe.css');
+  drupal_add_css($path . '/css/iframe.css.less');
 }
 
 /**
