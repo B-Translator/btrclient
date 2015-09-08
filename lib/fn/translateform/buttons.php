@@ -15,7 +15,7 @@ function translateform_buttons($lng, $sguid = NULL) {
     $buttons['details'] = [
       '#markup' => l('#', "translations/$lng/$sguid", [
                    'attributes' => [
-                     'class' => ['btn'],
+                     'class' => ['btn', 'btn-default'],
                      'style' => 'font-weight:bold; margin-right:3px;',
                      'target' => '_blank',
                    ]]),

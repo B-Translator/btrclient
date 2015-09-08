@@ -1,0 +1,62 @@
+
+#block-btrproject-select {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 10px;
+
+    .block-title {
+	display: inline-block;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: medium;
+	color: #666;
+	margin-right: 3px;
+    }
+    .block-title:after {
+	content: ': ';
+    }
+}
+
+#btrproject-select-form {
+    display: inline-block;
+
+    div {
+	display: inline-block;
+
+	.form-submit {
+	    float: right;
+	}
+
+	.panel {
+	    display: inline-block;
+	    border: none;
+	    margin: 0px;
+
+	    .panel-heading {
+		display: none;
+	    }
+
+	    .panel-body {
+		padding: 0px;
+
+		.form-item {
+		    display: inline-block;
+		    margin-bottom: 3px;
+
+		    label {
+			display: none;
+		    }
+
+		    select {
+			display: inline-block;
+		    }
+		}
+
+		.acs-dc, .acs-dch {
+		    display: none;
+		}
+	    }
+	}
+    }
+}

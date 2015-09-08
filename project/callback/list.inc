@@ -123,7 +123,7 @@ function btrProject_listfilter_form($form, &$form_state, $filter) {
 
     // buttons
     'submit' => [
-      '#value' => '<i class="fa fa-refresh"></i>', //t('Go'),
+      '#value' => '<span class="glyphicon glyphicon-repeat"></span>', //t('Go'),
       '#type' => 'submit',
       '#attributes' => ['class' => ['btn-primary']],
     ],

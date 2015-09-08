@@ -28,7 +28,7 @@ function filter_form($form_values) {
 
       // buttons
       'submit' => [
-        '#value' => '<i class="fa fa-refresh"></i>',
+        '#value' => '<span class="glyphicon glyphicon-repeat"></span>',
         '#type' => 'submit',
         '#attributes' => ['class' => ['btn-primary']],
       ],
@@ -36,14 +36,13 @@ function filter_form($form_values) {
       // advanced search checkbox
       'options' => [
         '#markup' => '
-            <div id="form-item-options">
-              <label>
+            <div class="btn-group" data-toggle="buttons" style="float: right;">
+              <label class="btn btn-default">
                 <input type="checkbox" id="edit-options" name="options">
-                <i class="btn fa fa-fw fa-ellipsis-v unchecked"></i>
-                <i class="btn fa fa-fw fa-ellipsis-v checked active"></i>
+                <span class="glyphicon glyphicon-option-vertical"></span>
               </label>
             </div>
-            ',
+        ',
       ],
 
       // words to be searched

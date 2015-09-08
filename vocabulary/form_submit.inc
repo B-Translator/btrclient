@@ -11,7 +11,7 @@ function btrVocabulary_form_submit($form, &$form_state) {
   $form_values = $form_state['values'];
   $op = $form_values['op'];
 
-  if ($op == '<i class="fa fa-refresh"></i>') {
+  if ($op == '<span class="glyphicon glyphicon-repeat"></span>') {
     btrVocabulary_form_go($form_state);
   }
   elseif ($op == t('Login')) {

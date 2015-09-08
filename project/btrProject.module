@@ -12,8 +12,9 @@ module_load_include('inc', 'btrProject', 'blocks/blocks');
 function btrProject_init() {
   // Include the stylesheets.
   $path = drupal_get_path('module', 'btrProject');
-  drupal_add_css($path . '/blocks/list.css');
-  drupal_add_css($path . '/blocks/select.css');
+  drupal_add_css($path . '/blocks/list.css.less');
+  drupal_add_css($path . '/blocks/select.css.less');
+  drupal_add_css($path . '/blocks/subscribe.css.less');
 }
 
 /**

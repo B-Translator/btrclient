@@ -51,7 +51,7 @@ function _btrProject_diffs_links($url_diff_dl, $nr) {
                  'external' => TRUE,
                  'absolute' => TRUE,
                  'attributes' => [
-                   'class' => ['btn'],
+                   'class' => ['btn', 'btn-default'],
                  ]]),
   ];
   $buttons['get_ediff'] = [
@@ -59,7 +59,7 @@ function _btrProject_diffs_links($url_diff_dl, $nr) {
                  'external' => TRUE,
                  'absolute' => TRUE,
                  'attributes' => [
-                   'class' => ['btn'],
+                   'class' => ['btn', 'btn-default'],
                  ]]),
   ];
 
