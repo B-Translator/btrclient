@@ -14,6 +14,7 @@ function btrProject_init() {
   $path = drupal_get_path('module', 'btrProject');
   drupal_add_css($path . '/blocks/list.css.less');
   drupal_add_css($path . '/blocks/select.css.less');
+  drupal_add_css($path . '/blocks/subscribe.css.less');
 }
 
 /**
