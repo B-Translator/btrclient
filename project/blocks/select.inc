@@ -32,7 +32,7 @@ function btrProject_select_form($form, &$form_state, $origin, $project, $lng) {
       'project' => [
         '#title' => t('Project'),
         '#empty_option' => t('- Project -'),
-        '#default_value' => $project,
+        '#default_value' => "$origin:$project",
       ],
       'lng' => [
         '#title' => t('Language'),
