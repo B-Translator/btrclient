@@ -103,7 +103,9 @@ function theme_btrClient_translate_source($variables) {
   $output .= '<label class="l10n-string' . $filter_match . '">' . drupal_render($element['source']['string']) . '</label>';
   $output .= theme('btrClient_in_context', array('source' => $element['#string']));
 
-  $url = variable_get('btrClient_server') . '/ajax/string_details/' . $element['#string']['sguid'];
+  $lng = bcl::get_translation_lng();
+  $sguid = $element['#string']['sguid'];
+  $url = variable_get('btrClient_server') . '/ajax/string_details/' . $lng . '/' . $sguid;
   $output .= '<div class="l10n-usage"><a href="' . $url . '" class="l10n-more-link" title="' . t('Show the string context and a list of projects where this string is used.') . '">' . t('Show string details.') . '</a><div class="l10n-more-info"></div></div>';
 
   // TODO: Improve alternatives in other languages.
