@@ -72,8 +72,12 @@ function _theme_btrClient_translate_table_2col($element) {
     $sguid = $element[$key]['#string']['sguid'];
     $rows[] = array(
       array(
-        'class' => array('sguid'),
-        'data' => l(t('#'), "translations/$lng/$sguid", array(), array('attributes' => array('title' => t('Direct and permanent link to this string.')))),
+        'class' => ['sguid'],
+        'data' => l(t('#'), "translations/$lng/$sguid", [
+                  'attributes' => [
+                    'title' => t('Direct and permanent link to this string.'),
+                    'class' => ['btn', 'btn-default'],
+                  ]]),
       ),
       array(
         'class' => array('source'),
