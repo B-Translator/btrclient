@@ -23,29 +23,44 @@
 }
 
 #edit-advanced {
-    .panel {
-	margin-bottom: 5px;
+    > .panel-body {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px !important;
 
-	.panel-heading {
-	    font-size: 14px;
-	    line-height: 30px;
-	    margin-bottom: 0px;
-	    border: none;
-
-	    .panel-title {
-		text-decoration: none;
-		padding: 5px;
-		background-color: #eeeeee;
-		border: 1px solid #dddddd;
-		border-radius: 3px;
-	    }
-	}
-
-	.panel-collapse {
-	    border: 1px solid rgb(229, 229, 229);
-	    border-radius: 5px;
-	    padding: 10px;
+	.panel {
 	    margin-bottom: 5px;
+
+	    .panel-heading {
+		font-size: 14px;
+		line-height: 30px;
+		margin-bottom: 0px;
+		border: none;
+
+		.panel-title {
+		    text-decoration: none;
+		    padding: 5px;
+		    background-color: #eeeeee;
+		    border: 1px solid #dddddd;
+		    border-radius: 3px;
+		}
+	    }
+
+	    .panel-collapse {
+		border: 1px solid rgb(229, 229, 229);
+		border-radius: 5px;
+		padding: 10px;
+		margin-bottom: 5px;
+
+		.form-item {
+		    margin-top: 10px;
+		    margin-bottom: 0px;
+
+		    .form-checkbox {
+			margin-left: 0px;
+		    }
+		}
+	    }
 	}
     }
 }
