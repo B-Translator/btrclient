@@ -11,7 +11,7 @@ use \bcl;
 /**
  * Validate the file uploaded from the import form.
  */
-function upload_file_validate($extensions =NULL) {
+function uploadfile_validate($extensions =NULL) {
   // Check that a file is uploaded.
   $file_tmp_name = $_FILES['files']['tmp_name']['file'];
   if ($file_tmp_name == '') {

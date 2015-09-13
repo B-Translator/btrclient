@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Function upload_file_to_server().
+ * Function uploadfile_to_server().
  */
 
 namespace BTranslator\Client;
@@ -14,7 +14,7 @@ use \bcl;
  *
  * TODO: Replace this function and wsclient by Guzzle.
  */
-function upload_file_to_server($endpoint, $params = array()) {
+function uploadfile_to_server($endpoint, $params = array()) {
   $btr = wsclient_service_load('btr');
 
   // Get an access_token.

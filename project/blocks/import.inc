@@ -79,7 +79,7 @@ strings to them) and certain assumptions are made about them.</p> ',
  */
 function btrProject_import_form_validate($form, &$form_state) {
   $extensions = 'pot po tar gz tgz bz2 xz 7z zip';
-  bcl::upload_file_validate($extensions);
+  bcl::uploadfile_validate($extensions);
 }
 
 
@@ -92,7 +92,7 @@ function btrProject_import_form_submit($form, &$form_state) {
     return;
   }
 
-  $messages = bcl::upload_file_to_server('project/import', [
+  $messages = bcl::uploadfile_to_server('project/import', [
                 'origin' => $form_state['values']['origin'],
                 'project' => $form_state['values']['project'],
               ]);
