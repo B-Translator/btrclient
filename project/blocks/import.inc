@@ -21,26 +21,26 @@ function btrProject_import_view() {
  */
 function btrProject_import_form($form, &$form_state, $origin, $project, $lng) {
   $description = t('
-<p>This form is for creating/updating custom translation projects. The PO/POT files
-that are uploaded will be used for importing strings and translations. If
-there are no POT files, then the PO files will be used both for importing
-strings and for importing translations. If there are POT files and PO files,
-their names have to match (except for the extension).</p>
 
-<p>If you want to create a vocabulary, use <strong>vocabulary</strong> as the
-origin of the project, and add the suffix \'<strong>_!lng</strong>\' to the
-project name. Use <strong>msgctxt "project_name"</strong> as the context of each
-string in the PO/POT file. Also the uploaded PO file must have the same name
-as the project, for example <strong>ICT_sq.po</strong>. These restrictions are
-needed because vocabularies are pseudo-projects (for example you can add
-strings to them) and certain assumptions are made about them.</p> ',
-                 ['!lng' => bcl::get_translation_lng()]
+<p>Create a project or update an existing one by importing the
+<strong>POT</strong> and <strong>PO</strong> files of the project.
+<ul>
+  <li>Put all the files inside an archive of type: <strong>tgz, bz2, 7z, zip</strong></li>
+  <li>The POT files should be placed in the subfolder <strong>pot/</strong>,
+      directly in the root folder of the archive.</li>
+  <li>The PO files of a language should be placed in the subfolder named after the code
+      of that language. Supported language codes are these: <strong>!lng_codes</strong></li>
+  <li> The path and name of each PO file should be the same as the corresponding POT file,
+       except for the extension (.po instead of .pot).</li>
+</ul>
+</p>',
+                 ['!lng_codes' => implode(', ', array_keys(bcl::get_languages()))]
   );
 
   $form = [
     'import' => [
       '#type' => 'fieldset',
-      '#title' => t('Create a project or update an existing one by importing POT/PO files'),
+      '#title' => t('Import the POT and PO files of a project'),
       '#description' => $description,
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
@@ -61,8 +61,8 @@ strings to them) and certain assumptions are made about them.</p> ',
 
       'file' => [
         '#type' => 'file',
-        '#title' => t('PO File(s)'),
-        '#description' => t('Upload a PO file. If you have many files, upload them as an archive (tar, tgz, bz2, 7z, zip).'),
+        '#title' => t('POT and PO files'),
+        //'#description' => t('Upload an archive (tgz, bz2, 7z, zip) of the POT and PO files of the project.'),
       ],
 
       'submit' => [
@@ -78,7 +78,7 @@ strings to them) and certain assumptions are made about them.</p> ',
  * Implements hook form_validate() for btrProject_import_form.
  */
 function btrProject_import_form_validate($form, &$form_state) {
-  $extensions = 'pot po tar gz tgz bz2 xz 7z zip';
+  $extensions = 'tgz bz2 7z zip';
   bcl::uploadfile_validate($extensions);
 }
 
