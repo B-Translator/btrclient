@@ -37,6 +37,12 @@ function btrProject_import_form($form, &$form_state, $origin, $project, $lng) {
                  ['!lng_codes' => implode(', ', array_keys(bcl::get_languages()))]
   );
 
+  // Suggest the username as the default value for the origin.
+  $btr_user = bcl::btr_user_get();
+  $default_origin = str_replace(' ', '', $btr_user['name']);
+  if (!$default_origin) $default_origin = 'test';
+
+  // Build the form.
   $form = [
     'import' => [
       '#type' => 'fieldset',
@@ -48,9 +54,8 @@ function btrProject_import_form($form, &$form_state, $origin, $project, $lng) {
       'origin' => [
         '#type' => 'textfield',
         '#title' => t('Origin'),
-        '#default_value' => 'custom',
+        '#default_value' => $default_origin,
         '#required' => TRUE,
-        //'#attributes' => array('readonly' => 'readonly'),
       ],
 
       'project' => [
@@ -61,8 +66,7 @@ function btrProject_import_form($form, &$form_state, $origin, $project, $lng) {
 
       'file' => [
         '#type' => 'file',
-        '#title' => t('POT and PO files'),
-        //'#description' => t('Upload an archive (tgz, bz2, 7z, zip) of the POT and PO files of the project.'),
+        '#title' => t('Archive of POT/PO files (tgz, bz2, 7z, zip)'),
       ],
 
       'submit' => [
