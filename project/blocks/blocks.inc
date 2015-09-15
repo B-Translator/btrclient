@@ -45,7 +45,7 @@ function btrProject_block_info() {
   // List of projects.
   $blocks['list'] = array(
     'info' => t('B-Translator Project: List of projects'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // Displays top 5 (or 10) contributors, over the last week (or month).

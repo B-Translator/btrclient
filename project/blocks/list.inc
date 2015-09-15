@@ -8,19 +8,9 @@
  * Called from hook_block_view for list.
  */
 function btrProject_list_view() {
-  // Return cache if possible.
-  $cache = cache_get('btrProject_block_list', 'cache_btrClient');
-  if (!empty($cache) && isset($cache->data) && !empty($cache->data)) {
-    return $cache->data;
-  }
-
   // Build the block.
   $block['subject'] = t('List of Projects');
   $block['content'] = array('#markup' => btrProject_list_view_html());
-  //$block['content'] = drupal_get_form('btrProject_list_block_form');
-
-  // Cache for 12 hours.
-  cache_set('btrProject_block_list', $block, 'cache_btrClient', time() + 12 * 60 * 60);
 
   return $block;
 }
@@ -67,53 +57,4 @@ function btrProject_list_view_html() {
   }
 
   return $html;
-}
-
-/**
- * Form callback for: btrProject_list_block_form
- */
-function btrProject_list_block_form($form, &$form_state) {
-  $form = [
-    'project_list' => [
-      '#type' => 'fieldset',
-      '#title' => t('Select a Project'),
-    ],
-  ];
-
-  $btr_server = variable_get('btrClient_server');
-  $result = drupal_http_request($btr_server . '/project/list/all');
-  if ($result->code != 200) {
-    drupal_set_message(t('Could not fetch data from the server.'));
-    return $form;
-  }
-
-  $project_list = drupal_json_decode($result->data);
-  foreach ($project_list as $origin => $arr_project) {
-    $form['project_list'][$origin] = array(
-      '#type' => 'fieldset',
-      '#title' => $origin,
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-    );
-    foreach ($arr_project as $project => $arr_lng) {
-      $form['project_list'][$origin][$project] = array(
-        '#type' => 'fieldset',
-        '#title' => $project,
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-        'items' => array(
-          '#theme' => 'item_list',
-          '#type' => 'ul',
-          '#items' => array(),
-        ),
-      );
-      $items = array();
-      foreach ($arr_lng as $lng) {
-        $items[] = l("$origin/$project/$lng", "/btr/project/$origin/$project/$lng/dashboard");
-      }
-      $form['project_list'][$origin][$project]['items']['#items'] = $items;
-    }
-  }
-
-  return $form;
 }
