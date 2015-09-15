@@ -23,7 +23,7 @@ function render_project_stats($origin, $project, $lng) {
 
   // All strings
   $url_list = "btr/project/$origin/$project/$lng/list";
-  $strings = '<a href="' . $url_list . '">'
+  $strings = '<a href="' . url($url_list) . '">'
     . format_plural($stats['strings'], '1 string', '@count strings')
     . '</a>';
 
