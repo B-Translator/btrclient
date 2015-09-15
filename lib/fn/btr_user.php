@@ -40,11 +40,8 @@ function btr_user_set($data) {
   // Get the profile fields.
   $btr_user = array(
     'translation_lng' => $data['translation_lng'],
-    'string_order' => $data['string_order'],
     'projects' => $data['projects'],
     'auxiliary_languages' => $data['auxiliary_languages'],
-    'translations_per_day' => $data['translations_per_day'],
-    'feedback_channels' => $data['feedback_channels'],
     'permissions' => $data['permissions'],
     'uid' => $data['identifier'],
     'name' => $data['displayName'],
