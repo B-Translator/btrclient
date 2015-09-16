@@ -13,7 +13,7 @@ projects[wsclient][version] = 1.0
 projects[wsclient][patch][] = https://drupal.org/files/wsclient-1285310-http_basic_authentication-14.patch
 projects[wsclient][patch][] = https://drupal.org/files/issues/wsclient-2138617-oauth2_support.patch
 
-projects[oauth2_login] = 1.7
+projects[oauth2_login] = 1.8
 
 projects[features] = 2.6
 projects[strongarm] = 2.0
