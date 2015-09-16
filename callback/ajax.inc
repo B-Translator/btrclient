@@ -19,7 +19,7 @@
  */
 function btrClient_string_details($lng, $sguid) {
   // Get the string details from the server.
-  $url = variable_get('btrClient_server') . '/ajax/string_details/' . $sguid;
+  $url = variable_get('btrClient_server') . '/string_details/' . $sguid;
   $output = drupal_http_request($url);
   if (isset($output->data)) {
     $details = json_decode($output->data, TRUE);
