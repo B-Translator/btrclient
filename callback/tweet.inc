@@ -7,7 +7,7 @@
 /**
  * Callback for 'btr/tweet'.
  */
-function btrCore_tweet($origin = NULL, $project = NULL) {
+function btrClient_tweet($origin = NULL, $project = NULL) {
   // Get the translation language.
   $lng = variable_get('btrClient_translation_lng', 'fr');
 

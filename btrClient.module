@@ -68,10 +68,20 @@ function btrClient_menu() {
   $items['btr/tweet'] = array(
     'type'            => MENU_CALLBACK,
     'title'           => 'Return a random string (and translations) in a form suitable for twitter.',
-    'page callback'   => 'btrCore_tweet',
+    'page callback'   => 'btrClient_tweet',
     'file'            => 'callback/tweet.inc',
     'access callback' => TRUE,
   );
+
+  // Return a string context, related projects (where a string is found), etc.
+  $items['btr/ajax/string_details'] = array(
+    'type'            => MENU_CALLBACK,
+    'title'           => 'String details',
+    'page callback'   => 'btrClient_string_details',
+    'file'            => 'callback/ajax.inc',
+    'access callback' => TRUE,
+  );
+
 
   return $items;
 }
