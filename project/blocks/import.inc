@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Import translations.
+ * Import a project.
  */
 
 /**

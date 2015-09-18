@@ -73,6 +73,7 @@ function _btrClientWS_authenticated_translations() {
     'del_vote' => 'translations/del_vote',
     'submit' => 'translations/submit',
     'import_translations' => 'translations/import',
+    'delete_project' => 'project/delete',
   );
   foreach ($post_operations as $name => $url) {
     $operations[$name] = array(

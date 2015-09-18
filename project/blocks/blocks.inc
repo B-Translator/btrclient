@@ -12,6 +12,7 @@ require_once __DIR__ . '/statistics.inc';
 require_once __DIR__ . '/project_stats.inc';
 require_once __DIR__ . '/export.inc';
 require_once __DIR__ . '/import.inc';
+require_once __DIR__ . '/delete.inc';
 require_once __DIR__ . '/import_translations.inc';
 require_once __DIR__ . '/latest.inc';
 require_once __DIR__ . '/diffs.inc';
@@ -76,6 +77,12 @@ function btrProject_block_info() {
   $blocks['import'] = array(
     'info' => t('B-Translator Project: Import'),
     'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Delete.
+  $blocks['delete'] = array(
+    'info' => t('B-Translator Project: Delete'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
   );
 
   // Import translations.

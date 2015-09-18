@@ -22,6 +22,7 @@ function btrProject_projlist() {
       'import' => [
         '#prefix' => '<div class="col-sm-6">',
         _btrProject_projlist_import(),
+        bcl::get_block('btrProject', 'delete'),
         '#suffix' => '</div>',
       ],
     ],
