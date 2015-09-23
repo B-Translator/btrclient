@@ -31,13 +31,13 @@ function btrProject_subscribe_form($form, &$form_state, $origin, $project) {
       '#value' => $project,
     ],
     'subscribe' => [
-      '#value' => t('Subscribe'),
+      '#value' => '<span class="glyphicon glyphicon-envelope"></span> - ' . t('Subscribe'),
       '#type' => 'submit',
       '#attributes' => ['class' => ['btn-primary']],
       '#access' => !$subscribed,
     ],
     'unsubscribe' => [
-      '#value' => t('Unsubscribe'),
+      '#value' => '<span class="glyphicon glyphicon-envelope"></span> - ' . t('Unsubscribe'),
       '#type' => 'submit',
       '#attributes' => ['class' => ['btn-primary']],
       '#access' => $subscribed,
@@ -76,15 +76,17 @@ function btrProject_subscribe_form_submit($form, &$form_state) {
   $project = $values['project'];
 
   $btr = wsclient_service_load('btr');
-  if ($operation == t('Subscribe')) {
+  if ($operation == '<span class="glyphicon glyphicon-envelope"></span> - ' . t('Subscribe')) {
     // Subscribe to the project.
     $btr->subscribe(['origin' => $origin, 'project' => $project]);
-    $msg = t("Subscribed to project '!project'.", ['!project' => "$origin/$project"]);
+    $msg = t("Subscribed to project '!project'. You will receive daily emails from this project.",
+           ['!project' => "$origin/$project"]);
   }
-  elseif ($operation == t('Unsubscribe')) {
+  elseif ($operation == '<span class="glyphicon glyphicon-envelope"></span> - ' . t('Unsubscribe')) {
     // Unsubscribe from the project.
     $btr->unsubscribe(['origin' => $origin, 'project' => $project]);
-    $msg = t("Unsubscribed from project '!project'.", ['!project' => "$origin/$project"]);
+    $msg = t("Unsubscribed from project '!project'. You will not receive daily emails from this project.",
+           ['!project' => "$origin/$project"]);
   }
   drupal_set_message($msg);
 
