@@ -13,7 +13,7 @@ function btrProject_dashboard($origin, $project, $lng) {
   $output[] = [ '#markup' => '<hr style="clear: both;"/>' ];
   $output[] = _btrProject_dashboard_stats();
   $output[] = [ '#markup' => '<hr style="clear: both;"/>' ];
-  $output[] = _btrProject_export_import();
+  $output[] = _btrProject_export_import_diffs();
 
   return $output;
 }
@@ -49,9 +49,9 @@ function _btrProject_dashboard_stats() {
 }
 
 /**
- * Render-array for export-import.
+ * Render-array for export-import-diffs.
  */
-function _btrProject_export_import() {
+function _btrProject_export_import_diffs() {
   $export = bcl::get_block('btrProject', 'export');
   $export['btrProject_export']['export']['#collapsible'] = TRUE;
   $export['btrProject_export']['export']['#collapsed'] = TRUE;
@@ -59,6 +59,10 @@ function _btrProject_export_import() {
   $import = bcl::get_block('btrProject', 'import_translations');
   $import['btrProject_import_translations']['import_translations']['#collapsible'] = TRUE;
   $import['btrProject_import_translations']['import_translations']['#collapsed'] = TRUE;
+
+  $diffs = bcl::get_block('btrProject', 'diffs');
+  $diffs['btrProject_diffs']['project_diffs']['#collapsible'] = TRUE;
+  $diffs['btrProject_diffs']['project_diffs']['#collapsed'] = TRUE;
 
   return [
     'export_import' => [
@@ -74,6 +78,12 @@ function _btrProject_export_import() {
       'import' => [
         '#prefix' => '<div class="col-sm-6">',
         $import,
+        '#suffix' => '</div>',
+      ],
+
+      'diffs' => [
+        '#prefix' => '<div class="col-sm-12">',
+        $diffs,
         '#suffix' => '</div>',
       ],
     ],

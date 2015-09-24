@@ -12,10 +12,45 @@ function btrProject_diffs_view() {
   list($origin, $project, $lng) = bcl::get_project_from_path();
 
   $block['subject'] = t('Project Diffs');
-  $block['content'][] = btrProject_diffs_table($origin, $project, $lng);
-  $block['content'][] = drupal_get_form('btrProject_diffs_latest_form', $origin, $project, $lng);
-  $block['content'][] = drupal_get_form('btrProject_diffs_snapshot_form', $origin, $project, $lng);
+  $block['content'] = drupal_get_form('btrProject_diffs_form', $origin, $project, $lng);
   return $block;
+}
+
+/**
+ * Form callback for: btrProject_diffs_form
+ */
+function btrProject_diffs_form($form, &$form_state, $origin, $project, $lng) {
+  $advanced = (bcl::installed_on_server() and btr::user_is_project_admin($origin, $project, $lng));
+  $form = [
+    'project_diffs' => [
+      '#type' => 'fieldset',
+      '#title' => t('Project Diffs'),
+      '#collapsible' => FALSE,
+      '#collapsed' => FALSE,
+
+      'diff_list' => btrProject_diffs_table($origin, $project, $lng),
+
+      'advanced' => [
+        '#prefix' => '<div class="row">',
+        '#suffix' => '</div>',
+        '#access' => $advanced,
+
+        'diff_latest' => [
+          '#prefix' => '<div class="col-sm-6 col-sm-push-6">',
+          drupal_get_form('btrProject_diffs_latest_form', $origin, $project, $lng),
+          '#suffix' => '</div>',
+        ],
+
+        'make_snapshot' => [
+          '#prefix' => '<div class="col-sm-6 col-sm-pull-6">',
+          drupal_get_form('btrProject_diffs_snapshot_form', $origin, $project, $lng),
+          '#suffix' => '</div>',
+        ],
+      ],
+    ],
+  ];
+
+  return $form;
 }
 
 /**
