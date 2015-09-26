@@ -117,7 +117,7 @@ function _btrVocabulary_get_string($vocabulary, $search_term = NULL) {
   }
   else {
     // Get a random sguid from the vocabulary.
-    $btr = bcl::user_is_authenticated() ?
+    $btr = oauth2_user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid([
@@ -160,7 +160,7 @@ function _btrVocabulary_form_buttons($vocabulary, $sguid, $term) {
         'onclick' => 'this.form.target="_self"',
       ),
     );
-    if (!bcl::user_is_authenticated() and inside_iframe()) {
+    if (!oauth2_user_is_authenticated() and inside_iframe()) {
       $buttons['add_term']['#attributes']['onclick'] = 'this.form.target="_blank"';
     }
   }

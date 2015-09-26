@@ -19,7 +19,7 @@ function get_languages() {
   }
 
   // Get an array of languages from the server.
-  if (bcl::installed_on_server()) {
+  if (oauth2_user_installed_on_server()) {
     $languages = btr::languages_get_details();
   }
   else {

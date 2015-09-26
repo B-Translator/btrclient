@@ -33,7 +33,7 @@ function filter_get_query($form_values) {
     $query['origin'] = $form_values['origin'];
   }
 
-  if (bcl::user_is_authenticated()) {
+  if (oauth2_user_is_authenticated()) {
     // Get only_mine.
     if ($form_values['only_mine'] == 1) {
       $query['only_mine'] = '1';

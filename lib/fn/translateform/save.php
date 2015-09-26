@@ -87,7 +87,7 @@ function _submit_single($sguid, $lng, $string) {
     // If this is not an existing vote,
     // then add a new vote for this translation.
     $previous_votes = $string[$tguid]['original']['votes'];
-    $btr_user = bcl::btr_user_get();
+    $btr_user = oauth2_user_get();
     if (!in_array($btr_user['name'], array_keys($previous_votes))) {
       _add_action('vote', array('tguid' => $tguid));
     }
@@ -99,7 +99,7 @@ function _submit_single($sguid, $lng, $string) {
  */
 function _submit_multiple($sguid, $tguid, $lng, $translation) {
 
-  $btr_user = bcl::btr_user_get();
+  $btr_user = oauth2_user_get();
 
   $approved = $translation['approved'];
   if ($tguid == 'new' and _not_empty_translation($translation['value'])) {

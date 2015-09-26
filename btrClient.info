@@ -5,11 +5,8 @@ core = 7.x
 
 dependencies[] = libraries
 dependencies[] = entity
-dependencies[] = wsclient
-dependencies[] = wsclient_rest
-dependencies[] = http_client
-dependencies[] = oauth2_client
 dependencies[] = oauth2_login
+dependencies[] = oauth2_user
 dependencies[] = btrClientWS
 dependencies[] = inside_iframe
 dependencies[] = srrssb

@@ -51,10 +51,10 @@ function btrProject_subscribe_form($form, &$form_state, $origin, $project) {
  * Return TRUE if the user is subscribed to the given project.
  */
 function _btrProject_user_subscribed($origin, $project) {
-  if (!bcl::user_is_authenticated()) return FALSE;
+  if (!oauth2_user_is_authenticated()) return FALSE;
 
   // Check the given project on the list of projects.
-  $btr_user = bcl::btr_user_get();
+  $btr_user = oauth2_user_get();
   if (!isset($btr_user['projects']))  return FALSE;
   return in_array("$origin/$project", $btr_user['projects']);
 }
@@ -64,8 +64,8 @@ function _btrProject_user_subscribed($origin, $project) {
  */
 function btrProject_subscribe_form_submit($form, &$form_state) {
   // If user is not authenticated, redirect to login first.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     return;
   }
 
@@ -92,5 +92,5 @@ function btrProject_subscribe_form_submit($form, &$form_state) {
 
   // Expire from cache the btr_user, so that it can be
   // refreshed with the latest values.
-  bcl::btr_user_expire();
+  oauth2_user_expire();
 }

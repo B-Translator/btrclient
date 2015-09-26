@@ -16,7 +16,7 @@ function _btrClientWS_public($service_name) {
   $service->type = 'rest';
   $service->url = $server_url . '/api/';
 
-  $service->settings += _btrClientWS_dev();
+  $service->settings += oauth2_user_wsclient_dev_settings();
 
   $service->operations += _btrClientWS_public_report();
   $service->operations += _btrClientWS_public_translations();

@@ -18,7 +18,7 @@ function btrProject_delete_view() {
  */
 function btrProject_delete_form($form, &$form_state) {
   // Suggest the username as the default value for the origin.
-  $btr_user = bcl::btr_user_get();
+  $btr_user = oauth2_user_get();
   $default_origin = str_replace(' ', '', $btr_user['name']);
   if (!$default_origin) $default_origin = 'test';
 
@@ -57,8 +57,8 @@ function btrProject_delete_form($form, &$form_state) {
  * Implement hook form_submit() for the form btrProject_delete_form
  */
 function btrProject_delete_form_submit($form, &$form_state) {
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     return;
   }
 

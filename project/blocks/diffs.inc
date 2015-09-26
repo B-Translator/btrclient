@@ -20,7 +20,7 @@ function btrProject_diffs_view() {
  * Form callback for: btrProject_diffs_form
  */
 function btrProject_diffs_form($form, &$form_state, $origin, $project, $lng) {
-  $advanced = (bcl::installed_on_server() and btr::user_is_project_admin($origin, $project, $lng));
+  $advanced = (oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng));
   $form = [
     'project_diffs' => [
       '#type' => 'fieldset',
@@ -109,7 +109,7 @@ function _btrProject_diffs_links($url_diff_dl, $nr) {
 function btrProject_diffs_latest_form($form, &$form_state, $origin, $project, $lng) {
   // Make the latest diffs only if the module is installed on the server and the
   // user is project admin.
-  if ( !(bcl::installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return '';
+  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return '';
 
   $form = [
     'latest_diffs' => [
@@ -168,12 +168,12 @@ function btrProject_diffs_latest_form($form, &$form_state, $origin, $project, $l
  */
 function btrProject_diffs_latest_form_submit($form, &$form_state) {
   // If user is not authenticated, redirect to login first.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     return;
   }
   // Allow only if installed on server and user is project admin.
-  if ( !(bcl::installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return;
+  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return;
 
   // Get the arguments origin/project/lng from the path.
   list($origin, $project, $lng) = bcl::get_project_from_path();
@@ -237,7 +237,7 @@ function btrProject_diffs_latest_form_submit($form, &$form_state) {
 function btrProject_diffs_snapshot_form($form, &$form_state, $origin, $project, $lng) {
   // Make the project snapshot only if the module is installed on the server and
   // the user is project admin.
-  if ( !(bcl::installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return '';
+  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return '';
 
   $form = [
     'make_snapshot' => [
@@ -292,12 +292,12 @@ function btrProject_diffs_snapshot_form($form, &$form_state, $origin, $project, 
  */
 function btrProject_diffs_snapshot_form_submit($form, &$form_state) {
   // If user is not authenticated, redirect to login first.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     return;
   }
   // Allow only if installed on server and user is project admin.
-  if ( !(bcl::installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return;
+  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return;
 
   // Get the arguments origin/project/lng from the path.
   list($origin, $project, $lng) = bcl::get_project_from_path();

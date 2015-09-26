@@ -11,8 +11,8 @@ use \bcl;
  * Return the language of translations.
  */
 function get_translation_lng() {
-  if (bcl::user_is_authenticated()) {
-    $btr_user = bcl::btr_user_get();
+  if (oauth2_user_is_authenticated()) {
+    $btr_user = oauth2_user_get();
     $lng = $btr_user['translation_lng'];
   }
 

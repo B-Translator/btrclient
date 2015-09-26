@@ -21,24 +21,3 @@ function btrClientWS_default_wsclient_service() {
   $services['btr'] = _btrClientWS_authenticated('btr');
   return $services;
 }
-
-/**
- * Set curl options for development, testing and debug.
- */
-function _btrClientWS_dev() {
-  $skipssl = variable_get('oauth2_login_skipssl', TRUE);
-  $proxy = variable_get('oauth2_login_proxy', '');
-
-  $dev_settings = array();
-  if ($skipssl) {
-    // Skip checking the SSL certificate, for testing.
-    $dev_settings['curl options'] = array(
-      CURLOPT_SSL_VERIFYPEER => FALSE,
-      CURLOPT_SSL_VERIFYHOST => FALSE,
-    );
-  }
-  if ($proxy) {
-    $dev_settings['curl options'][CURLOPT_PROXY] = $proxy;
-  }
-  return $dev_settings;
-}

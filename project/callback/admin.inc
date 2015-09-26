@@ -9,7 +9,7 @@
  */
 function btrProject_admin($origin, $project, $lng) {
   // The admin interface works well only on the B-Translator server.
-  if (!bcl::installed_on_server()) {
+  if (!oauth2_user_installed_on_server()) {
     $btr_server = variable_get('btrClient_server', 'https://btr.example.org');
     drupal_goto("$btr_server/btr/project/$origin/$project/$lng/admin");
     return;

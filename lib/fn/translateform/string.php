@@ -97,7 +97,7 @@ function _translation($translation, $string_sguid, $lng) {
 
   $translation['translation'] = bcl::string_unpack($translation['translation']);
 
-  $btr_user = bcl::btr_user_get();
+  $btr_user = oauth2_user_get();
   $is_own = ($btr_user['name'] and ($btr_user['name'] == $translation['author']));
   $is_approved = ($btr_user['name'] and in_array($btr_user['name'], array_keys($translation['votes'])));
   $is_new = ($translation['tguid'] == 'new');

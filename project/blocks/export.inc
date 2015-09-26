@@ -90,8 +90,8 @@ function btrProject_export_form($form, &$form_state, $origin, $project, $lng) {
  */
 function btrProject_export_form_submit($form, &$form_state) {
   // If user is not authenticated, redirect to login first.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     return;
   }
 
@@ -110,7 +110,7 @@ function btrProject_export_form_submit($form, &$form_state) {
   }
 
   // Export the project.
-  if (bcl::installed_on_server()
+  if (oauth2_user_installed_on_server()
     and btr::user_is_project_admin($origin, $project, $lng))
     {
       _btrProject_export_now($origin, $project, $lng, $export_mode, $friends);

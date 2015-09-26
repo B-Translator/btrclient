@@ -18,7 +18,7 @@ function btrProject_random($origin, $project, $lng = NULL, $sguid = NULL) {
   if ($sguid == NULL)  $sguid = 'random';
 
   if (in_array($sguid, array('random', 'translated', 'untranslated'))) {
-    $btr = bcl::user_is_authenticated() ?
+    $btr = oauth2_user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid([

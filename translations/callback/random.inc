@@ -18,7 +18,7 @@ function btrTranslations_random($lng = NULL, $sguid = NULL) {
   if ($lng == NULL or $lng == 'all')  $lng = bcl::get_translation_lng();
 
   if (in_array($sguid, ['random', 'translated', 'untranslated'])) {
-    $btr = bcl::user_is_authenticated() ?
+    $btr = oauth2_user_is_authenticated() ?
       wsclient_service_load('btr') :
       wsclient_service_load('public_btr');
     $result = $btr->get_random_sguid([

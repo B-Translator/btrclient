@@ -56,8 +56,8 @@ function btrVocabulary_form_go($form_state) {
  * The button 'Login' has been clicked.
  */
 function _btrVocabulary_form_login($form, $form_state) {
-  if (bcl::user_is_authenticated())  return;
-  bcl::user_authenticate($form_state, $redirection = $form===NULL);
+  if (oauth2_user_is_authenticated())  return;
+  oauth2_user_authenticate($form_state, $redirection = $form===NULL);
 }
 
 /**
@@ -65,8 +65,8 @@ function _btrVocabulary_form_login($form, $form_state) {
  */
 function _btrVocabulary_form_save($form, $form_state) {
   // Make sure that user is authenticated.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = $form===NULL);
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = $form===NULL);
     return;
   }
 
@@ -82,8 +82,8 @@ function _btrVocabulary_form_save($form, $form_state) {
  */
 function _btrVocabulary_form_add($form, $form_state) {
   // Make sure that user is authenticated.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = $form===NULL);
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = $form===NULL);
   }
 
   // Check access rights.
@@ -120,8 +120,8 @@ function _btrVocabulary_form_add($form, $form_state) {
  */
 function _btrVocabulary_form_delete($form, $form_state) {
   // Make sure that user is authenticated.
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = $form===NULL);
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = $form===NULL);
   }
 
   // Check access rights.

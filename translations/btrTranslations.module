@@ -63,5 +63,5 @@ function btrTranslations_menu() {
  * Return true if there is an oauth2 access_token.
  */
 function btr_user_is_authenticated() {
-  return bcl::user_is_authenticated();
+  return oauth2_user_is_authenticated();
 }

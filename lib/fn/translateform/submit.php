@@ -13,14 +13,14 @@ use \bcl;
 function translateform_submit($form, $form_state) {
   $op = $form_state['values']['op'];
   if ($op == t('Login')) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
   }
   elseif ($op == t('Save')) {
-    if (bcl::user_is_authenticated()) {
+    if (oauth2_user_is_authenticated()) {
       bcl::translateform_save($form_state['values']);
     }
     else {
-      bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+      oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     }
   }
 }

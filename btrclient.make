@@ -7,13 +7,7 @@ projects[ctools] = 1.9
 projects[libraries] = 2.2
 projects[entity] = 1.5
 
-projects[http_client] = 2.x-dev
-
-projects[wsclient][version] = 1.0
-projects[wsclient][patch][] = https://drupal.org/files/wsclient-1285310-http_basic_authentication-14.patch
-projects[wsclient][patch][] = https://drupal.org/files/issues/wsclient-2138617-oauth2_support.patch
-
-projects[oauth2_login] = 1.8
+projects[oauth2_login] = 2.1
 
 projects[features] = 2.6
 projects[strongarm] = 2.0

@@ -108,7 +108,7 @@ function _advanced($form_values) {
   ];
 
   // Search by author and by date are available only to authenticated users.
-  if (bcl::user_is_authenticated()) {
+  if (oauth2_user_is_authenticated()) {
     $advanced['author'] = _author($form_values);
     $advanced['date'] = _date($form_values);
   }

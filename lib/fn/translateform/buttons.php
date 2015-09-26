@@ -21,7 +21,7 @@ function translateform_buttons($lng, $sguid = NULL) {
                    ]]),
     ];
   }
-  $enable_login = (bcl::installed_on_server() and !bcl::user_is_authenticated());
+  $enable_login = (oauth2_user_installed_on_server() and !oauth2_user_is_authenticated());
   $buttons['login'] = [
     '#type' => 'submit',
     '#value' => t('Login'),
@@ -38,7 +38,7 @@ function translateform_buttons($lng, $sguid = NULL) {
   // permissions to submit votes and suggestions.
   $translation_lng = variable_get('btrClient_translation_lng', 'all');
   $enable_save = (($translation_lng == 'all' or ($translation_lng == $lng))
-                 and (!bcl::installed_on_server() or bcl::user_is_authenticated()));
+                 and (!oauth2_user_installed_on_server() or oauth2_user_is_authenticated()));
   $buttons['save'] = [
     '#type' => 'submit',
     '#value' => t('Save'),
@@ -48,7 +48,7 @@ function translateform_buttons($lng, $sguid = NULL) {
   // When the user is not authenticated, clicking Save will redirect
   // to login. When we are inside an iFrame, it is better to do the
   // login on a popup window (or a new tab).
-  if (!bcl::user_is_authenticated() and inside_iframe()) {
+  if (!oauth2_user_is_authenticated() and inside_iframe()) {
     $buttons['save']['#attributes']['onclick'] = 'this.form.target="_blank"';
   }
 

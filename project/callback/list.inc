@@ -21,7 +21,7 @@ function btrProject_list($origin, $project, $lng) {
   $params['lng'] = $lng;
 
   // Get the strings that match the search params.
-  $btr = bcl::user_is_authenticated() ?
+  $btr = oauth2_user_is_authenticated() ?
     wsclient_service_load('btr') :
     wsclient_service_load('public_btr');
   $result = $btr->search($params);

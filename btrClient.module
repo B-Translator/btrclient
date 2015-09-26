@@ -10,12 +10,6 @@ module_load_include('php', 'btrClient', 'lib/bcl');
  * Implements hook_init().
  */
 function btrClient_init() {
-  // Check whether this is a redirect after login,
-  // and if yes call the submit function again.
-  if (bcl::user_is_authenticated() and isset($_SESSION['btrClient']['form_state'])) {
-    bcl::form_resubmit();
-  }
-
   // Include the stylesheets.
   $path = drupal_get_path('module', 'btrClient');
   drupal_add_css($path . '/css/styles.css.less');
@@ -96,29 +90,44 @@ function btrClient_menu_alter(&$items) {
 }
 
 /**
- * Implements hook_user_login().
+ * Implements hook_oauth2_profile_fields_alter().
  */
-function btrClient_user_login(&$edit, $account) {
-  if (bcl::installed_on_server()) {
-    $data = (array)oauth2_loginprovider_user_profile_callback();
-    $data['displayName'] = $data['name'];
-    $data['identifier'] = $data['uid'];
-    bcl::btr_user_set($data);
-  }
+function btrClient_oauth2_profile_fields_alter(&$profile_fields) {
+  // Add these additional fields to the profile.
+  // These extra fields can be defined by the server
+  // on hook_oauth2_loginprovider_userprofile_alter().
+  $profile_fields += [
+    'translation_lng',
+    'projects',
+    'auxiliary_languages',
+    'permissions',
+  ];
 }
 
 /**
- * Implements hook_hybridauth_user_login().
+ * Implements hook_oauth2_user_alter().
+ *
+ * $oauth2_user is the remote user profile that comes from the server.
  */
-function btrClient_hybridauth_user_login($account, $data) {
-  bcl::btr_user_set($data);
+function btrClient_oauth2_user_alter(&$oauth2_user) {
+  // Keep only the fields of the user profile that we are interested in.
+  $btr_user = [
+    'translation_lng' => $oauth2_user['translation_lng'],
+    'projects' => $oauth2_user['projects'],
+    'auxiliary_languages' => $oauth2_user['auxiliary_languages'],
+    'permissions' => $oauth2_user['permissions'],
+    'uid' => $oauth2_user['identifier'],
+    'name' => $oauth2_user['displayName'],
+  ];
+  $oauth2_user = $btr_user;
 }
+
 
 /**
  * Implementation of hook_form_alter().
  */
 function btrClient_form_alter(&$form, &$form_state, $form_id) {
-  if (bcl::installed_on_server())  return;
+  if (oauth2_user_installed_on_server())  return;
 
   if ($form_id == 'user_profile_form') {
     $form['remote_account'] = array(
@@ -133,38 +142,6 @@ function btrClient_form_alter(&$form, &$form_state, $form_id) {
       . t('Edit B-Translator Profile') . '</a>',
     );
   }
-}
-
-/**
- * Implements hook_hybridauth_provider_config_alter().
- */
-function btrClient_hybridauth_provider_config_alter(&$config, $provider_id) {
-  if ($provider_id != 'DrupalOAuth2') {
-    return;
-  }
-
-  // Get some extra fields from the remote user profile.
-  // These fields can be defined by the oauth2 server
-  // on hook_oauth2_loginprovider_userprofile_alter().
-  $config['profile_fields'] = array(
-    /*
-    // These are the default profile field mappings.
-    'identifier' => 'uid',
-    'displayName' => 'name',
-    'photoURL' => 'picture.url',
-    'email' => 'mail',
-    'emailVerified' => 'mail',
-    'language' => 'language',
-    */
-    // Get these extra fields as well.
-    'translation_lng' => 'translation_lng',
-    'string_order' => 'string_order',
-    'projects' => 'projects',
-    'auxiliary_languages' => 'auxiliary_languages',
-    'translations_per_day' => 'translations_per_day',
-    'feedback_channels' => 'feedback_channels',
-    'permissions' => 'permissions',
-  );
 }
 
 /**

@@ -69,8 +69,8 @@ function btrProject_import_translations_form_validate($form, &$form_state) {
  * Implement hook form_submit() for the form btrProject_import_translations_form
  */
 function btrProject_import_translations_form_submit($form, &$form_state) {
-  if (!bcl::user_is_authenticated()) {
-    bcl::user_authenticate($form_state, $redirection = ($form===NULL));
+  if (!oauth2_user_is_authenticated()) {
+    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
     return;
   }
 
