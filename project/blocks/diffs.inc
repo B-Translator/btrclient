@@ -58,7 +58,6 @@ function btrProject_diffs_form($form, &$form_state, $origin, $project, $lng) {
  */
 function btrProject_diffs_table($origin, $project, $lng) {
   $btr_server = variable_get('btrClient_server');
-  $btr_server = 'https://btranslator.org';
   $url_diff = "$btr_server/project/diff/$origin/$project/$lng";
   $url_diff_dl = "$btr_server/project/diff-dl/$origin/$project/$lng";
   $lines = file($url_diff);
