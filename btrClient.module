@@ -98,9 +98,11 @@ function btrClient_oauth2_profile_fields_alter(&$profile_fields) {
   // on hook_oauth2_loginprovider_userprofile_alter().
   $profile_fields += [
     'translation_lng',
-    'projects',
     'auxiliary_languages',
     'permissions',
+    'subscribed_projects',
+    'admin_projects',
+    'moderate_projects',
   ];
 }
 
@@ -112,12 +114,14 @@ function btrClient_oauth2_profile_fields_alter(&$profile_fields) {
 function btrClient_oauth2_user_alter(&$oauth2_user) {
   // Keep only the fields of the user profile that we are interested in.
   $btr_user = [
-    'translation_lng' => $oauth2_user['translation_lng'],
-    'projects' => $oauth2_user['projects'],
-    'auxiliary_languages' => $oauth2_user['auxiliary_languages'],
-    'permissions' => $oauth2_user['permissions'],
     'uid' => $oauth2_user['identifier'],
     'name' => $oauth2_user['displayName'],
+    'translation_lng' => $oauth2_user['translation_lng'],
+    'auxiliary_languages' => $oauth2_user['auxiliary_languages'],
+    'permissions' => $oauth2_user['permissions'],
+    'subscribed_projects' => $oauth2_user['subscribed_projects'],
+    'admin_projects' => $oauth2_user['admin_projects'],
+    'moderate_projects' => $oauth2_user['moderate_projects'],
   ];
   $oauth2_user = $btr_user;
 }

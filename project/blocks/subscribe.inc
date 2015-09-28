@@ -55,8 +55,8 @@ function _btrProject_user_subscribed($origin, $project) {
 
   // Check the given project on the list of projects.
   $btr_user = oauth2_user_get();
-  if (!isset($btr_user['projects']))  return FALSE;
-  return in_array("$origin/$project", $btr_user['projects']);
+  if (!isset($btr_user['subscribed_projects']))  return FALSE;
+  return in_array("$origin/$project", $btr_user['subscribed_projects']);
 }
 
 /**

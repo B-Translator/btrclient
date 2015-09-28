@@ -110,15 +110,12 @@ function btrProject_export_form_submit($form, &$form_state) {
   }
 
   // Export the project.
-  if (oauth2_user_installed_on_server()
-    and btr::user_is_project_admin($origin, $project, $lng))
-    {
-      _btrProject_export_now($origin, $project, $lng, $export_mode, $friends);
-    }
-  else
-    {
-      _btrProject_export_schedule($origin, $project, $lng, $export_mode, $friends);
-    }
+  if (bcl::user_is_project_admin($origin, $project, $lng)) {
+    _btrProject_export_now($origin, $project, $lng, $export_mode, $friends);
+  }
+  else {
+    _btrProject_export_schedule($origin, $project, $lng, $export_mode, $friends);
+  }
 }
 
 /**
