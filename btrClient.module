@@ -127,8 +127,6 @@ function btrClient_oauth2_user_alter(&$oauth2_user) {
  * Implementation of hook_form_alter().
  */
 function btrClient_form_alter(&$form, &$form_state, $form_id) {
-  if (oauth2_user_installed_on_server())  return;
-
   if ($form_id == 'user_profile_form') {
     $form['remote_account'] = array(
       '#type' => 'fieldset',

@@ -19,9 +19,7 @@ use \bcl;
 function user_access($permission) {
   // If the user has not been authenticated yet by oauth2,
   // he doesn't have any permissions.
-  if (oauth2_user_is_authenticated()) {
-    return FALSE;
-  }
+  if (!oauth2_user_is_authenticated())  return FALSE;
 
   // Check the given permission on the list of permissions.
   $btr_user = oauth2_user_get();

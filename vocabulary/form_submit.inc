@@ -14,9 +14,6 @@ function btrVocabulary_form_submit($form, &$form_state) {
   if ($op == '<span class="glyphicon glyphicon-repeat"></span>') {
     btrVocabulary_form_go($form_state);
   }
-  elseif ($op == t('Login')) {
-    _btrVocabulary_form_login($form, $form_state);
-  }
   elseif ($op == t('Save')) {
     _btrVocabulary_form_save($form, $form_state);
   }
@@ -50,14 +47,6 @@ function btrVocabulary_form_go($form_state) {
   }
   // Redirect.
   drupal_goto($url, array('query' => $query));
-}
-
-/**
- * The button 'Login' has been clicked.
- */
-function _btrVocabulary_form_login($form, $form_state) {
-  if (oauth2_user_is_authenticated())  return;
-  oauth2_user_authenticate($form_state, $redirection = $form===NULL);
 }
 
 /**

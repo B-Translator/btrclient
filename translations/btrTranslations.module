@@ -42,7 +42,7 @@ function btrTranslations_menu() {
     'description'     => 'Export the most voted translations of a project into a PO file.',
     'page callback'   => 'btrTranslations_export',
     'file'            => 'callback/export.inc',
-    'access callback' => 'btr_user_is_authenticated',
+    'access callback' => 'oauth2_user_is_authenticated',
     'weight'          => 3,
   );
 
@@ -52,16 +52,9 @@ function btrTranslations_menu() {
     'description'     => 'Import translations from PO files.',
     'page callback'   => 'btrTranslations_import',
     'file'            => 'callback/import.inc',
-    'access callback' => 'btr_user_is_authenticated',
+    'access callback' => 'oauth2_user_is_authenticated',
     'weight'          => 4,
   );
 
   return $items;
-}
-
-/**
- * Return true if there is an oauth2 access_token.
- */
-function btr_user_is_authenticated() {
-  return oauth2_user_is_authenticated();
 }

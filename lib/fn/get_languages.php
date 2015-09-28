@@ -19,25 +19,20 @@ function get_languages() {
   }
 
   // Get an array of languages from the server.
-  if (oauth2_user_installed_on_server()) {
-    $languages = btr::languages_get_details();
+  $btr_server = variable_get('btrClient_server', 'https://dev.btranslator.org');
+  $output = drupal_http_request("$btr_server/languages");
+  if (isset($output->data)) {
+    $languages = json_decode($output->data, TRUE);
   }
   else {
-    $btr_server = variable_get('btrClient_server', 'https://dev.btranslator.org');
-    $output = drupal_http_request("$btr_server/languages");
-    if (isset($output->data)) {
-      $languages = json_decode($output->data, TRUE);
-    }
-    else {
-      $languages = array(
-        'fr' => array(
-          'code' => 'fr',
-          'name' => 'French',
-          'direction' => LANGUAGE_LTR,
-          'plurals' => 2,
-        ));
-      return $languages;
-    }
+    $languages = array(
+      'fr' => array(
+        'code' => 'fr',
+        'name' => 'French',
+        'direction' => LANGUAGE_LTR,
+        'plurals' => 2,
+      ));
+    return $languages;
   }
 
   // Cache until a general cache wipe.

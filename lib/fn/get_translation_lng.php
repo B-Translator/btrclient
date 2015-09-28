@@ -15,12 +15,10 @@ function get_translation_lng() {
     $btr_user = oauth2_user_get();
     $lng = $btr_user['translation_lng'];
   }
-
-  if (!$lng) {
+  else {
     $lng = variable_get('btrClient_translation_lng', 'fr');
+    if ($lng == 'all')  $lng = 'fr';
   }
-
-  if ($lng == 'all')  $lng = 'fr';
 
   return $lng;
 }

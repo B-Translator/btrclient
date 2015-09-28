@@ -21,24 +21,11 @@ function translateform_buttons($lng, $sguid = NULL) {
                    ]]),
     ];
   }
-  $enable_login = (oauth2_user_installed_on_server() and !oauth2_user_is_authenticated());
-  $buttons['login'] = [
-    '#type' => 'submit',
-    '#value' => t('Login'),
-    '#access' => $enable_login,
-    '#attributes' => ['onclick' => 'this.form.target="_self"'],
-  ];
-  // When we are inside an iFrame, it is better to do the login
-  // on a popup window (or a new tab).
-  if (inside_iframe()) {
-    $buttons['login']['#attributes']['onclick'] = 'this.form.target="_blank"';
-  }
 
   // The save button will appear only when the user has
   // permissions to submit votes and suggestions.
   $translation_lng = variable_get('btrClient_translation_lng', 'all');
-  $enable_save = (($translation_lng == 'all' or ($translation_lng == $lng))
-                 and (!oauth2_user_installed_on_server() or oauth2_user_is_authenticated()));
+  $enable_save = ($translation_lng == $lng or $translation_lng == 'all');
   $buttons['save'] = [
     '#type' => 'submit',
     '#value' => t('Save'),
