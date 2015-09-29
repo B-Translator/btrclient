@@ -12,17 +12,17 @@ function btrProject_diffs_view() {
   list($origin, $project, $lng) = bcl::get_project_from_path();
 
   $block['subject'] = t('Project Diffs');
-  $block['content'] = drupal_get_form('btrProject_diffs_form', $origin, $project, $lng);
+  $block['content'] = btrProject_diffs_content($origin, $project, $lng);
   return $block;
 }
 
 /**
- * Form callback for: btrProject_diffs_form
+ * Render array for the content of the block diffs.
  */
-function btrProject_diffs_form($form, &$form_state, $origin, $project, $lng) {
-  $advanced = (oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng));
+function btrProject_diffs_content($origin, $project, $lng) {
   $form = [
     'project_diffs' => [
+      '#id' => 'btrproject-diffs',
       '#type' => 'fieldset',
       '#title' => t('Project Diffs'),
       '#collapsible' => FALSE,
@@ -33,7 +33,7 @@ function btrProject_diffs_form($form, &$form_state, $origin, $project, $lng) {
       'advanced' => [
         '#prefix' => '<div class="row">',
         '#suffix' => '</div>',
-        '#access' => $advanced,
+        '#access' =>  bcl::user_is_project_admin($origin, $project, $lng),
 
         'diff_latest' => [
           '#prefix' => '<div class="col-sm-6 col-sm-push-6">',
@@ -69,7 +69,6 @@ function btrProject_diffs_table($origin, $project, $lng) {
   }
   $table = [
     '#theme' => 'table',
-    //'#attributes' => ['class' => ['l10n-table']],
     '#header' => ['time', 'comment', 'get'],
     '#rows' => $rows,
   ];
@@ -94,6 +93,7 @@ function _btrProject_diffs_links($url_diff_dl, $nr) {
                  'absolute' => TRUE,
                  'attributes' => [
                    'class' => ['btn', 'btn-default'],
+                   'style' => 'margin-left: 3px;',
                  ]]),
   ];
 
@@ -106,10 +106,6 @@ function _btrProject_diffs_links($url_diff_dl, $nr) {
  * Get the diffs between the latest snapshot and the current version.
  */
 function btrProject_diffs_latest_form($form, &$form_state, $origin, $project, $lng) {
-  // Make the latest diffs only if the module is installed on the server and the
-  // user is project admin.
-  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return '';
-
   $form = [
     'latest_diffs' => [
       '#type' => 'fieldset',
@@ -117,6 +113,7 @@ function btrProject_diffs_latest_form($form, &$form_state, $origin, $project, $l
       '#description' => t('Get the diffs between the latest snapshot and the current version.'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
+      '#access' => bcl::user_is_project_admin($origin, $project, $lng),
 
       'diff_export_mode' => [
         '#type' => 'select',
@@ -166,66 +163,32 @@ function btrProject_diffs_latest_form($form, &$form_state, $origin, $project, $l
  * Submit callback for the form: btrProject_diffs_latest_form
  */
 function btrProject_diffs_latest_form_submit($form, &$form_state) {
-  // If user is not authenticated, redirect to login first.
-  if (!oauth2_user_is_authenticated()) {
-    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
-    return;
-  }
-  // Allow only if installed on server and user is project admin.
-  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return;
-
   // Get the arguments origin/project/lng from the path.
   list($origin, $project, $lng) = bcl::get_project_from_path();
 
+  // Allow only if user is project admin (for performance reasons).
+  if (!bcl::user_is_project_admin($origin, $project, $lng)) {
+    drupal_set_message(t('Only project admins can get the latest diffs.'), 'error');
+    return;
+  }
+
+  // Get form values.
   $values = $form_state['values'];
   $export_mode = check_plain($values['diff_export_mode']);
   $friends = check_plain($values['friends']);
+  $format = check_plain($values['diff_format']);
 
-  if (in_array($export_mode, ['preferred_by_me', 'preferred_by_my_friends'])) {
-    $export_mode = 'preferred';
-  }
-
-  // Get and check the list of preferred voters.
-  if ($export_mode == 'preferred') {
-    if (empty($preferred_voters)) {
-      $preferred_voters = $GLOBALS['user']->name;
-    }
-    list($arr_emails, $error_messages) = btr::utils_get_emails($preferred_voters);
-    if (!empty($error_messages)) {
-      foreach ($error_messages as $msg) {
-        drupal_set_message($msg, 'error');
-      }
-      return;
-    }
-  }
-
-  // Export the latest most voted translations
-  // and make the diffs with the last snapshot.
-  $export_file = tempnam('/tmp', 'export_file_');
-  $file_diff = tempnam('/tmp', 'file_diff_');
-  $file_ediff = tempnam('/tmp', 'file_ediff_');
-  btr::project_diff($origin, $project, $lng,
-    $file_diff, $file_ediff, $export_file,
-    $export_mode, $arr_emails);
-
-  // Send the diff file.
-  $fmt = check_plain($values['diff_format']);
-  $file = ($fmt=='ediff' ? $file_ediff : $file_diff);
-  $filename = "$origin-$project-$lng.$fmt";
-  header('Content-Type: text/plain; charset=utf-8');
-  header('Content-Disposition: attachment; filename="' . $filename . '"');
-  header('Content-Transfer-Encoding: binary');
-  header("Content-Length: " . filesize($file));
-  $fp = fopen($file, 'rb');
-  fpassthru($fp);
-  fclose($fp);
-
-  // Cleanup.
-  unlink($export_file);
-  unlink($file_diff);
-  unlink($file_ediff);
-
-  drupal_exit();
+  // Request the latest diff.
+  $btr_server = variable_get('btrClient_server');
+  drupal_goto($btr_server . "/project/diff-latest/$origin/$project/$lng", [
+      'absolute' => TRUE,
+      'external' => TRUE,
+      'query' => [
+        'format' => $format,
+        'export_mode' => $export_mode,
+        'friends' => $friends,
+      ],
+    ]);
 }
 
 /**
@@ -234,10 +197,6 @@ function btrProject_diffs_latest_form_submit($form, &$form_state) {
  * Make a snapshot of the current version of translations.
  */
 function btrProject_diffs_snapshot_form($form, &$form_state, $origin, $project, $lng) {
-  // Make the project snapshot only if the module is installed on the server and
-  // the user is project admin.
-  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return '';
-
   $form = [
     'make_snapshot' => [
       '#type' => 'fieldset',
@@ -290,39 +249,32 @@ function btrProject_diffs_snapshot_form($form, &$form_state, $origin, $project, 
  * Submit callback for the form: btrProject_diffs_snapshot_form
  */
 function btrProject_diffs_snapshot_form_submit($form, &$form_state) {
-  // If user is not authenticated, redirect to login first.
-  if (!oauth2_user_is_authenticated()) {
-    oauth2_user_authenticate($form_state, $redirection = ($form===NULL));
-    return;
-  }
-  // Allow only if installed on server and user is project admin.
-  if ( !(oauth2_user_installed_on_server() and btr::user_is_project_admin($origin, $project, $lng)) ) return;
-
   // Get the arguments origin/project/lng from the path.
   list($origin, $project, $lng) = bcl::get_project_from_path();
 
+  // Allow only if user is project admin (for performance reasons).
+  if (!bcl::user_is_project_admin($origin, $project, $lng)) {
+    drupal_set_message(t('Only project admins can make a project snapshot.'), 'error');
+    return;
+  }
+
+  // Get form values.
   $values = $form_state['values'];
-  $export_mode = check_plain($values['diff_export_mode']);
+  $comment = check_plain($values['comment']);
+  $export_mode = check_plain($values['snapshot_export_mode']);
   $friends = check_plain($values['friends']);
 
-  if (in_array($export_mode, ['preferred_by_me', 'preferred_by_my_friends'])) {
-    $export_mode = 'preferred';
-  }
-
-  // Get and check the list of preferred voters.
-  if ($export_mode == 'preferred') {
-    if (empty($preferred_voters)) {
-      $preferred_voters = $GLOBALS['user']->name;
-    }
-    list($arr_emails, $error_messages) = btr::utils_get_emails($preferred_voters);
-    if (!empty($error_messages)) {
-      foreach ($error_messages as $msg) {
-        drupal_set_message($msg, 'error');
-      }
-      return;
-    }
-  }
-
-  $comment = $values['comment'];
-  btr::project_snapshot($origin, $project, $lng, $comment, $export_mode, $arr_voters);
+  // Make project snapshot.
+  $btr_server = variable_get('btrClient_server');
+  $destination = url(request_uri(), ['absolute' => TRUE]);
+  drupal_goto($btr_server . "/project/snapshot/$origin/$project/$lng", [
+      'absolute' => TRUE,
+      'external' => TRUE,
+      'query' => [
+        'comment' => $comment,
+        'export_mode' => $export_mode,
+        'friends' => $friends,
+        'dest' => $destination,
+      ],
+    ]);
 }
