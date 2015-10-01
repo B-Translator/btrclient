@@ -3,11 +3,12 @@ description = B-Translator Client Module.
 package = B-Translator
 core = 7.x
 
+dependencies[] = btrClientWS
+dependencies[] = btrTranslations
 dependencies[] = libraries
 dependencies[] = entity
 dependencies[] = oauth2_login
 dependencies[] = oauth2_user
-dependencies[] = btrClientWS
 dependencies[] = inside_iframe
 dependencies[] = srrssb
 
