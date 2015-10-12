@@ -28,6 +28,25 @@ function btrVocabulary_menu() {
     //'file'            => 'form.inc',
     'access callback' => TRUE,
   );
+
+  $items['vocabulary/list'] = array(
+    'type'            => MENU_NORMAL_ITEM,
+    'title'           => 'Vocabulary List',
+    'description'     => 'List od vocabularies.',
+    'page callback'   => 'btrVocabulary_list',
+    'file'            => 'callback/list.inc',
+    'access callback' => TRUE,
+  );
+
+  $items['vocabularies'] = array(
+    'type'            => MENU_NORMAL_ITEM,
+    'title'           => 'Vocabulary List',
+    'description'     => 'List of vocabularies.',
+    'page callback'   => 'btrVocabulary_list',
+    'file'            => 'callback/list.inc',
+    'access callback' => TRUE,
+  );
+
   return $items;
 }
 
