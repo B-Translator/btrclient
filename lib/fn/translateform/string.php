@@ -205,6 +205,7 @@ function _render($textarray, $empty = '') {
  * Generates the 'By ...' line containing meta information about a string.
  */
 function _by($name, $uid, $time) {
+  if ($name == 'admin')  return '';
   $btr_server = variable_get('btrClient_server');
   $params = array(
     '!author' => l($name, $btr_server . "/user/$uid"),
