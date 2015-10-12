@@ -6,6 +6,16 @@
 
 module_load_include('inc', 'btrVocabulary', 'form_build');
 module_load_include('inc', 'btrVocabulary', 'form_submit');
+module_load_include('inc', 'btrVocabulary', 'blocks/blocks');
+
+/**
+ * Implements hook_init().
+ */
+function btrVocabulary_init() {
+  // Include the stylesheets.
+  $path = drupal_get_path('module', 'btrVocabulary');
+  drupal_add_css($path . '/blocks/list.css.less');
+}
 
 /**
  * Implements hook_menu().
