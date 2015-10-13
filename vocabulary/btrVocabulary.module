@@ -25,7 +25,6 @@ function btrVocabulary_menu() {
     'title'           => 'Vocabulary',
     'description'     => 'Lookup vocabulary items.',
     'page callback'   => 'btrVocabulary_page',
-    //'file'            => 'form.inc',
     'access callback' => TRUE,
   );
 
@@ -34,7 +33,6 @@ function btrVocabulary_menu() {
     'title'           => 'Vocabulary List',
     'description'     => 'List od vocabularies.',
     'page callback'   => 'btrVocabulary_list',
-    'file'            => 'callback/list.inc',
     'access callback' => TRUE,
   );
 
@@ -43,7 +41,6 @@ function btrVocabulary_menu() {
     'title'           => 'Vocabulary List',
     'description'     => 'List of vocabularies.',
     'page callback'   => 'btrVocabulary_list',
-    'file'            => 'callback/list.inc',
     'access callback' => TRUE,
   );
 
@@ -89,4 +86,43 @@ function btrVocabulary_page($vocabulary = NULL, $term = NULL) {
   // Build and return the output.
   $output = drupal_get_form('btrVocabulary_form', $vocabulary, $term);
   return $output;
+}
+
+/**
+ * Menu callback: vocabulary/list
+ */
+function btrVocabulary_list() {
+  $output = [
+    'vocabulary_list' => [
+      '#prefix' => '<div class="row">',
+      '#suffix' => '</div>',
+
+      'list' => [
+        '#prefix' => '<div class="col-sm-6">',
+        bcl::get_block('btrVocabulary', 'list'),
+        '#suffix' => '</div>',
+      ],
+
+      /*
+      'import' => [
+        '#prefix' => '<div class="col-sm-6">',
+        _btrVocabulary_list_import(),
+        bcl::get_block('btrVocabulary', 'delete'),
+        '#suffix' => '</div>',
+      ],
+      */
+    ],
+  ];
+
+  return $output;
+}
+
+/**
+ * Import a vocabulary.
+ */
+function _btrVocabulary_list_import() {
+  $import = bcl::get_block('btrVocabulary', 'import');
+  $import['btrVocabulary_import']['import']['#collapsible'] = TRUE;
+  $import['btrVocabulary_import']['import']['#collapsed'] = TRUE;
+  return $import;
 }
