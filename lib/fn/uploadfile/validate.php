@@ -11,7 +11,7 @@ use \bcl;
 /**
  * Validate the file uploaded from the import form.
  */
-function uploadfile_validate($extensions =NULL) {
+function uploadfile_validate($extensions = NULL, $file_types = NULL) {
   // Check that a file is uploaded.
   $file_tmp_name = $_FILES['files']['tmp_name']['file'];
   if ($file_tmp_name == '') {
@@ -24,7 +24,7 @@ function uploadfile_validate($extensions =NULL) {
   if ($file_error != 0) {
     form_set_error('file',
       t("Error %error happened during file upload.",
-        array('%error' => $file_error))
+        ['%error' => $file_error])
     );
     return;
   }
@@ -36,27 +36,29 @@ function uploadfile_validate($extensions =NULL) {
   if (!preg_match($regex, $file_name)) {
     form_set_error('file',
       t('Only files with the following extensions are allowed: %files-allowed.',
-        array('%files-allowed' => $extensions))
+        ['%files-allowed' => $extensions])
     );
     return;
   }
 
   // Check the type of the uploaded file.
   $file_type = $_FILES['files']['type']['file'];
-  $known_file_types = array(
-    'text/x-gettext-translation',
-    'application/x-tar',
-    'application/x-compressed-tar',
-    'application/x-bzip',
-    'application/x-gzip',
-    'application/x-7z-compressed',
-    'application/x-xz',
-    'application/zip',
-  );
-  if (!in_array($file_type, $known_file_types)) {
+  if ($file_type === NULL) {
+    $file_types = [
+      'text/x-gettext-translation',
+      'application/x-tar',
+      'application/x-compressed-tar',
+      'application/x-bzip',
+      'application/x-gzip',
+      'application/x-7z-compressed',
+      'application/x-xz',
+      'application/zip',
+    ];
+  }
+  if (!in_array($file_type, $file_types)) {
     form_set_error('file',
       t('File has unknown type: %file_type.',
-        array('%file_type' => $file_type))
+        ['%file_type' => $file_type])
     );
     return;
   }

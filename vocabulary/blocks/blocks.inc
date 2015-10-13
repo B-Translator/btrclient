@@ -5,6 +5,8 @@
  */
 
 require_once __DIR__ . '/list.inc';
+require_once __DIR__ . '/import.inc';
+require_once __DIR__ . '/delete.inc';
 
 /**
  * Implements hook_block_info().
@@ -24,6 +26,18 @@ function btrVocabulary_block_info() {
   $blocks['list'] = array(
     'info' => t('B-Translator Vocabularies: List of vocabularies'),
     'cache' => DRUPAL_NO_CACHE,
+  );
+
+  // Import.
+  $blocks['import'] = array(
+    'info' => t('B-Translator Vocabulary: Import'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+
+  // Delete.
+  $blocks['delete'] = array(
+    'info' => t('B-Translator Vocabulary: Delete'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
   );
 
   return $blocks;

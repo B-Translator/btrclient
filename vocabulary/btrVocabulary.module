@@ -103,14 +103,12 @@ function btrVocabulary_list() {
         '#suffix' => '</div>',
       ],
 
-      /*
       'import' => [
         '#prefix' => '<div class="col-sm-6">',
         _btrVocabulary_list_import(),
         bcl::get_block('btrVocabulary', 'delete'),
         '#suffix' => '</div>',
       ],
-      */
     ],
   ];
 

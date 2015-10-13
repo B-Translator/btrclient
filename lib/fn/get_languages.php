@@ -6,7 +6,6 @@
 
 namespace BTranslator\Client;
 use \bcl;
-use \btr;
 
 /**
  * Return an array of languages and their details.
