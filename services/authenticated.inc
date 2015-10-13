@@ -21,6 +21,7 @@ function _btrClientWS_authenticated($service_name) {
 
   $service->operations += _btrClientWS_authenticated_translations();
   $service->operations += _btrClientWS_authenticated_projects();
+  $service->operations += _btrClientWS_authenticated_vocabularies();
 
   return $service;
 }
@@ -47,7 +48,6 @@ function _btrClientWS_authenticated_translations() {
     'del_vote' => 'translations/del_vote',
     'submit' => 'translations/submit',
     'import_translations' => 'translations/import',
-    'delete_project' => 'project/delete',
   );
   foreach ($post_operations as $name => $url) {
     $operations[$name] = array(
@@ -69,12 +69,35 @@ function _btrClientWS_authenticated_translations() {
  */
 function _btrClientWS_authenticated_projects() {
   $post_operations = array(
+    'delete_project' => 'project/delete',
     'subscribe' => 'project/subscribe',
     'unsubscribe' => 'project/unsubscribe',
     'subscriptions' => 'project/subscriptions',
     'export_projects' => 'project/export',
-    'add_string' => 'project/add_string',
-    'del_string' => 'project/del_string',
+  );
+  foreach ($post_operations as $name => $url) {
+    $operations[$name] = array(
+      'label' => $name,
+      'url' => $url,
+      'type' => 'POST',
+      'data' => 'params',
+      'parameter' => array(
+        'params' => array('type' => 'array'),
+      ),
+    );
+  }
+
+  return $operations;
+}
+
+/**
+ * Return definitions for operations about vocabularies.
+ */
+function _btrClientWS_authenticated_vocabularies() {
+  $post_operations = array(
+    'add_string' => 'vocabulary/add_string',
+    'del_string' => 'vocabulary/del_string',
+    'delete_vocabulary' => 'vocabulary/delete',
   );
   foreach ($post_operations as $name => $url) {
     $operations[$name] = array(
