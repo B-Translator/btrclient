@@ -40,7 +40,7 @@ function btrProject_block_info() {
   // Subscribe to a project.
   $blocks['subscribe'] = array(
     'info' => t('B-Translator Project: Subscribe to a project'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // List of projects.
@@ -70,25 +70,25 @@ function btrProject_block_info() {
   // Export the project.
   $blocks['export'] = array(
     'info' => t('B-Translator Project: Export'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // Import.
   $blocks['import'] = array(
     'info' => t('B-Translator Project: Import'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // Delete.
   $blocks['delete'] = array(
     'info' => t('B-Translator Project: Delete'),
-    'cache' => DRUPAL_CACHE_GLOBAL,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // Import translations.
   $blocks['import_translations'] = array(
     'info' => t('B-Translator Project: Import translations'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // Suggestions and votes submited lately.

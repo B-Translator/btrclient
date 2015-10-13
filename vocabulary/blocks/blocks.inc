@@ -31,13 +31,13 @@ function btrVocabulary_block_info() {
   // Import.
   $blocks['import'] = array(
     'info' => t('B-Translator Vocabulary: Import'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   // Delete.
   $blocks['delete'] = array(
     'info' => t('B-Translator Vocabulary: Delete'),
-    'cache' => DRUPAL_CACHE_GLOBAL,
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   return $blocks;
