@@ -30,7 +30,9 @@ function render_project_stats($origin, $project, $lng) {
   // Translated strings.
   $url_list_translated =
     url($url_list, ['query' => ['list_mode' => 'translated']]);
-  $percent = ' (' . round($stats['translated'] / $stats['strings'] * 100) . '%) ';
+  $percent = ( $stats['strings'] ?
+             ' (' . round($stats['translated'] / $stats['strings'] * 100) . '%) ' :
+             ' (0%) ' );
   $translated = '<a href="' . $url_list_translated . '">'
     . t('!nr translated', ['!nr' => $stats['translated']]) . $percent
     . '</a>';
@@ -38,7 +40,9 @@ function render_project_stats($origin, $project, $lng) {
   // Untranslated strings.
   $url_list_untranslated =
     url($url_list, ['query' => ['list_mode' => 'untranslated']]);
-  $percent = ' (' . round($stats['untranslated'] / $stats['strings'] * 100) . '%) ';
+  $percent = ( $stats['strings'] ?
+             ' (' . round($stats['untranslated'] / $stats['strings'] * 100) . '%) ' :
+             ' (0%) ' );
   $untranslated = '<a href="' . $url_list_untranslated . '">'
     . t('!nr untranslated', ['!nr' => $stats['untranslated']]) . $percent
     . '</a>';
