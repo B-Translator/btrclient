@@ -16,8 +16,8 @@ function _btrClientWS_authenticated($service_name) {
   $service->type = 'rest';
   $service->url = $server_url . '/api/';
 
+  $service->settings['authentication']['oauth2'] = oauth2_login_get_oauth2_settings();
   $service->settings += oauth2_user_wsclient_dev_settings();
-  $service->settings += oauth2_user_wsclient_auth_settings();
 
   $service->operations += _btrClientWS_authenticated_translations();
   $service->operations += _btrClientWS_authenticated_projects();
