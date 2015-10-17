@@ -42,8 +42,8 @@ function uploadfile_validate($extensions = NULL, $file_types = NULL) {
   }
 
   // Check the type of the uploaded file.
-  $file_type = $_FILES['files']['type']['file'];
-  if ($file_type === NULL) {
+  $ftype = $_FILES['files']['type']['file'];
+  if ($file_types === NULL) {
     $file_types = [
       'text/x-gettext-translation',
       'application/x-tar',
@@ -55,10 +55,10 @@ function uploadfile_validate($extensions = NULL, $file_types = NULL) {
       'application/zip',
     ];
   }
-  if (!in_array($file_type, $file_types)) {
+  if (!in_array($ftype, $file_types)) {
     form_set_error('file',
       t('File has unknown type: %file_type.',
-        ['%file_type' => $file_type])
+        ['%file_type' => $ftype])
     );
     return;
   }
