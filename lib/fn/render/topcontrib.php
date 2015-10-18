@@ -81,14 +81,22 @@ function render_topcontrib($period = 'week', $size = '5', $lng = 'fr', $origin =
             )));
     }
 
-    $list_item = "
+    if ($lng == 'all') {
+      $list_item = "
+      <strong><a href='$url_user' target='_blank'>$name</a></strong><br/>
+        + " . format_plural($nr_votes, '1 vote', '@count votes') . " <br/>
+        + " . format_plural($nr_translations, '1 translation', '@count translations') . " ";
+    }
+    else {
+      $list_item = "
       <strong><a href='$url_user' target='_blank'>$name</a></strong><br/>
         + <a href='$url_votes' target='_blank'>"
-      . format_plural($nr_votes, '1 vote', '@count votes')
-      . " </a><br/>
+        . format_plural($nr_votes, '1 vote', '@count votes')
+        . " </a><br/>
         + <a href='$url_translations' target='_blank'>"
-      . format_plural($nr_translations, '1 translation', '@count translations')
-      . " </a> ";
+        . format_plural($nr_translations, '1 translation', '@count translations')
+        . " </a> ";
+    }
 
     $content['second_para']['#items'][] = $list_item;
   }

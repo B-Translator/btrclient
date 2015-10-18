@@ -65,15 +65,21 @@ function render_statistics($lng = 'fr', $origin = NULL, $project = NULL) {
             )));
     }
 
-    $list_item = t("Last !period:", ['!period' => $period])
-      . "<br/>
-      + <a href='$url_votes' target='_blank'>"
-      . format_plural($nr_votes, '1 vote', '@count votes')
-      . "</a><br/>
-      + <a href='$url_translations' target='_blank'>"
-      . format_plural($nr_translations, '1 translation', '@count translations')
-      . "</a>";
-
+    if ($lng == 'all') {
+      $list_item = t("Last !period:", ['!period' => $period]) . "<br/>
+        + " . format_plural($nr_votes, '1 vote', '@count votes') . "<br/>
+        + " . format_plural($nr_translations, '1 translation', '@count translations');
+    }
+    else {
+      $list_item = t("Last !period:", ['!period' => $period])
+        . "<br/>
+        + <a href='$url_votes' target='_blank'>"
+        . format_plural($nr_votes, '1 vote', '@count votes')
+        . "</a><br/>
+        + <a href='$url_translations' target='_blank'>"
+        . format_plural($nr_translations, '1 translation', '@count translations')
+        . "</a>";
+    }
     $content['stats']['#items'][] = $list_item;
   }
   /*
