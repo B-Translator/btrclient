@@ -7,9 +7,9 @@
 /**
  * Callback for 'btr/tweet'.
  */
-function btrClient_tweet($origin = NULL, $project = NULL) {
+function btrClient_tweet($origin = NULL, $project = NULL, $lng = NULL) {
   // Get the translation language.
-  $lng = variable_get('btrClient_translation_lng', 'fr');
+  if ($lng === NULL)  $lng = bcl::get_translation_lng();
 
   // Get a tweet from the B-Translator server.
   $btr_server = variable_get('btrClient_server', 'http://dev.btranslator.org');

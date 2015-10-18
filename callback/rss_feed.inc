@@ -7,9 +7,9 @@
 /**
  * Callback for 'btr/rss-feed'.
  */
-function btrClient_rss_feed($origin = NULL, $project = NULL) {
+function btrClient_rss_feed($origin = NULL, $project = NULL, $lng = NULL) {
   // Get the translation language.
-  $lng = variable_get('btrClient_translation_lng', 'fr');
+  if ($lng === NULL)  $lng = bcl::get_translation_lng();
 
   // Get the domain of the feed in the form of 'origin/project'
   // (or just 'origin').
