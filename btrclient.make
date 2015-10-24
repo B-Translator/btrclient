@@ -7,9 +7,9 @@ projects[ctools] = 1.9
 projects[libraries] = 2.2
 projects[entity] = 1.6
 
-projects[oauth2_login] = 2.x-dev
+projects[oauth2_login] = 2.4
 
-projects[features] = 2.6
+projects[features] = 2.7
 projects[strongarm] = 2.0
 
 projects[disqus] = 1.12
