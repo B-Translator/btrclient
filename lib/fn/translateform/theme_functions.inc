@@ -122,13 +122,20 @@ function theme_btrClient_translate_source($variables) {
  * Theme appropriate actions for the given string element.
  */
 function theme_btrClient_translate_actions($variables) {
-  $element = $variables['element'];
   $actions = '';
-  foreach (array('declined', 'edit') as $type) {
+
+  $votes = _theme_btrClient_translate_votes($variables['element']);
+  if ($votes) {
+    $actions .= '<li>' . $votes . '</li>';
+  }
+
+  $element = $variables['element'];
+  foreach (['edit', 'declined'] as $type) {
     if (isset($element[$type])) {
       $actions .= '<li class="' . $type . '">' . drupal_render($element[$type]) . '</li>';
     }
   }
+
   if (!empty($actions)) {
     return '<ul class="actions">' . $actions . '</ul>';
   }
@@ -154,9 +161,6 @@ function theme_btrClient_in_context($variables) {
 function theme_btrClient_translate_translation($variables) {
   $element = $variables['element'];
 
-  if (!isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] = array();
-  }
   $element['#attributes']['class'][] = 'clearfix';
   $element['#attributes']['class'][] = 'translation';
 
@@ -164,12 +168,6 @@ function theme_btrClient_translate_translation($variables) {
   $element['#attributes']['class'][] = 'is-selectable';
   if (isset($element['declined'])) {
     $element['#attributes']['class'][] = 'is-declinable';
-  }
-
-  // Add information on whether this matched the filter.
-  if ((int) $element['approved']['#return_value'] > 0) {
-    $filters_match = 'filter-no-match';
-    $element['#attributes']['class'][] = $filters_match;
   }
 
   switch ($element['approved']['#return_value']) {
@@ -187,21 +185,17 @@ function theme_btrClient_translate_translation($variables) {
   }
 
   $output = '<li' . drupal_attributes($element['#attributes']) . '>';
-  $output .= theme('btrClient_translate_actions', array('element' => $element));
+  $output .= theme('btrClient_translate_actions', ['element' => $element]);
   // Add the radio box to pick the approved translation.
   $output .= drupal_render($element['approved']);
 
   if (isset($element['author'])) {
-    $output .= '<div class="author">' . drupal_render($element['author']) . '</div>';
+    $output .= _theme_btrClient_translate_author($element['author']);
   }
-  // TODO: Improve displaying of vote count and the voters.
-  if (isset($element['votes'])) {
-    $output .= '<div class="votes">' . drupal_render($element['votes']) . '</div>';
-  }
-
   if (isset($element['value'])) {
     $output .= drupal_render($element['value']);
   }
+
   return $output . '</li>';
 }
 
@@ -238,4 +232,42 @@ function theme_btrClient_translate_translation_list($variables) {
   }
   $output .= '</ul>';
   return $output;
+}
+
+function _theme_btrClient_translate_votes($element) {
+  if (!isset($element['votes'])) return '';
+  if ($element['approved']['#return_value'] == 'new')  return '';
+
+  $count = $element['votes']['#count'];
+  $voters = $element['votes']['#voters'];
+
+  // Convert voters to an html list.
+  $btr_server = variable_get('btrClient_server');
+  $list = array();
+  foreach ($voters as $name => $voter) {
+    $url = $btr_server . '/user/' . $voter['uid'];
+    $list[] = "<li><a href='$url' target='_blank'>$name</a></li>";
+  }
+  $content_html = '<ul>' . implode('', $list) . '</ul>';
+  $content_html = strtr($content_html, "'", '"');
+
+  $output = "<div class='votes'><a href='#' class='btn btn-info btn-sm' data-toggle='popover' data-trigger='click' data-placement='bottom auto' data-html='true' data-content='$content_html'>+ $count</a></div>";
+
+  return $output;
+}
+
+/**
+ * Display information about the author of the string.
+ */
+function _theme_btrClient_translate_author($author) {
+  $time = format_interval(REQUEST_TIME - strtotime($author['#time']));
+  if ($author['#name'] =='' or $author['#name'] == 'admin') {
+    $msg = t('Added !time ago', ['!time' => $time]);
+  }
+  else {
+    $btr_server = variable_get('btrClient_server');
+    $name = l($author['#name'], $btr_server . '/user/' . $author['uid']);
+    $msg = t('Added by !author !time ago', ['!author' => $name, '!time' => $time]);
+  }
+  return "<div class='author'>$msg</div>";
 }

@@ -145,7 +145,7 @@ function _translation($translation, $string_sguid, $lng) {
                        '#cols' => 60,
                        '#rows' => 3,
                        '#default_value' => t('<New translation>'),
-		       '#attributes' => array(
+                       '#attributes' => array(
                          'defaultValue' => t('<New translation>'),
                        ),
                      ));
@@ -157,28 +157,15 @@ function _translation($translation, $string_sguid, $lng) {
       '#prefix' => '<label title="' . t('Edit a copy') . '">',
       '#suffix' => '</label>',
     );
-    if ($translation['author'] != NULL) {
-      $form['author'] = array(
-        '#markup' => _by($translation['author'], $translation['uid'], $translation['time']),
-      );
-    }
-    // TODO: Improve displaying of vote count and the voters.
-    if ($translation['count'] != '0') {
-      $btr_server = variable_get('btrClient_server');
-      $voters = array();
-      foreach ($translation['votes'] as $name => $vote) {
-        $voters[] = l($name, $btr_server . '/user/' . $vote['uid']);
-      }
-      $form['votes'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Votes: !count', array('!count' => $translation['count'])),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-        'voters' => array(
-          '#markup' => implode(', ', $voters),
-        ),
-      );
-    }
+    $form['author'] = array(
+      '#name' => $translation['author'],
+      '#uid' => $translation['uid'],
+      '#time' => $translation['time'],
+    );
+    $form['votes'] = array(
+      '#count' => $translation['count'],
+      '#voters' => $translation['votes'],
+    );
   }
 
   return $form;
@@ -198,19 +185,4 @@ function _render($textarray, $empty = '') {
   // when starting to submit a new suggestion.
   $empty = !empty($empty) ? ' data-empty="' . check_plain($empty) . '"' : '';
   return "<span$empty>" . implode("</span><br /><span$empty>", array_map('check_plain', $textarray)) . '</span>';
-}
-
-
-/**
- * Generates the 'By ...' line containing meta information about a string.
- */
-function _by($name, $uid, $time) {
-  if ($name == 'admin')  return '';
-  $btr_server = variable_get('btrClient_server');
-  $params = array(
-    '!author' => l($name, $btr_server . "/user/$uid"),
-    '@date' => format_date(strtotime($time)),
-    '@timeago' => format_interval(REQUEST_TIME - strtotime($time)),
-  );
-  return t('by !author <span title="on @date">@timeago ago</span>', $params);
 }

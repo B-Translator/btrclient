@@ -16,25 +16,22 @@ td.sguid {
 }
 
 /**
- * Fix the section of votes and voters.
+ * Fix votes and voters.
  */
-.votes .panel {
-    margin: 10px;
-    margin-top: 0px;
-    .panel-heading {
-	padding: 5px;
-	background-color: #ffffff;
-	a.panel-title {
-	    font-size: x-small;
-	    font-weight: bold;
-	}
-    }
-    .panel-body {
-	padding: 5px;
-	font-size: x-small;
-	a {
-	    padding: 5px;
-	    text-decoration: none;
-	}
+.votes .btn {
+    float: right;
+    margin-left: 4px;
+    padding: 0px 4px;
+}
+
+.popover-content ul {
+    padding-left: 10px;
+    margin-bottom: 0px;
+
+    li {
+        white-space: nowrap;
+        a:hover, a:visited {
+            text-decoration: none;
+        }
     }
 }

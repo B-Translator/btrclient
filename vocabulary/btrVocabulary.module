@@ -31,7 +31,7 @@ function btrVocabulary_menu() {
   $items['vocabulary/list'] = array(
     'type'            => MENU_NORMAL_ITEM,
     'title'           => 'Vocabulary List',
-    'description'     => 'List od vocabularies.',
+    'description'     => 'List of vocabularies.',
     'page callback'   => 'btrVocabulary_list',
     'access callback' => TRUE,
   );
