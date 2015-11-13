@@ -251,7 +251,7 @@ function _theme_btrClient_translate_votes($element) {
   $content_html = '<ul>' . implode('', $list) . '</ul>';
   $content_html = strtr($content_html, "'", '"');
 
-  $output = "<div class='votes'><a href='#' class='btn btn-info btn-sm' data-toggle='popover' data-trigger='click' data-placement='bottom auto' data-html='true' data-content='$content_html'>+ $count</a></div>";
+  $output = "<div class='votes'><span class='btn btn-info btn-sm' data-toggle='popover' data-trigger='click' data-placement='bottom auto' data-html='true' data-content='$content_html'>+ $count</span></div>";
 
   return $output;
 }
