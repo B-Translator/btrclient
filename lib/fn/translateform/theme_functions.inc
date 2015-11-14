@@ -251,7 +251,12 @@ function _theme_btrClient_translate_votes($element) {
   $content_html = '<ul>' . implode('', $list) . '</ul>';
   $content_html = strtr($content_html, "'", '"');
 
-  $output = "<div class='votes'><span class='btn btn-info btn-sm' data-toggle='popover' data-trigger='click' data-placement='bottom auto' data-html='true' data-content='$content_html'>+ $count</span></div>";
+  // Use a different button type for the voted translation.
+  $btr_user = oauth2_user_get();
+  $voted = ($btr_user['name'] and in_array($btr_user['name'], array_keys($voters)));
+  $btn_type = ($voted ? 'btn-success' : 'btn-info');
+
+  $output = "<div class='votes'><span class='btn $btn_type btn-sm' data-toggle='popover' data-trigger='click' data-placement='bottom auto' data-html='true' data-content='$content_html'>+ $count</span></div>";
 
   return $output;
 }
