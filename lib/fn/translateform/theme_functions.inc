@@ -274,5 +274,11 @@ function _theme_btrClient_translate_author($author) {
     $name = l($author['#name'], $btr_server . '/user/' . $author['uid']);
     $msg = t('Added by !author !time ago', ['!author' => $name, '!time' => $time]);
   }
-  return "<div class='author'>$msg</div>";
+
+  // Use different classes for the translations of the current user.
+  $btr_user = oauth2_user_get();
+  $is_own = ($btr_user['name'] and ($btr_user['name'] == $author['#name']));
+  $classes = ($is_own ? 'author is-own' : 'author');
+
+  return "<div class='$classes'>$msg</div>";
 }

@@ -215,6 +215,10 @@ li.translation > .author {
     color: #666;
   }
 
+li.translation > .author.is-own,
+li.translation > .author.is-own a {
+    color: #229922;
+}
 
   li.new-translation:not(.focused):not(.has-content):not(.is-approved) > .l10n-string {
     display: none;
