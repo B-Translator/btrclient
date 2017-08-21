@@ -7,7 +7,7 @@ projects[ctools] = 1.9
 projects[libraries] = 2.2
 projects[entity] = 1.6
 
-projects[oauth2_login] = 2.6
+projects[oauth2_login] = 2.7
 
 projects[features] = 2.7
 projects[strongarm] = 2.0
