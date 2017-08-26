@@ -19,7 +19,7 @@ function get_languages() {
 
   // Get an array of languages from the server.
   $btr_server = variable_get('btrClient_server', 'http://dev.btranslator.org');
-  $output = drupal_http_request("$btr_server/languages");
+  $output = bcl::http_request("$btr_server/languages");
   if (isset($output->data)) {
     $languages = json_decode($output->data, TRUE);
   }

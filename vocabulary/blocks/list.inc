@@ -21,7 +21,7 @@ function btrVocabulary_list_view() {
 function btrVocabulary_list_view_html() {
   // Get the list of vocabularies.
   $btr_server = variable_get('btrClient_server');
-  $result = drupal_http_request($btr_server . '/vocabulary/list');
+  $result = bcl::http_request($btr_server . '/vocabulary/list');
   if ($result->code != 200) {
     drupal_set_message(t('Could not fetch data from the server.'));
     return '';

@@ -14,7 +14,7 @@ function btrClient_tweet($origin = NULL, $project = NULL, $lng = NULL) {
   // Get a tweet from the B-Translator server.
   $btr_server = variable_get('btrClient_server', 'http://dev.btranslator.org');
   $url = $btr_server . "/tweet/$lng/$origin/$project";
-  $output = drupal_http_request($url, array(
+  $output = bcl::http_request($url, array(
               'headers' => array(
                 'Accept' => 'application/json',
               )));

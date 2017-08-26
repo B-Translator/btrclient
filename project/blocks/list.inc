@@ -21,7 +21,7 @@ function btrProject_list_view() {
 function btrProject_list_view_html() {
 
   $btr_server = variable_get('btrClient_server');
-  $result = drupal_http_request($btr_server . '/project/list/all');
+  $result = bcl::http_request($btr_server . '/project/list/all');
   if ($result->code != 200) {
     drupal_set_message(t('Could not fetch data from the server.'));
     return '';

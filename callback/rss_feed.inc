@@ -38,7 +38,7 @@ function btrClient_rss_feed($origin = NULL, $project = NULL, $lng = NULL) {
   }
   else {
     $url = $btr_server . "/latest/$lng/$origin/$project";
-    $output = drupal_http_request($url);
+    $output = bcl::http_request($url);
     $translations = json_decode($output->data, TRUE);
   }
 

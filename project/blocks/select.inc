@@ -62,7 +62,7 @@ function btrProject_select_fetchdata($level = 0, $previous_level_key = 0) {
   $data = array();
   switch ($level) {
     case 'origin':
-      $result = drupal_http_request($btr_server . '/project/list/*/-/json');
+      $result = bcl::http_request($btr_server . '/project/list/*/-/json');
       if ($result->code == 200) {
         $arr = drupal_json_decode($result->data);
         foreach ($arr as $origin) {
@@ -73,7 +73,7 @@ function btrProject_select_fetchdata($level = 0, $previous_level_key = 0) {
 
     case 'project':
       $origin = $previous_level_key;
-      $result = drupal_http_request($btr_server . "/project/list/$origin/*/json");
+      $result = bcl::http_request($btr_server . "/project/list/$origin/*/json");
       if ($result->code == 200) {
         $arr = drupal_json_decode($result->data);
         foreach ($arr as $item) {
@@ -85,7 +85,7 @@ function btrProject_select_fetchdata($level = 0, $previous_level_key = 0) {
 
     case 'lng':
       $project = str_replace(':', '/', $previous_level_key);
-      $result = drupal_http_request($btr_server . '/project/langs/' . $project);
+      $result = bcl::http_request($btr_server . '/project/langs/' . $project);
       if ($result->code == 200) {
         $data = drupal_json_decode($result->data);
       }
