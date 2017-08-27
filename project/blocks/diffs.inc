@@ -60,7 +60,8 @@ function btrProject_diffs_table($origin, $project, $lng) {
   $btr_server = variable_get('btrClient_server');
   $url_diff = "$btr_server/project/diff/$origin/$project/$lng";
   $url_diff_dl = "$btr_server/project/diff-dl/$origin/$project/$lng";
-  $lines = file($url_diff);
+  $output = bcl::http_request($url_diff);
+  $lines = explode("\n", $output->data);
   $rows = array();
   foreach ($lines as $line) {
     list($nr, $time, $comment) = explode("\t", $line, 3);
